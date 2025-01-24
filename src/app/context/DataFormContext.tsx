@@ -18,27 +18,24 @@ export const DataFormContext = createContext<DataFormContextType | undefined>(
     undefined
 );
 
-// export const DataFormProvider: React.FC<{ children: React.ReactNode }> = ({
-//     children
-// }) => {
-//     const [dataForm, setDataForm] = useState<any>(null);
+export const DataFormProvider: React.FC<{ children: React.ReactNode }> = ({
+    children
+}) => {
+    const [dataForm, setDataForm] = useState<any>(null);
 
-<<<<<<< HEAD
-//     useEffect(() => {
-//         console.log('dataFormContext: ', dataForm)
-//     },[dataForm])
-=======
+
+// Fede: otro conflicto de merge, acepte el current que tenia esta pieza de codigo comentado, como el resto de la funcion en la cual se encuentra (la otra opcion era el use effect suelto en el archivo...)
+// descomente porque lo usaban las paginas en auth.
     useEffect(() => {
-        console.log('dataFormContext: ', dataForm);
-    }, [dataForm]);
->>>>>>> 116d8d173d4db7d3b87dd26a958c74bd79c4c513
+        console.log('dataFormContext: ', dataForm)
+    },[dataForm])
 
-//     return (
-//         <DataFormContext.Provider value={{ dataForm, setDataForm }}>
-//             {children}
-//         </DataFormContext.Provider>
-//     );
-// };
+    return (
+        <DataFormContext.Provider value={{ dataForm, setDataForm }}>
+            {children}
+        </DataFormContext.Provider>
+    );
+};
 
 export const useDataForm = () => {
     const context = useContext(DataFormContext);
