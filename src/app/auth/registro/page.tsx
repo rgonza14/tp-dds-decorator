@@ -1,5 +1,6 @@
 // RegistroPage.jsx
 'use client';
+import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataFormProvider, useDataForm } from '../../context/DataFormContext';

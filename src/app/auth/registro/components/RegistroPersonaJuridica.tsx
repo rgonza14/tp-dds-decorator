@@ -3,6 +3,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useDataForm } from '../../../context/DataFormContext';
+import { redirect } from 'next/navigation';
 
 export default function RegistroPersonaJuridica() {
     const { dataForm } = useDataForm();
@@ -47,8 +48,12 @@ export default function RegistroPersonaJuridica() {
             const data = await response.json();
             if (response.ok) {
                 alert('Registro exitoso');
+                localStorage.setItem('userId', data.user.documento);
+                router.push('/');
             } else {
                 alert(`Error: ${data.error}`);
+                localStorage.setItem('userId', data.user.documento);
+                router.push('/');
             }
         } catch (error) {
             console.error('Error:', error);

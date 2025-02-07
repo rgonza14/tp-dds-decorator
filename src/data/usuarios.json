@@ -84,5 +84,48 @@
     "fechaNacimiento": "",
     "direccion": "sofi1234",
     "codigoPostal": "1625"
+  },
+  {
+    "documento": "40123456",
+    "password": "$2b$10$0Yhkv2F/p/YeBExQ/WoAZeMpN3/b.rogFQq5v5M89sUamQuG8Qx6e",
+    "personaJuridica": true,
+    "ayudarPersonas": false,
+    "razonSocial": "Gran Empresa",
+    "tipo": "Empresa",
+    "rubro": "Empresarial",
+    "direccion": "Av. Salvador María del Carril 2281"
+  },
+  {
+    "documento": "1020304050",
+    "password": "$2b$10$r2HOz4rI.IUDtHXWGUf12uWKjJPrhyK5vCPzR21ablejesna8gqUK",
+    "personaJuridica": true,
+    "ayudarPersonas": false,
+    "razonSocial": "colaborador juridico",
+    "tipo": "Empresa",
+    "rubro": "gastronomico",
+    "direccion": "Av. Salvador María del Carril 2281"
+  },
+  {
+    "documento": "1122334455",
+    "password": "$2b$10$z5BQq7.Lkn67aR0Lxya6u.jBTKuiVuuQy8gvDHSYOYUbzC9gTX2kq",
+    "personaJuridica": false,
+    "ayudarPersonas": false,
+    "nombre": "colaborador",
+    "apellido": "humano",
+    "email": "colaborador.humano@uncorreo.com",
+    "telefono": "1139544445",
+    "fechaNacimiento": "",
+    "direccion": "",
+    "codigoPostal": ""
+  },
+  {
+    "documento": "4162536",
+    "password": "$2b$10$dh4zL9CUDfXbkn2NALt/ouoJLGVCytZ4InRJ24Fs5/H3DssFfyAAa",
+    "personaJuridica": true,
+    "ayudarPersonas": true,
+    "razonSocial": "colaborador juridico + vulnerables",
+    "tipo": "Empresa",
+    "rubro": "seguridad",
+    "direccion": ""
   }
 ]
