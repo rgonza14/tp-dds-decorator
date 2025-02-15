@@ -23,7 +23,7 @@ interface RegistroPageProps {
 
 const formSchema = z
     .object({
-        documento: z.string(),
+        usuario: z.string(),
         password: z
             .string()
             .min(8, {
@@ -48,7 +48,7 @@ export default function RegistroForm({
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            documento: '',
+            usuario: '',
             password: '',
             password2: '',
             personaJuridica: false,
@@ -71,13 +71,13 @@ export default function RegistroForm({
                             <div className='grid gap-2'>
                                 <FormField
                                     control={form.control}
-                                    name='documento'
+                                    name='usuario'
                                     render={({ field, fieldState }) => (
                                         <FormItem>
-                                            <FormLabel>Documento</FormLabel>
+                                            <FormLabel>Usuario</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder='Documento'
+                                                    placeholder='Usuario'
                                                     {...field}
                                                 />
                                             </FormControl>

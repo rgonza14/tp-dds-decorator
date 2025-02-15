@@ -1,10 +1,22 @@
 'use client';
-
 import { useDataForm } from '@/app/context/DataFormContext';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-const RegistroPersonaHumana: React.FC = () => {
+
+interface PersonaHumanaJSON {
+    cola_usuario: string;
+    cola_contrasena: string;
+    cola_tipo_colaborador: string;
+    ph_nombre: string;
+    ph_apellido: string;
+    ph_telefono: string;
+    ph_mail: string;
+    ph_fecha_nacimiento: string;
+    ph_direccion: string
+}
+
+export default function RegistroPersonaHumana() {
     const router = useRouter();
     const [nombre, setNombre] = useState<string>('');
     const [apellido, setApellido] = useState<string>('');
@@ -19,39 +31,40 @@ const RegistroPersonaHumana: React.FC = () => {
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        const usuario = {
-            ...dataForm,
-            nombre,
-            apellido,
-            email,
-            telefono,
-            fechaNacimiento,
-            direccion,
-            codigoPostal
-        };
-
+        // NUEVA ESTRUCTURA
+        const colaborador: PersonaHumanaJSON = {
+            cola_usuario: dataForm.usuario,
+            cola_contrasena: dataForm.password,
+            cola_tipo_colaborador: "persona_humana",
+            ph_nombre: nombre,
+            ph_apellido: apellido,
+            ph_telefono: telefono,
+            ph_mail: email,
+            ph_fecha_nacimiento: fechaNacimiento,
+            ph_direccion: direccion
+        }
+        
+        
         try {
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(usuario)
+            const response = await fetch("/api/auth/registrarPH", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(colaborador)
             });
 
-            const data = await response.json();
-            if (response.ok) {
-                alert('Registro exitoso');
-                localStorage.setItem('userId', data.user.documento);
-                router.push('/');
-            } else {
-                alert(`Error: ${data.error}`);
-                localStorage.setItem('userId', data.user.documento);
-                router.push('/');
+            if(!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al registrar el usuario');
+
+            const data = await response.json();
+            console.log("colaborador agregado", data);
+            localStorage.setItem('userId', data.colaborador.cola_id);
+            router.push('/');
+
+
+        } catch(error) {
+            console.error("Error: ", error);
         }
     };
 
@@ -190,5 +203,3 @@ const RegistroPersonaHumana: React.FC = () => {
         </div>
     );
 };
-
-export default RegistroPersonaHumana;

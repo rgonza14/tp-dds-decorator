@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export interface DataForm {
-    documento: string;
+    usuario: string;
     password: string;
     password2: string;
     personaJuridica: boolean;

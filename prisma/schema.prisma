@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model colaborador {
+  cola_id                      Int                            @id @default(autoincrement())
+  cola_usuario                 String?                        @unique(map: "cola_usuario") @db.Char(64)
+  cola_contrasena              String?                        @db.Char(64)
+  cola_tipo_colaborador        String?                        @db.Char(50)
+  distribucion_vianda          distribucion_vianda[]
+  donacion_dinero              donacion_dinero[]
+  donacion_vianda              donacion_vianda[]
+  heladera                     heladera[]
+  persona_humana               persona_humana?
+  persona_juridica             persona_juridica?
+  persona_situacion_vulnerable persona_situacion_vulnerable[]
+  suscripcion_heladera         suscripcion_heladera[]
+  tarjeta_beneficiario         tarjeta_beneficiario[]
+  tarjeta_colaborador          tarjeta_colaborador[]
+}
+
+model persona_humana {
+  ph_id               Int         @id
+  ph_nombre           String?     @db.Char(50)
+  ph_apellido         String?     @db.Char(50)
+  ph_telefono         String?     @db.Char(50)
+  ph_mail             String?     @db.Char(50)
+  ph_fecha_nacimiento String?     @db.Char(50)
+  ph_direccion        String?     @db.Char(50)
+  colaborador         colaborador @relation(fields: [ph_id], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ph_colaborador")
+}
+
+model persona_juridica {
+  pj_id           Int         @id
+  pj_razon_social String?     @db.Char(50)
+  pj_tipo         String?     @db.Char(50)
+  pj_rubro        String?     @db.Char(50)
+  pj_direccion    String?     @db.Char(50)
+  pj_mail         String?     @db.Char(50)
+  colaborador     colaborador @relation(fields: [pj_id], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pj_colaborador")
+}
+
+model coeficiente_reconocimiento {
+  coef_id          Int      @id @default(autoincrement())
+  coef_descripcion String?  @db.Char(50)
+  coef_coeficiente Decimal? @db.Decimal(10, 2)
+}
+
+model distribucion_vianda {
+  dist_id                                                      Int          @id @default(autoincrement())
+  dist_colaborador                                             Int?
+  dist_heladera_origen                                         Int?
+  dist_heladera_destino                                        Int?
+  dist_estado                                                  String?      @db.Char(50)
+  dist_cantidad                                                Decimal?     @db.Decimal(10, 2)
+  dist_motivo                                                  String?      @db.Char(50)
+  dist_fecha                                                   DateTime?    @db.Date
+  colaborador                                                  colaborador? @relation(fields: [dist_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "distribucion_vianda_ibfk_1")
+  heladera_distribucion_vianda_dist_heladera_origenToheladera  heladera?    @relation("distribucion_vianda_dist_heladera_origenToheladera", fields: [dist_heladera_origen], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "distribucion_vianda_ibfk_2")
+  heladera_distribucion_vianda_dist_heladera_destinoToheladera heladera?    @relation("distribucion_vianda_dist_heladera_destinoToheladera", fields: [dist_heladera_destino], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "distribucion_vianda_ibfk_3")
+
+  @@index([dist_colaborador], map: "dist_colaborador")
+  @@index([dist_heladera_destino], map: "dist_heladera_destino")
+  @@index([dist_heladera_origen], map: "dist_heladera_origen")
+}
+
+model donacion_dinero {
+  dd_id          Int          @id @default(autoincrement())
+  dd_colaborador Int?
+  dd_monto       Decimal?     @db.Decimal(7, 2)
+  dd_frecuencia  String?      @db.Char(50)
+  dd_fecha       DateTime?    @db.Date
+  colaborador    colaborador? @relation(fields: [dd_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_dinero_ibfk_1")
+
+  @@index([dd_colaborador], map: "dd_colaborador")
+}
+
+model donacion_vianda {
+  dv_id              Int          @id @default(autoincrement())
+  dv_comida          String?      @db.Char(50)
+  dv_fecha_doncacion DateTime?    @db.Date
+  dv_fecha_caducidad DateTime?    @db.Date
+  dv_calorias        Decimal?     @db.Decimal(10, 2)
+  dv_peso            Decimal?     @db.Decimal(10, 2)
+  dv_estado          String?      @db.Char(50)
+  dv_colaborador     Int?
+  dv_heladera        Int?
+  colaborador        colaborador? @relation(fields: [dv_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_vianda_ibfk_1")
+  heladera           heladera?    @relation(fields: [dv_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_vianda_ibfk_2")
+
+  @@index([dv_colaborador], map: "dv_colaborador")
+  @@index([dv_heladera], map: "dv_heladera")
+}
+
+model heladera {
+  hela_id                                                                 Int                    @id @default(autoincrement())
+  hela_nombre                                                             String?                @db.Char(50)
+  hela_capacidad                                                          Int?
+  hela_fecha_registro                                                     DateTime?              @db.Date
+  hela_estado                                                             String?                @db.Char(50)
+  hela_direccion                                                          String?                @db.Char(50)
+  hela_longitud                                                           Decimal?               @db.Decimal(8, 6)
+  hela_latitud                                                            Decimal?               @db.Decimal(8, 6)
+  hela_colaborador                                                        Int?
+  distribucion_vianda_distribucion_vianda_dist_heladera_origenToheladera  distribucion_vianda[]  @relation("distribucion_vianda_dist_heladera_origenToheladera")
+  distribucion_vianda_distribucion_vianda_dist_heladera_destinoToheladera distribucion_vianda[]  @relation("distribucion_vianda_dist_heladera_destinoToheladera")
+  donacion_vianda                                                         donacion_vianda[]
+  colaborador                                                             colaborador?           @relation(fields: [hela_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "heladera_ibfk_1")
+  suscripcion_heladera                                                    suscripcion_heladera[]
+
+  @@index([hela_colaborador], map: "hela_colaborador")
+}
+
+model incidente {
+  inc_id             Int       @id @default(autoincrement())
+  inc_tecnico        Int?
+  inc_tipo           String?   @db.Char(50)
+  inc_fecha_registro DateTime? @db.Date
+  inc_fecha_visita   DateTime? @db.Date
+  inc_estado         String?   @db.Char(50)
+  inc_reporte        String?   @db.Char(200)
+  tecnico            tecnico?  @relation(fields: [inc_tecnico], references: [tec_id], onDelete: NoAction, onUpdate: NoAction, map: "incidente_ibfk_1")
+
+  @@index([inc_tecnico], map: "inc_tecnico")
+}
+
+model persona_situacion_vulnerable {
+  psv_id               Int                    @id @default(autoincrement())
+  psv_nombre           String?                @db.Char(50)
+  psv_fecha_nacimiento DateTime?              @db.Date
+  psv_fecha_registro   DateTime?              @db.Date
+  psv_colaborador      Int?
+  psv_direccion        String?                @db.Char(50)
+  psv_dni_tipo         String?                @db.Char(3)
+  psv_dni_nro          String?                @db.Char(10)
+  psv_menores_a_cargo  Int?
+  colaborador          colaborador?           @relation(fields: [psv_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "persona_situacion_vulnerable_ibfk_1")
+  tarjeta_beneficiario tarjeta_beneficiario[]
+
+  @@index([psv_colaborador], map: "psv_colaborador")
+}
+
+model suscripcion_heladera {
+  susc_id                          Int          @id @default(autoincrement())
+  susc_colaborador                 Int?
+  susc_heladera                    Int?
+  susc_notif_n_viandas_disponibles Int?
+  susc_notif_n_viandas_faltantes   Int?
+  susc_notif_desperfecto           Int?
+  colaborador                      colaborador? @relation(fields: [susc_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "suscripcion_heladera_ibfk_1")
+  heladera                         heladera?    @relation(fields: [susc_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "suscripcion_heladera_ibfk_2")
+
+  @@index([susc_colaborador], map: "susc_colaborador")
+  @@index([susc_heladera], map: "susc_heladera")
+}
+
+model tarjeta_beneficiario {
+  tarb_id                      String                        @id @db.Char(11)
+  tarb_fecha_alta              DateTime?                     @db.Date
+  tarb_colaborador             Int?
+  tarb_beneficiario            Int?
+  colaborador                  colaborador?                  @relation(fields: [tarb_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "tarjeta_beneficiario_ibfk_1")
+  persona_situacion_vulnerable persona_situacion_vulnerable? @relation(fields: [tarb_beneficiario], references: [psv_id], onDelete: NoAction, onUpdate: NoAction, map: "tarjeta_beneficiario_ibfk_2")
+
+  @@index([tarb_beneficiario], map: "tarb_beneficiario")
+  @@index([tarb_colaborador], map: "tarb_colaborador")
+}
+
+model tarjeta_colaborador {
+  tarc_id       String       @id @db.Char(11)
+  t_fecha_alta  DateTime?    @db.Date
+  t_colaborador Int?
+  colaborador   colaborador? @relation(fields: [t_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "tarjeta_colaborador_ibfk_1")
+
+  @@index([t_colaborador], map: "t_colaborador")
+}
+
+model tecnico {
+  tec_id       Int         @id @default(autoincrement())
+  tec_nombre   String?     @db.Char(50)
+  tec_apellido String?     @db.Char(50)
+  tec_dni_tipo String?     @db.Char(3)
+  tec_dni_nro  Decimal?    @db.Decimal(10, 0)
+  incidente    incidente[]
+}

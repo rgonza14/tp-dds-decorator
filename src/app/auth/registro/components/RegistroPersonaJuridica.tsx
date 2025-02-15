@@ -1,9 +1,19 @@
 'use client';
-import Checkbox from '@mui/material/Checkbox';
+import { useDataForm } from '../../../context/DataFormContext';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { useDataForm } from '../../../context/DataFormContext';
-import { redirect } from 'next/navigation';
+import Checkbox from '@mui/material/Checkbox';
+
+interface PersonaJuridicaJSON {
+    cola_usuario: string;
+    cola_contrasena: string;
+    cola_tipo_colaborador: string;
+    pj_razon_social: string;
+    pj_tipo: string;
+    pj_rubro: string;
+    pj_direccion: string;
+    pj_mail: string;
+}
 
 export default function RegistroPersonaJuridica() {
     const { dataForm } = useDataForm();
@@ -24,40 +34,37 @@ export default function RegistroPersonaJuridica() {
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        const usuario = {
-            ...dataForm,
-            personaJuridica: true,
-            razonSocial,
-            // dataForm.documento,
-            // medioContacto,
-            // dataForm.password,
-            tipo,
-            rubro,
-            direccion
-        };
+        const colaborador: PersonaJuridicaJSON = {
+            cola_usuario: dataForm.usuario,
+            cola_contrasena: dataForm.password,
+            cola_tipo_colaborador: "persona_juridica",
+            pj_razon_social: razonSocial,
+            pj_tipo: tipo,
+            pj_rubro: rubro,
+            pj_direccion: direccion,
+            pj_mail: email
+        }
 
         try {
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(usuario)
+            const response = await fetch("/api/auth/registrarPJ", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(colaborador)
             });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert('Registro exitoso');
-                localStorage.setItem('userId', data.user.documento);
-                router.push('/');
-            } else {
-                alert(`Error: ${data.error}`);
-                localStorage.setItem('userId', data.user.documento);
-                router.push('/');
+    
+            if(!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al registrar el usuario');
+    
+            const data = await response.json();
+            console.log("Registro exitoso", data);
+            localStorage.setItem('userId', data.colaborador.cola_id);
+            router.push('/');
+
+    
+        } catch(error) {
+            console.error("Error: ", error);
         }
     };
 
@@ -222,3 +229,4 @@ export default function RegistroPersonaJuridica() {
         </div>
     );
 }
+

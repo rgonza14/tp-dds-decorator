@@ -16,8 +16,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const loginSchema = z.object({
-    documento: z.string().min(6, 'El documento es requerido'),
-    password: z.string().min(8, 'La contraseña es requerida')
+    cola_usuario: z.string().min(6, 'El ususario es requerido'),
+    cola_contrasena: z.string().min(8, 'La contraseña es requerida')
 });
 
 interface LoginPageProps {
@@ -30,15 +30,16 @@ export default function LoginPage({ setShowLogin }: LoginPageProps) {
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            documento: '',
-            password: ''
+            cola_usuario: '',
+            cola_contrasena: ''
         }
     });
 
     async function onSubmit(data: any) {
+        console.log("---> onSubmit", data);
         setIsLoading(true);
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('/api/auth/iniciar-sesion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,11 +48,12 @@ export default function LoginPage({ setShowLogin }: LoginPageProps) {
             });
 
             if (!response.ok) {
-                throw new Error('Error en las credenciales');
+                alert("Usuario o contraseña incorrecto");
+                throw new Error('Error en las credenciales del formulario');
             }
 
-            const result = await response.json();
-            localStorage.setItem('userId', result.user.documento);
+            const {colaborador} = await response.json();
+            localStorage.setItem("userId", colaborador.cola_id);
             router.push('/');
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
@@ -67,12 +69,12 @@ export default function LoginPage({ setShowLogin }: LoginPageProps) {
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <FormField
                         control={form.control}
-                        name='documento'
+                        name='cola_usuario'
                         render={({ field, fieldState }) => (
                             <FormItem>
-                                <FormLabel>Documento</FormLabel>
+                                <FormLabel>Usuario</FormLabel>
                                 <FormControl>
-                                    <Input placeholder='Documento' {...field} />
+                                    <Input placeholder='Usuario' {...field} />
                                 </FormControl>
                                 <FormMessage>
                                     {fieldState.error?.message}
@@ -83,7 +85,7 @@ export default function LoginPage({ setShowLogin }: LoginPageProps) {
                     <div className='mt-5'>
                         <FormField
                             control={form.control}
-                            name='password'
+                            name='cola_contrasena'
                             render={({ field, fieldState }) => (
                                 <FormItem>
                                     <FormLabel>Contraseña</FormLabel>
