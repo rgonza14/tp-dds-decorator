@@ -19,6 +19,7 @@ CREATE TABLE smaa.persona_juridica(
     pj_tipo CHAR(50),
     pj_rubro CHAR(50),
     pj_direccion CHAR(50),
+    ph_telefono CHAR(50),
     pj_mail CHAR(50),
     PRIMARY KEY (pj_id),
     FOREIGN KEY (pj_id) REFERENCES smaa.colaborador(cola_id)

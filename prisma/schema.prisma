@@ -9,9 +9,9 @@ datasource db {
 
 model colaborador {
   cola_id                      Int                            @id @default(autoincrement())
-  cola_usuario                 String?                        @unique(map: "cola_usuario") @db.Char(64)
-  cola_contrasena              String?                        @db.Char(64)
-  cola_tipo_colaborador        String?                        @db.Char(50)
+  cola_usuario                 String                         @unique(map: "cola_usuario") @db.Char(64)
+  cola_contrasena              String                         @db.Char(64)
+  cola_tipo_colaborador        String                         @db.Char(50)
   distribucion_vianda          distribucion_vianda[]
   donacion_dinero              donacion_dinero[]
   donacion_vianda              donacion_vianda[]
@@ -41,6 +41,7 @@ model persona_juridica {
   pj_tipo         String?     @db.Char(50)
   pj_rubro        String?     @db.Char(50)
   pj_direccion    String?     @db.Char(50)
+  ph_telefono     String?     @db.Char(50)
   pj_mail         String?     @db.Char(50)
   colaborador     colaborador @relation(fields: [pj_id], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pj_colaborador")
 }
