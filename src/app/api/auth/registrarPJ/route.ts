@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
         colaborador: nuevoColaborador,
-        persona_juridica: nuevoPJ
+        persona: nuevoPJ
     }, {status: 201});
 
   } catch(error) {

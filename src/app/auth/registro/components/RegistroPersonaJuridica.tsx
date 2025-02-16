@@ -34,7 +34,7 @@ export default function RegistroPersonaJuridica() {
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
 
-        const colaborador: PersonaJuridicaJSON = {
+        const nuevoColaborador: PersonaJuridicaJSON = {
             cola_usuario: dataForm.usuario,
             cola_contrasena: dataForm.password,
             cola_tipo_colaborador: "persona_juridica",
@@ -49,17 +49,19 @@ export default function RegistroPersonaJuridica() {
             const response = await fetch("/api/auth/registrarPJ", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(colaborador)
+                body: JSON.stringify(nuevoColaborador)
             });
     
             if(!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message);
             }
-    
-            const data = await response.json();
-            console.log("Registro exitoso", data);
-            localStorage.setItem('userId', data.colaborador.cola_id);
+
+            const {colaborador, persona} = await response.json();
+            console.log("colaborador agregado", {colaborador, persona});
+            localStorage.setItem('userId', colaborador.cola_id);
+            localStorage.setItem("tipo_colaborador", colaborador.cola_tipo_colaborador);
+            localStorage.setItem("persona", JSON.stringify(persona));
             router.push('/');
 
     

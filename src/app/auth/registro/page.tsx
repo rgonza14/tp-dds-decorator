@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import RegistroForm from './components/RegistroForm';
 import RegistroPersonaHumana from './components/RegistroPersonaHumana';
 import RegistroPersonaJuridica from './components/RegistroPersonaJuridica';
-import LoginPage from './components/LoginForm'; // Asegúrate de que la ruta es correcta
+import LoginPage from './components/LoginForm';
 import { z } from 'zod';
 
 export default function RegistroComponent() {

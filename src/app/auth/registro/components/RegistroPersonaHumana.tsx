@@ -32,7 +32,7 @@ export default function RegistroPersonaHumana() {
         e.preventDefault();
 
         // NUEVA ESTRUCTURA
-        const colaborador: PersonaHumanaJSON = {
+        const nuevoColaborador: PersonaHumanaJSON = {
             cola_usuario: dataForm.usuario,
             cola_contrasena: dataForm.password,
             cola_tipo_colaborador: "persona_humana",
@@ -49,7 +49,7 @@ export default function RegistroPersonaHumana() {
             const response = await fetch("/api/auth/registrarPH", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(colaborador)
+                body: JSON.stringify(nuevoColaborador)
             });
 
             if(!response.ok) {
@@ -57,9 +57,11 @@ export default function RegistroPersonaHumana() {
                 throw new Error(errorData.message);
             }
 
-            const data = await response.json();
-            console.log("colaborador agregado", data);
-            localStorage.setItem('userId', data.colaborador.cola_id);
+            const {colaborador, persona} = await response.json();
+            console.log("colaborador agregado", {colaborador, persona});
+            localStorage.setItem('userId', colaborador.cola_id);
+            localStorage.setItem("tipo_colaborador", colaborador.cola_tipo_colaborador);
+            localStorage.setItem("persona", JSON.stringify(persona));
             router.push('/');
 
 

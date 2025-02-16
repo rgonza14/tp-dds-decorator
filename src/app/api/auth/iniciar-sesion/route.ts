@@ -46,7 +46,7 @@ export async function POST(req: Request) {
                 if(!pj) {
                     return NextResponse.json({message: "No se encontró la persona juridica asociada al colaborador"}, {status:404});
                 }
-                body = {colaborador, pj};
+                body = {colaborador: colaborador, persona: pj};
             break;
 
             case "persona_humana":
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
                 if(!ph) {
                     return NextResponse.json({message: "No se encontró la persona humana asociada al colaborador"}, {status:404});
                 }
-                body = {colaborador, ph};
+                body = {colaborador: colaborador, persona: ph};
             break;
 
             default:

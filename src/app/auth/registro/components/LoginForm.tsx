@@ -52,8 +52,11 @@ export default function LoginPage({ setShowLogin }: LoginPageProps) {
                 throw new Error('Error en las credenciales del formulario');
             }
 
-            const {colaborador} = await response.json();
+            const {colaborador, persona} = await response.json();
             localStorage.setItem("userId", colaborador.cola_id);
+            localStorage.setItem("tipo_colaborador", colaborador.cola_tipo_colaborador);
+            console.log("--> persona = ", persona);
+            localStorage.setItem("persona", JSON.stringify(persona));
             router.push('/');
         } catch (error) {
             console.error('Error al iniciar sesión:', error);

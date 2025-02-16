@@ -47,10 +47,34 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
         colaborador: nuevoColaborador,
-        persona_humana: nuevoPH
+        persona: nuevoPH
     }, {status: 201});
 
   } catch(error) {
     return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
   }
+}
+
+
+async function getPersona(colaborador: any) {
+
+
+  switch(colaborador.cola_tipo_colaborador) {
+      case "persona_juridica":
+          const pj = await prisma.persona_juridica.findUnique({
+              where: {pj_id: colaborador.cola_id}
+          })
+          return pj;
+      break;
+      case "persona_humana":
+          const ph = await prisma.persona_humana.findUnique({
+              where: {ph_id: colaborador.cola_id}
+          });
+          return ph;
+      break;
+      default:
+          return null;
+      break;
+  }
+
 }
