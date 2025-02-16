@@ -13,7 +13,7 @@ const RegistroHeladeras: React.FC = () => {
 
     async function handleSubmit(e: React.FormEvent) {
         try {
-            const response = await fetch("/api/heladeraDB", {
+            const response = await fetch("/api/heladera", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

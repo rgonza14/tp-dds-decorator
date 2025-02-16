@@ -1,16 +1,52 @@
 'use client';
 import MapaHeladeras from '@/app/dashboard/components/MapaHeladeras';
-import heladerasData from '@/data/heladeras.json';
+// import heladerasData from '@/data/heladeras.json';
+import { useState, useEffect } from 'react';
 
-const HeladerasSection = () => {
-    const heladeras = heladerasData;
+export default function HeladerasSection(){
+    // const heladerasjson = heladerasData;
+    const [heladerasDB, setHeladerasDB] = useState([]);
+
+    useEffect(() => {
+        console.log("--> useEffect dataFetch heladeras");
+        async function fetchData() {
+            try {
+                const response = await fetch("/api/heladera", {
+                    method: "GET",
+                    headers: {"Content-Type": "application/json"}
+                });
+
+                if (response.ok) {
+                    const {heladeras} = await response.json();
+                    console.log("heladeras: ", heladeras);
+                    setHeladerasDB(
+                        heladeras.map(
+                            (h) => {
+                                return {
+                                    nombre: h.hela_nombre,
+                                    lat: h.hela_latitud,
+                                    lng: h.hela_longitud
+                                }
+                            }
+                        )
+                    )
+                }
+
+            } catch(error) {
+                console.error("Error: ", error);
+            }
+
+        }
+
+        fetchData();
+    }, []);
+
+
 
     return (
         <div>
             <div>Heladeras Disponibles: </div>
-            <MapaHeladeras ubicaciones={heladeras} mapId='heladeras' />
+            <MapaHeladeras ubicaciones={heladerasDB} mapId='heladeras' />
         </div>
     );
 };
-
-export default HeladerasSection;
