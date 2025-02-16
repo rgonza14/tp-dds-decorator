@@ -5,20 +5,26 @@ Otros: [https://dev.mysql.com/downloads/] (se necesita el workbench y el server)
 Para correr la aplicacion con la DB, es necesario montar la base de datos.
 Instrucciones:
 1) DB: instalar DB y correr el script ubicado en /app/data/script_db_mysql.sql
-para mayor facilidad, respetar los datos colocados en env: user root: "root" // password: "myroot.345"
-dado que la URL en env es la siguiente:
-DATABASE_URL="mysql://root:myroot.345@localhost:3306/smaa"
-2) prisma (ORM)
-    si no se instala con el npm, correr el comando 
+2) configurar archivos .env y .env.local con la URL:
+DATABASE_URL="mysql://ROOTUSER:PASSWORD@localhost:3306/DBNAME"
+ROOTUSER = raíz root creado al instalar la DB (root por defecto).
+PASSWORD = contraseña del usuario raíz que se configura al instalar la DB
+DBNAME = nombre de la base de datos o schema (smaa si no se modifica el script)
+ejemplo si dejaste "root" como usuario raíz y "myroot.345" como contraseña y "smaa" como nombre de la DB o schema:
+    DATABASE_URL="mysql://root:myroot.345@localhost:3306/smaa"
+3) configurar prisma (ORM)
+    si no fue instalado con npm install, correr los siguientes comandos 
 ```bash
 npm install prisma --save-dev
 npx prisma init
 npx prisma db pull
 npx prisma generate
 ```
-prisma init -> crea la carpeta prisma con el archivo schema.prisma
-prisma db pull -> crea los modelos basado en la base de datos
-prisma generate -> genera los objetos y metodos para utilizar la base de datos basado en los modelos
+NOTAS sobre prisma:
+npx prisma init -> crea la carpeta prisma con el archivo schema.prisma
+npx prisma db pull -> crea los modelos basado en la base de datos
+npx prisma generate -> genera los objetos y metodos para utilizar la base de datos basado en los modelos
+
 
 por eso, tras cada modificacion en la estructura de la DB, se debe:
 1) detener el entorno local de la app (CTRL+C en la consola en la que se corrio npm run dev) sino se detiene no funcionará el prisma generate
