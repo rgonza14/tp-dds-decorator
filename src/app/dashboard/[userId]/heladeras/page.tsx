@@ -8,11 +8,10 @@ import { PageContainer } from '../../components/PageContainer';
 import HeladerasSection from './components/HeladerasSection';
 import RecomendacionesHeladeras from '@/app/dashboard/components/RecomendacionesHeladeras';
 
-interface HeladerasProps {
-    userId: string | null;
-}
 
-const Heladeras: React.FC<HeladerasProps> = ({ userId }) => {
+
+export default function Heladeras() {
+    const userId = localStorage.getItem("userId")
     const [abrirRegistro, setAbrirRegistro] = useState<boolean>(false);
     const [abrirBaja, setAbrirBaja] = useState<boolean>(false);
     const [abrirEdicion, setAbrirEdicion] = useState<boolean>(false);
@@ -68,5 +67,3 @@ const Heladeras: React.FC<HeladerasProps> = ({ userId }) => {
         </PageContainer>
     );
 };
-
-export default Heladeras;

@@ -40,7 +40,7 @@ export default function RegistroPersonaHumana() {
             ph_apellido: apellido,
             ph_telefono: telefono,
             ph_mail: email,
-            ph_fecha_nacimiento: fechaNacimiento,
+            ph_fecha_nacimiento: new Date(fechaNacimiento).toISOString(),
             ph_direccion: direccion
         }
         

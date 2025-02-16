@@ -50,21 +50,17 @@ export async function GET(req: Request) {
 }
 
 export async function PUT(req: Request) {
-    console.log("--> colaborador PUT");
 
     try {
         const {cola_id, colaboradorData, personaData} = await req.json();
-        console.log("--> BUSCANDO", cola_id, colaboradorData, personaData);
         if(!cola_id) {
             return NextResponse.json({message: "Se requiere el ID para poder realizar actualizaciones en un colaborador"}, {status: 400})
         }
         const colaborador = colaboradorData ?? await prisma.colaborador.findUnique({
             where: {cola_id: Number(cola_id)}
         });
-        console.log("--> colaborador: ", colaborador)
         
         const persona = personaData ?? await getPersona(colaborador);
-        console.log("--> persona: ", persona)
 
         if(!colaborador || !persona) {
             return NextResponse.json({message: "No se encontró el colaborador en la base de datos"}, {status: 404})

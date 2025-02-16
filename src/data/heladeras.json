@@ -27,5 +27,13 @@
     "nombre": "Heladera GE",
     "capacidad": "98",
     "fechaFuncionamiento": "2025-01-27"
+  },
+  {
+    "nombre": "primera heladera",
+    "direccion": "calle siempreviva 123",
+    "lng": -58.4912,
+    "lat": -34.5861,
+    "capacidad": "50",
+    "fechaFuncionamiento": "2025-02-20"
   }
 ]

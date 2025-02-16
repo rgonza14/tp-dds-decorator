@@ -2,33 +2,33 @@
 import React, { useState } from 'react';
 
 const RegistroHeladeras: React.FC = () => {
+    const userId = localStorage.getItem("userId");
+    const [nombre, setNombre] = useState<string>('');
     const [direccion, setDireccion] = useState<string>('');
     const [longitud, setLongitud] = useState<number | string>('');
     const [latitud, setLatitud] = useState<number | string>('');
-    const [nombre, setNombre] = useState<string>('');
     const [capacidad, setCapacidad] = useState<number | string>('');
     const [fechaFuncionamiento, setFechaFuncionamiento] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const heladeraData = {
-            direccion,
-            lng: Number(longitud),
-            lat: Number(latitud),
-            nombre,
-            capacidad,
-            fechaFuncionamiento
-        };
-
+    async function handleSubmit(e: React.FormEvent) {
         try {
-            const response = await fetch('/api/heladeras', {
-                method: 'POST',
+            const response = await fetch("/api/heladeraDB", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify(heladeraData)
+                body: JSON.stringify({
+                    cola_id: userId,
+                    heladeraData: {
+                        hela_nombre: nombre,
+                        hela_capacidad: Number(capacidad),
+                        hela_fecha_registro: new Date(fechaFuncionamiento).toISOString(),
+                        hela_direccion: direccion,
+                        hela_longitud: Number(longitud),
+                        hela_latitud: Number(latitud)
+                    }
+                })
             });
 
             const result = await response.json();
@@ -44,6 +44,8 @@ const RegistroHeladeras: React.FC = () => {
             } else {
                 setMensaje(result.mensaje || 'Error al registrar la heladera');
             }
+
+
         } catch (error) {
             console.error('Error al registrar la heladera:', error);
             setMensaje('Error al registrar la heladera');
