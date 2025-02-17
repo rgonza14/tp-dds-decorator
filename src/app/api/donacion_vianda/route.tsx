@@ -17,14 +17,7 @@ export async function POST(req: Request) {
 
         const cantidadViandasCreadas = await prisma.donacion_vianda.createMany({
             data: Array(cantidadViandas).fill({...donacionViandaData, dv_colaborador: Number(cola_id)})
-        })
-
-        // const nuevaDonacionVianda = await prisma.donacion_vianda.create({
-        //     data: {
-        //         ...donacionViandaData,
-        //         dv_colaborador: Number(cola_id),
-        //     }
-        // });
+        });
         
         return NextResponse.json({
             cantidadViandasCreadas: cantidadViandasCreadas,
