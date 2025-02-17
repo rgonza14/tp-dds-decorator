@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 
-const DistribucionViandasForm: React.FC = () => {
-    const [heladeraOrigen, setHeladeraOrigen] = useState('');
-    const [heladeraDestino, setHeladeraDestino] = useState('');
-    const [cantidadViandas, setCantidadViandas] = useState(0);
+export default function DistribucionViandasForm() {
+    const [heladeraOrigen, setHeladeraOrigen] = useState<number|"">('');
+    const [heladeraDestino, setHeladeraDestino] = useState<number|"">('');
+    const [cantidadViandas, setCantidadViandas] = useState<number|"">("");
     const [motivo, setMotivo] = useState('');
     const [fecha, setFecha] = useState('');
+    const [heladerasArray, setHeladerasArray] = useState([]);
+    const [mensaje, setMensaje] = useState<string>('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -17,6 +20,34 @@ const DistribucionViandasForm: React.FC = () => {
             fecha
         });
     };
+        
+    async function fetchData() {
+        try {
+            const response = await fetch(`/api/heladera`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+
+            }
+
+            const {heladeras} = await response.json();
+
+            setHeladerasArray(heladeras);
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al obtener los datos de las heladeras');
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    },[])
 
     return (
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
@@ -29,14 +60,22 @@ const DistribucionViandasForm: React.FC = () => {
                 >
                     Heladera Origen:
                 </label>
-                <input
-                    type='text'
+                <select
                     id='heladeraOrigen'
-                    value={heladeraOrigen}
-                    onChange={e => setHeladeraOrigen(e.target.value)}
-                    required
                     className='mt-1 p-2 border rounded-md w-full'
-                />
+                    value={heladeraOrigen}
+                    onChange={e => setHeladeraOrigen(Number(e.target.value))}
+                    required
+                >
+                    <option value="">Seleccionar heladera</option>
+                    {heladerasArray.map(
+                        (h: any, index) => {
+                            return (
+                                <option key={index} value={`${h.hela_id}`}>{`${h.hela_id} ${h.hela_nombre}`}</option>
+                            )
+                        }
+                    )}
+                </select>
             </div>
 
             <div>
@@ -46,14 +85,22 @@ const DistribucionViandasForm: React.FC = () => {
                 >
                     Heladera Destino:
                 </label>
-                <input
-                    type='text'
+                <select
                     id='heladeraDestino'
-                    value={heladeraDestino}
-                    onChange={e => setHeladeraDestino(e.target.value)}
-                    required
                     className='mt-1 p-2 border rounded-md w-full'
-                />
+                    value={heladeraDestino}
+                    onChange={e => setHeladeraDestino(Number(e.target.value))}
+                    required
+                >
+                    <option value="">Seleccionar heladera</option>
+                    {heladerasArray.map(
+                        (h: any, index) => {
+                            return (
+                                <option key={index} value={`${h.hela_id}`}>{`${h.hela_id} ${h.hela_nombre}`}</option>
+                            )
+                        }
+                    )}
+                </select>
             </div>
 
             <div>
@@ -117,5 +164,3 @@ const DistribucionViandasForm: React.FC = () => {
         </form>
     );
 };
-
-export default DistribucionViandasForm;

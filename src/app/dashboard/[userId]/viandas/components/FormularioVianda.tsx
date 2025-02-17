@@ -12,7 +12,7 @@ export default function FormularioVianda(){
     const [peso, setPeso] = useState<number | ''>('');
     const [estado, setEstado] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
-    const [heladerasIdArray, setHeladerasIdArray] = useState([]);
+    const [heladerasArray, setHeladerasArray] = useState([]);
     const [cantidad, setCantidad] = useState<number | ''>(1);
     
 
@@ -89,7 +89,7 @@ export default function FormularioVianda(){
 
             const {heladeras} = await response.json();
 
-            setHeladerasIdArray(heladeras);
+            setHeladerasArray(heladeras);
 
         } catch (error) {
             console.error("Error obteniendo los datos:", error);
@@ -120,7 +120,7 @@ export default function FormularioVianda(){
                     required
                 >
                     <option value="">Seleccionar heladera</option>
-                    {heladerasIdArray.map(
+                    {heladerasArray.map(
                         (h: any, index) => {
                             return (
                                 <option key={index} value={`${h.hela_id}`}>{`${h.hela_id} ${h.hela_nombre}`}</option>
