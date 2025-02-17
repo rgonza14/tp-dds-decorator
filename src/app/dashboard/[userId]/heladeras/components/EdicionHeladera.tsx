@@ -186,7 +186,7 @@ export default function EdicionHeladera() {
                         >
                             <option value="">Seleccionar id</option>
                             {heladerasIdArray.map(
-                                (h, index) => {
+                                (h: any, index) => {
                                     return (
                                         <option key={index} value={`${h.hela_id}`}>{`${h.hela_id} ${h.hela_nombre}`}</option>
                                     )
