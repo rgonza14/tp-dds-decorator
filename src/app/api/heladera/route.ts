@@ -65,10 +65,13 @@ export async function GET(req: Request) {
             const heladera = await prisma.heladera.findUnique({
                 where: {hela_id: hela_id}
             });
+            const capacidadOcupada = await prisma.donacion_vianda.count({
+                where: {dv_heladera: hela_id}
+            });
             if(!heladera) {
                 return NextResponse.json({message: "Heladera no encontrada"}, {status: 404});
             }
-            return NextResponse.json({heladera: heladera}, {status: 200});
+            return NextResponse.json({heladera: heladera, capacidadDisponible: capacidadOcupada}, {status: 200});
         } else if(cola_id) {
             // buscar las heladeras de ese colaborador
             const heladeras = await prisma.heladera.findMany({
