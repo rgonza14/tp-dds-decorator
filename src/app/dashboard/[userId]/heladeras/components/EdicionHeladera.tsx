@@ -150,12 +150,7 @@ export default function EdicionHeladera() {
 
             const {heladeras} = await response.json();
 
-            setHeladerasIdArray(
-                heladeras.map(
-                    (h) => {
-                        return h.hela_id;
-                })
-            );
+            setHeladerasIdArray(heladeras);
 
         } catch (error) {
             console.error("Error obteniendo los datos:", error);
@@ -191,9 +186,9 @@ export default function EdicionHeladera() {
                         >
                             <option value="">Seleccionar id</option>
                             {heladerasIdArray.map(
-                                (h_id, index) => {
+                                (h, index) => {
                                     return (
-                                        <option key={index} value={`${h_id}`}>{h_id}</option>
+                                        <option key={index} value={`${h.hela_id}`}>{`${h.hela_id} ${h.hela_nombre}`}</option>
                                     )
                                 }
                             )}
