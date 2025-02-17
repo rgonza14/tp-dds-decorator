@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
-    
 
     try {
         
@@ -19,9 +18,7 @@ export async function POST(req: Request) {
                 hela_estado: "activo"
             }
         });
-
         
-        console.log("--> se inserto la heladera: ", nuevaHeladera);
         return NextResponse.json({
             heladera: nuevaHeladera,
         }, {status: 201});
@@ -33,12 +30,11 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
     
-    console.log("--> GET heladera")
 
     try {
         const {searchParams} = new URL(req.url);
         const cola_id = Number(searchParams.get("cola_id"));
-        const hela_id = Number(searchParams.get("hlea_id"));
+        const hela_id = Number(searchParams.get("hela_id"));
 
         if(hela_id) {
             // buscar la heladera por id
@@ -53,7 +49,7 @@ export async function GET(req: Request) {
             // buscar las heladeras de ese colaborador
             const heladeras = await prisma.heladera.findMany({
                 where: {hela_colaborador: cola_id}
-            })
+            });
             return NextResponse.json({heladeras: heladeras}, {status: 200});
         } else {
             // buscar todas las heladeras
