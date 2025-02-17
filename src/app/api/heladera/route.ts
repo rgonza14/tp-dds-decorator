@@ -28,6 +28,30 @@ export async function POST(req: Request) {
     }
 }
 
+export async function PUT(req: Request) {
+    console.log("--> heladera PUT:");
+    try {
+        const {hela_id, heladeraData} = await req.json();
+        console.log("--> hela_id: ", hela_id);
+        console.log("--> heladeraData: ", heladeraData);
+
+        const heladeraActualizada = await prisma.heladera.update({
+            where: {hela_id: hela_id},
+            data: heladeraData
+        });
+
+        console.log("--> DESPUES DEL UPDATE: ");
+        console.log("heladeraActualizada: ", heladeraActualizada);
+
+        return NextResponse.json({
+            heladeraActualizada: heladeraActualizada
+        }, {status: 200})
+
+    } catch(error) {
+        return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
+    }
+}
+
 export async function GET(req: Request) {
     
 
@@ -56,10 +80,6 @@ export async function GET(req: Request) {
             const heladeras = await prisma.heladera.findMany();
             return NextResponse.json({heladeras: heladeras}, {status: 200});
         }
-
-
-
-
 
     } catch(error) {
         return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
