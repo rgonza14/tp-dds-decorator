@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-const EdicionHeladera: React.FC = () => {
+export default function EdicionHeladera() {
     const userId = localStorage.getItem("userId")
     const [id, setId] = useState<number | string>('');
     const [nombre, setNombre] = useState<string>('');
@@ -183,7 +183,6 @@ const EdicionHeladera: React.FC = () => {
                             id:
                         </label>
                         <select
-                            // type='number'
                             id='id'
                             className='mt-1 p-2 border rounded-md w-full'
                             value={id}
@@ -335,4 +334,4 @@ const EdicionHeladera: React.FC = () => {
     );
 };
 
-export default EdicionHeladera;
+

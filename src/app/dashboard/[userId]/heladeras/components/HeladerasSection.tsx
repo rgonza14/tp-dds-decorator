@@ -1,10 +1,8 @@
 'use client';
 import MapaHeladeras from '@/app/dashboard/components/MapaHeladeras';
-// import heladerasData from '@/data/heladeras.json';
 import { useState, useEffect } from 'react';
 
-export default function HeladerasSection(){
-    // const heladerasjson = heladerasData;
+export default function HeladerasSection() {
     const [heladerasDB, setHeladerasDB] = useState([]);
 
     useEffect(() => {

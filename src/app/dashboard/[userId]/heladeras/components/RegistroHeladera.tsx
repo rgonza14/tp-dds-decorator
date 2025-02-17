@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 
-const RegistroHeladeras: React.FC = () => {
+export default function RegistroHeladeras() {
     const userId = localStorage.getItem("userId");
     const [nombre, setNombre] = useState<string>('');
     const [direccion, setDireccion] = useState<string>('');
@@ -171,5 +171,3 @@ const RegistroHeladeras: React.FC = () => {
         </div>
     );
 };
-
-export default RegistroHeladeras;
