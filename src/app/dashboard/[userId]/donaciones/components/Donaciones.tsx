@@ -1,36 +1,36 @@
 import React, { useState, useEffect } from 'react';
 
 const DonacionesForm: React.FC = () => {
+    const userId = localStorage.getItem('userId');
     const [fecha, setFecha] = useState<string>('');
     const [monto, setMonto] = useState<number | ''>('');
     const [frecuencia, setFrecuencia] = useState<string>('');
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const userId = localStorage.getItem('userId');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const [mensaje, setMensaje] = useState<string>('');
 
-        const donacion = {
-            fecha,
-            monto,
-            frecuencia,
-            userId
-        };
+    async function handleSubmit(e: React.FormEvent) {
 
         try {
-            const response = await fetch('/api/donaciones-dinero', {
+            const response = await fetch('/api/donacion_dinero', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify([donacion])
+                body: JSON.stringify({
+                    cola_id: userId,
+                    donacionDineroData: {
+                        dd_monto: Number(monto),
+                        dd_frecuencia: frecuencia,
+                        dd_fecha: new Date(fecha).toISOString()
+                    }
+                })
             });
 
             if (response.ok) {
                 setFecha('');
                 setMonto('');
                 setFrecuencia('');
-                setModalVisible(true);
+                setMensaje("Gracias! La donación se ha guardado exitosamente");
             } else {
                 const errorData = await response.json();
                 console.error('Errores:', errorData.errores);
@@ -38,17 +38,8 @@ const DonacionesForm: React.FC = () => {
         } catch (error) {
             console.error('Error en la conexión:', error);
         }
-    };
 
-    useEffect(() => {
-        if (modalVisible) {
-            const timer = setTimeout(() => {
-                setModalVisible(false);
-            }, 5000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [modalVisible]);
+    }
 
     return (
         <div>
@@ -56,6 +47,9 @@ const DonacionesForm: React.FC = () => {
                 <h2 className='text-lg font-semibold'>
                     Formulario de Donaciones
                 </h2>
+                    {mensaje && (
+                        <div className='text-green-600'>{mensaje}</div>
+                    )}{' '}
 
                 <div>
                     <label
@@ -104,6 +98,7 @@ const DonacionesForm: React.FC = () => {
                         value={frecuencia}
                         onChange={e => setFrecuencia(e.target.value)}
                     >
+                        <option value="">Seleccionar id</option>
                         <option value='una vez'>Una vez</option>
                         <option value='semanal'>Semanal</option>
                         <option value='mensual'>Mensual</option>
@@ -119,16 +114,6 @@ const DonacionesForm: React.FC = () => {
                 </button>
             </form>
 
-            {modalVisible && (
-                <div className='fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50'>
-                    <div className='bg-white p-4 rounded-md shadow-md'>
-                        <h3 className='text-lg font-semibold'>
-                            ¡Donación guardada!
-                        </h3>
-                        <p>Gracias! La donación se ha guardado exitosamente.</p>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
