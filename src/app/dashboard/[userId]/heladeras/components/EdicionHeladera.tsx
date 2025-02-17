@@ -1,15 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const EdicionHeladera: React.FC = () => {
+    const userId = localStorage.getItem("userId")
+    const [id, setId] = useState<number | string>('');
+    const [nombre, setNombre] = useState<string>('');
     const [direccion, setDireccion] = useState<string>('');
     const [longitud, setLongitud] = useState<number | string>('');
     const [latitud, setLatitud] = useState<number | string>('');
-    const [nombre, setNombre] = useState<string>('');
     const [capacidad, setCapacidad] = useState<number | string>('');
     const [fechaFuncionamiento, setFechaFuncionamiento] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
+    const [heladerasIdArray, setHeladerasIdArray] = useState([]);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -51,6 +55,69 @@ const EdicionHeladera: React.FC = () => {
         }
     };
 
+    async function handleIdChange(hela_id: number|string) {
+        // TODO TRAER DATOS DE LA HELADERA Y LLENAR LOS CAMPOS
+        setId(hela_id);
+        try {
+            const response = await fetch(`/api/heladera?hela_id=${hela_id}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+
+            }
+
+            const {heladera} = await response.json();
+            setNombre(heladera.hela_id);
+            setDireccion(heladera.hela_direccion);
+            setLongitud(heladera.hela_longitud);
+            setLatitud(heladera.hela_latitud);
+            setCapacidad(heladera.hela_capacidad);
+            setFechaFuncionamiento(heladera.hela_fecha_registro.split("T")[0]);
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al recibir los datos de la heladera seleccionada');
+        }
+    }
+
+    async function fetchData() {
+        try {
+            const response = await fetch(`/api/heladera?cola_id=${userId}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+
+            }
+
+            const {heladeras} = await response.json();
+
+            setHeladerasIdArray(
+                heladeras.map(
+                    (h) => {
+                        return h.hela_id;
+                })
+            );
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al obtener los datos de las heladeras');
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    },[])
+
     return (
         <div className='flex justify-center mt-6'>
             <div className='w-3/4 bg-white shadow-lg rounded-lg p-6'>
@@ -59,6 +126,31 @@ const EdicionHeladera: React.FC = () => {
                     {mensaje && (
                         <div className='text-green-600'>{mensaje}</div>
                     )}{' '}
+                    <div>
+                        <label
+                            htmlFor='id'
+                            className='block text-sm font-medium'
+                        >
+                            id:
+                        </label>
+                        <select
+                            // type='number'
+                            id='id'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={id}
+                            onChange={e => handleIdChange(e.target.value)}
+                            required
+                        >
+                            <option value="">Seleccionar id</option>
+                            {heladerasIdArray.map(
+                                (h_id, index) => {
+                                    return (
+                                        <option key={index} value={`${h_id}`}>{h_id}</option>
+                                    )
+                                }
+                            )}
+                        </select>
+                    </div>
                     <div>
                         <label
                             htmlFor='nombre'
