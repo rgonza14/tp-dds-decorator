@@ -42,7 +42,47 @@ const EdicionHeladera: React.FC = () => {
             const result = await response.json();
 
             if (response.ok) {
-                setMensaje("Heladera editada exitisamente");
+                setMensaje("Heladera editada exitosamente");
+                setId("");
+                setDireccion('');
+                setLongitud('');
+                setLatitud('');
+                setNombre('');
+                setCapacidad('');
+                setFechaFuncionamiento('');
+                setEstado("");
+            } else {
+                setMensaje(result.mensaje || 'Error al editar la heladera');
+            }
+
+            
+        } catch (error) {
+            console.error('Error al editar la heladera:', error);
+            setMensaje('Error al editar la heladera');
+        }
+
+    }
+
+    async function handleBaja(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        try {
+            const response = await fetch("/api/heladera", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    hela_id: Number(id),
+                    heladeraData: {
+                        hela_estado: "BAJA"
+                    }
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                setMensaje("Heladera dada de baja exitosamente");
                 setId("");
                 setDireccion('');
                 setLongitud('');
@@ -281,6 +321,13 @@ const EdicionHeladera: React.FC = () => {
                         type='submit'
                     >
                         Confirmar Edición
+                    </button>
+                    <button
+                        className='mt-4 bg-red-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
+                        type='button'
+                        onClick={handleBaja}
+                    >
+                        Dar de Baja
                     </button>
                 </form>
             </div>

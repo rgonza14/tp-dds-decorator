@@ -77,7 +77,10 @@ export async function GET(req: Request) {
             return NextResponse.json({heladeras: heladeras}, {status: 200});
         } else {
             // buscar todas las heladeras
-            const heladeras = await prisma.heladera.findMany();
+            const heladeras = await prisma.heladera.findMany({
+                    where: { hela_estado: {not: "BAJA"}}
+                }
+            );
             return NextResponse.json({heladeras: heladeras}, {status: 200});
         }
 
