@@ -1,23 +1,25 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const FormularioVianda: React.FC = () => {
+export default function FormularioVianda(){
+    const userId = localStorage.getItem("userId");
+
     const [comida, setComida] = useState<string>('');
     const [fechaCaducidad, setFechaCaducidad] = useState<string>('');
     const [fechaDonacion, setFechaDonacion] = useState<string>('');
-    const [colaborador, setColaborador] = useState<string>('');
-    const [heladera, setHeladera] = useState<string>('');
+    const [heladera, setHeladera] = useState<number|"">('');
     const [calorias, setCalorias] = useState<number | ''>('');
     const [peso, setPeso] = useState<number | ''>('');
     const [estado, setEstado] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
+    const [heladerasIdArray, setHeladerasIdArray] = useState([]);
+    
 
     const isFormValid = () => {
         return (
             comida !== '' &&
             fechaCaducidad !== '' &&
             fechaDonacion !== '' &&
-            colaborador !== '' &&
             heladera !== '' &&
             calorias !== '' &&
             peso !== '' &&
@@ -28,51 +30,102 @@ const FormularioVianda: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const viandaData = {
-            comida,
-            fechaCaducidad,
-            fechaDonacion,
-            colaborador,
-            heladera,
-            calorias,
-            peso,
-            estado
-        };
-
         try {
-            const response = await fetch('/api/viandas', {
+            const response = await fetch('/api/donacion_vianda', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(viandaData)
+                body: JSON.stringify({
+                    cola_id: userId,
+                    donacionViandaData: {
+                        dv_heladera: Number(heladera),
+                        dv_comida: comida,
+                        dv_fecha_doncacion: new Date(fechaDonacion).toISOString(),
+                        dv_fecha_caducidad: new Date(fechaCaducidad).toISOString(),
+                        dv_calorias: Number(calorias),
+                        dv_peso: Number(peso),
+                        dv_estado: estado
+                    }
+                })
             });
 
             const result = await response.json();
 
             if (response.ok) {
-                setMensaje(result.mensaje);
+                setMensaje("vianda cargada correctamente");
                 setComida('');
                 setFechaCaducidad('');
                 setFechaDonacion('');
-                setColaborador('');
                 setHeladera('');
                 setCalorias('');
                 setPeso('');
                 setEstado('');
             } else {
-                setMensaje(result.mensaje || 'Error al enviar la vianda');
+                setMensaje(result.message || 'Error al enviar la vianda');
             }
         } catch (error) {
             console.error('Error al enviar la vianda:', error);
             setMensaje('Error al enviar la vianda');
         }
     };
+    
+    async function fetchData() {
+        try {
+            const response = await fetch(`/api/heladera`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+
+            }
+
+            const {heladeras} = await response.json();
+
+            setHeladerasIdArray(heladeras);
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al obtener los datos de las heladeras');
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    },[])
 
     return (
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
             <h2 className='text-lg font-semibold'>Formulario de Viandas</h2>
             {mensaje && <div className='text-green-600'>{mensaje}</div>}{' '}
+            <div>
+                <label
+                    htmlFor='heladera'
+                    className='block text-sm font-medium'
+                >
+                    heladera:
+                </label>
+                <select
+                    id='heladera'
+                    className='mt-1 p-2 border rounded-md w-full'
+                    value={heladera}
+                    onChange={e => setHeladera(Number(e.target.value))}
+                    required
+                >
+                    <option value="">Seleccionar heladera</option>
+                    {heladerasIdArray.map(
+                        (h: any, index) => {
+                            return (
+                                <option key={index} value={`${h.hela_id}`}>{`${h.hela_id} ${h.hela_nombre}`}</option>
+                            )
+                        }
+                    )}
+                </select>
+            </div>
             <div>
                 <label htmlFor='comida' className='block text-sm font-medium'>
                     Comida:
@@ -119,35 +172,6 @@ const FormularioVianda: React.FC = () => {
                 />
             </div>
             <div>
-                <label
-                    htmlFor='colaborador'
-                    className='block text-sm font-medium'
-                >
-                    Colaborador:
-                </label>
-                <input
-                    type='text'
-                    id='colaborador'
-                    className='mt-1 p-2 border rounded-md w-full'
-                    value={colaborador}
-                    onChange={e => setColaborador(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor='heladera' className='block text-sm font-medium'>
-                    Heladera:
-                </label>
-                <input
-                    type='text'
-                    id='heladera'
-                    className='mt-1 p-2 border rounded-md w-full'
-                    value={heladera}
-                    onChange={e => setHeladera(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
                 <label htmlFor='calorias' className='block text-sm font-medium'>
                     Calorías:
                 </label>
@@ -181,6 +205,7 @@ const FormularioVianda: React.FC = () => {
                     value={estado}
                     onChange={e => setEstado(e.target.value)}
                 >
+                    <option value=''>Seleccionar estado</option>
                     <option value='No Entregada'>No Entregada</option>
                     <option value='Entregada'>Entregada</option>
                 </select>
@@ -195,5 +220,3 @@ const FormularioVianda: React.FC = () => {
         </form>
     );
 };
-
-export default FormularioVianda;
