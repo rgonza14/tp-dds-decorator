@@ -13,6 +13,7 @@ export default function FormularioVianda(){
     const [estado, setEstado] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
     const [heladerasIdArray, setHeladerasIdArray] = useState([]);
+    const [cantidad, setCantidad] = useState<number | ''>(1);
     
 
     const isFormValid = () => {
@@ -23,7 +24,8 @@ export default function FormularioVianda(){
             heladera !== '' &&
             calorias !== '' &&
             peso !== '' &&
-            estado !== ''
+            estado !== '' &&
+            cantidad !== ''
         );
     };
 
@@ -46,7 +48,8 @@ export default function FormularioVianda(){
                         dv_calorias: Number(calorias),
                         dv_peso: Number(peso),
                         dv_estado: estado
-                    }
+                    },
+                    cantidad: cantidad
                 })
             });
 
@@ -209,6 +212,18 @@ export default function FormularioVianda(){
                     <option value='No Entregada'>No Entregada</option>
                     <option value='Entregada'>Entregada</option>
                 </select>
+            </div>
+            <div>
+                <label htmlFor='cantidad' className='block text-sm font-medium'>
+                    Cantidad:
+                </label>
+                <input
+                    type='number'
+                    id='peso'
+                    className='mt-1 p-2 border rounded-md w-full'
+                    value={cantidad}
+                    onChange={e => setCantidad(Number(e.target.value))}
+                />
             </div>
             <button
                 className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'

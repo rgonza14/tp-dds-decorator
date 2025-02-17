@@ -7,22 +7,27 @@ export async function POST(req: Request) {
 
     try {
         
-        const {cola_id, donacionViandaData} = await req.json();
-
+        const {cola_id, donacionViandaData, cantidad} = await req.json();
+        
         if(!cola_id || !donacionViandaData) {
             return NextResponse.json({message: "cola_id e informacion de la vianda son requeridos"}, {status: 400});
         }
         
+        const cantidadViandas = cantidad ?? 1
 
-        const nuevaDonacionVianda = await prisma.donacion_vianda.create({
-            data: {
-                ...donacionViandaData,
-                dv_colaborador: Number(cola_id),
-            }
-        });
+        const cantidadViandasCreadas = await prisma.donacion_vianda.createMany({
+            data: Array(cantidadViandas).fill({...donacionViandaData, dv_colaborador: Number(cola_id)})
+        })
+
+        // const nuevaDonacionVianda = await prisma.donacion_vianda.create({
+        //     data: {
+        //         ...donacionViandaData,
+        //         dv_colaborador: Number(cola_id),
+        //     }
+        // });
         
         return NextResponse.json({
-            donacionVianda: nuevaDonacionVianda,
+            cantidadViandasCreadas: cantidadViandasCreadas,
         }, {status: 201});
 
     } catch(error) {
