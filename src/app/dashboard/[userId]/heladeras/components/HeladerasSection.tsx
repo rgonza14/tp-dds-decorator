@@ -8,7 +8,6 @@ export default function HeladerasSection(){
     const [heladerasDB, setHeladerasDB] = useState([]);
 
     useEffect(() => {
-        console.log("--> useEffect dataFetch heladeras");
         async function fetchData() {
             try {
                 const response = await fetch("/api/heladera", {
@@ -18,7 +17,6 @@ export default function HeladerasSection(){
 
                 if (response.ok) {
                     const {heladeras} = await response.json();
-                    console.log("heladeras: ", heladeras);
                     setHeladerasDB(
                         heladeras.map(
                             (h) => {
