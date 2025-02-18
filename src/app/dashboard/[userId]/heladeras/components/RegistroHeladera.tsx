@@ -1,8 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function RegistroHeladeras() {
-    const userId = localStorage.getItem("userId");
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+
     const [nombre, setNombre] = useState<string>('');
     const [direccion, setDireccion] = useState<string>('');
     const [longitud, setLongitud] = useState<number | string>('');

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
 import RegistroHeladera from './components/RegistroHeladera';
 import EdicionHeladera from './components/EdicionHeladera';
@@ -10,7 +10,11 @@ import RecomendacionesHeladeras from '@/app/dashboard/components/Recomendaciones
 
 
 export default function Heladeras() {
-    const userId = localStorage.getItem("userId")
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+
     const [abrirRegistro, setAbrirRegistro] = useState<boolean>(false);
     const [abrirEdicion, setAbrirEdicion] = useState<boolean>(false);
 

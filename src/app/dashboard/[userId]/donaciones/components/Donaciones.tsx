@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 const DonacionesForm: React.FC = () => {
-    const userId = localStorage.getItem('userId');
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+
     const [fecha, setFecha] = useState<string>('');
     const [monto, setMonto] = useState<number | ''>('');
     const [frecuencia, setFrecuencia] = useState<string>('');

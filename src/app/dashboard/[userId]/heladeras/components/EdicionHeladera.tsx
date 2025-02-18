@@ -3,7 +3,11 @@
 import React, { useEffect, useState } from 'react';
 
 export default function EdicionHeladera() {
-    const userId = localStorage.getItem("userId")
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+
     const [id, setId] = useState<number | string>('');
     const [nombre, setNombre] = useState<string>('');
     const [direccion, setDireccion] = useState<string>('');

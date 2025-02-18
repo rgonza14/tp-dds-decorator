@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from 'react';
 
 export default function FormularioVianda(){
-    const userId = localStorage.getItem("userId");
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+
 
     const [comida, setComida] = useState<string>('');
     const [fechaCaducidad, setFechaCaducidad] = useState<string>('');

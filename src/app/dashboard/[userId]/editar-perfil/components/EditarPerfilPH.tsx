@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
 export default function EditarPerfilPH(){
-    const userId = localStorage.getItem('userId');
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+
     const persona = JSON.parse(String(localStorage.getItem("persona")));
 
     const [nombre, setNombre] = useState<string>(persona.ph_nombre);
