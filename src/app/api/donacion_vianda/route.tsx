@@ -13,7 +13,26 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "cola_id e informacion de la vianda son requeridos"}, {status: 400});
         }
         
-        const cantidadViandas = cantidad ?? 1
+        const cantidadViandas = cantidad ?? 1;
+        
+        // Comprobar le capcaidad disponible de la heladera
+        const capacidadOcupada = await prisma.donacion_vianda.count({
+            where: {dv_heladera: donacionViandaData.dv_heladera}
+        });
+        const heladera = await prisma.heladera.findUnique({
+            where: {hela_id: donacionViandaData.dv_heladera}
+        });
+        if(!heladera) {
+            return NextResponse.json({message: "No se encontró la heladera seleccionada, vuelva a intentar"}, {status: 404});
+
+        }
+        // si no hay suficiente espacio en la heladera, retornar error
+        const capacidadDisponible: number = Number(heladera?.hela_capacidad) - capacidadOcupada
+        if(capacidadDisponible < cantidadViandas) {
+            return NextResponse.json({message: "La heladera destino no tiene suficiente espacio disponible"}, {status: 400});
+        }
+
+
 
         const cantidadViandasCreadas = await prisma.donacion_vianda.createMany({
             data: Array(cantidadViandas).fill({...donacionViandaData, dv_colaborador: Number(cola_id)})

@@ -12,6 +12,7 @@ export default function FormularioVianda(){
     const [peso, setPeso] = useState<number | ''>('');
     const [estado, setEstado] = useState<string>('');
     const [mensaje, setMensaje] = useState<string>('');
+    const [error, setError] = useState<boolean>(false);
     const [heladerasArray, setHeladerasArray] = useState([]);
     const [cantidad, setCantidad] = useState<number | ''>(1);
 
@@ -42,6 +43,7 @@ export default function FormularioVianda(){
             const result = await response.json();
 
             if (response.ok) {
+                setError(false);
                 setMensaje("vianda cargada correctamente");
                 setComida('');
                 setFechaCaducidad('');
@@ -51,11 +53,13 @@ export default function FormularioVianda(){
                 setPeso('');
                 setEstado('');
             } else {
+                setError(true);
                 setMensaje(result.message || 'Error al enviar la vianda');
             }
         } catch (error) {
-            console.error('Error al enviar la vianda:', error);
+            setError(true);
             setMensaje('Error al enviar la vianda');
+            console.error('Error al enviar la vianda:', error);
         }
     };
     
@@ -90,7 +94,9 @@ export default function FormularioVianda(){
     return (
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
             <h2 className='text-lg font-semibold'>Formulario de Viandas</h2>
-            {mensaje && <div className='text-green-600'>{mensaje}</div>}{' '}
+            {mensaje && <div className={`${
+                        error ? 'text-red-600' : 'text-green-600'
+                    }`}>{mensaje}</div>}{' '}
             <div>
                 <label
                     htmlFor='heladera'
