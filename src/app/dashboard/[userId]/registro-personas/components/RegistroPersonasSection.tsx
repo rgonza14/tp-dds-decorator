@@ -9,7 +9,7 @@ import FormPersona from './FormPersona';
 import { DataTablePersonasVulnerables } from './DataTablePersonasVulnerables';
 // implort { DataTableCategory } from './DataTableCategory';
 
-const RegistroPersonasSection = () => {
+export default function RegistroPersonasSection() {
     const { userId: idUser } = useParams();
     const [isOpenModalRegistroPersona, setIsOpenModalRegistroPersona] =
         useState<boolean>(false);
@@ -23,7 +23,7 @@ const RegistroPersonasSection = () => {
             >
                 Registrar Persona Vulnerable
             </Button>
-
+        
             <Modal
                 title='Nuevo empleado'
                 description=''
@@ -37,4 +37,3 @@ const RegistroPersonasSection = () => {
     );
 };
 
-export default RegistroPersonasSection;
