@@ -96,7 +96,7 @@ export default function FormularioVianda(){
             <h2 className='text-lg font-semibold'>Formulario de Viandas</h2>
             {mensaje && <div className={`${
                         error ? 'text-red-600' : 'text-green-600'
-                    }`}>{mensaje}</div>}{' '}
+                    }`}>{mensaje}</div>}
             <div>
                 <label
                     htmlFor='heladera'
