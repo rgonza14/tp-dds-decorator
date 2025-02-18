@@ -18,7 +18,7 @@ export default function FormPersona() {
     const [direccion, setDireccion] = useState<string>("");//opcional
     const [dniTipo, setDniTipo] = useState<string>("");
     const [dniNro, setDniNro] = useState<string>("");
-    const [cantMenoresACargo, setCantMenoresACargo] = useState<number | string>("");
+    const [cantMenoresACargo, setCantMenoresACargo] = useState<number | "">(0);
 
     const [mensaje, setMensaje] = useState<string>('');
         const [error, setError] = useState<boolean>(false);
@@ -46,7 +46,7 @@ export default function FormPersona() {
                     cola_id: userId,
                     personaData: {
                         psv_nombre: nombre,
-                        // psv_apellido: apellido,
+                        psv_apellido: apellido,
                         psv_fecha_nacimiento: new Date(fechaNacimiento).toISOString(),
                         psv_fecha_registro: new Date(fechaRegistro).toISOString(),
                         psv_direccion: direccion,
@@ -230,7 +230,7 @@ export default function FormPersona() {
                             id='cantMenoresACargo'
                             className='mt-1 p-2 border rounded-md w-full'
                             value={cantMenoresACargo}
-                            onChange={e => setCantMenoresACargo(e.target.value)}
+                            onChange={e => setCantMenoresACargo(Number(e.target.value))}
                             required
                         />
                     </div>

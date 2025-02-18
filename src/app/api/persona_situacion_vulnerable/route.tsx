@@ -80,7 +80,7 @@ function esPersonaValida(personaData: any) {
     !personaData.psv_direccion||
     !personaData.psv_dni_tipo ||
     !personaData.psv_dni_nro ||
-    !personaData.psv_menores_a_cargo){
+    personaData.psv_menores_a_cargo<0){
         return false;
     } else {
         return true;

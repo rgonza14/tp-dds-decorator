@@ -140,6 +140,7 @@ model persona_situacion_vulnerable {
   psv_dni_tipo         String?                @db.Char(3)
   psv_dni_nro          String?                @db.Char(10)
   psv_menores_a_cargo  Int?
+  psv_apellido         String?                @db.Char(50)
   colaborador          colaborador?           @relation(fields: [psv_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "persona_situacion_vulnerable_ibfk_1")
   tarjeta_beneficiario tarjeta_beneficiario[]
 
