@@ -15,6 +15,7 @@ import {
     TableRow
 } from '@/components/ui/table';
 import { PersonaVulnerableAction } from './PersonaVulerableAction';
+import { useEffect, useState } from 'react';
 
 export type PersonaVulnerable = {
     id: string;
@@ -56,22 +57,74 @@ export const columns: ColumnDef<PersonaVulnerable>[] = [
     }
 ];
 
-export function DataTablePersonasVulnerables({
-    idUser
-}: {
-    idUser: string | number;
-}) {
-    // const { categories, isLoading } = useCategoryFetcher(idUser);
+export function DataTablePersonasVulnerables() {
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
+    const [arrayPersonas, setArrayPersonas] = useState<any[]>([]);
+    const [mostrarTodos, setMostrarTodos] = useState<boolean>(false);
+    const [mensaje, setMensaje] = useState<string>('');
+    const [error, setError] = useState<boolean>(false);
+
+    
+
+    async function fetchData() {
+        try {
+            const response = await fetch(`/api/persona_situacion_vulnerable${mostrarTodos?``:`?cola_id=${userId}`}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+
+            }
+
+            const {personas} = await response.json();
+            setArrayPersonas(personas);
+            // BORRAR LOG AL TERMINAR
+            console.log("-> personas:",personas);
+
+            setError(false);
+            setMensaje('');
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al obtener personas en situacion vulnerable');
+            setError(true);
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    },[mostrarTodos]);
 
     const table = useReactTable({
         data: personasVulnerables,
         columns,
         getCoreRowModel: getCoreRowModel()
     });
-    // if (isLoading) return <Spinner>Cargando tabla...</Spinner>;
 
     return (
         <div className='rounded-md border'>
+        <div>
+            <label
+                htmlFor='mostrarTodos'
+                className='block text-sm font-medium'
+            >
+                Fecha de Funcionamiento:
+            </label>
+            <input
+                type='checkbox'
+                id='mostrarTodos'
+                className='mt-1 p-2 border rounded-md w-full'
+                checked={mostrarTodos}
+                onChange={e => setMostrarTodos(Boolean(e.target.checked))}
+            />
+        </div>
+
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map(headerGroup => (

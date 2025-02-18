@@ -32,7 +32,7 @@ export default function RegistroPersonasSection() {
             >
                 <FormPersona />
             </Modal>
-            <DataTablePersonasVulnerables idUser={idUser.toString()} />
+            <DataTablePersonasVulnerables/>
         </div>
     );
 };
