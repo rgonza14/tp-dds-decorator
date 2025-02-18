@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 export async function POST(req: Request) {
     console.log("--> POST /api/distribucion_vianda");
     try {
-        const {cola_id, hela_id_origen, hela_id_destino, viandasData} = await req.json();
+        const {cola_id, hela_id_origen, hela_id_destino, motivo, fecha, viandasData} = await req.json();
         
         console.log("--> datos: ");
-        console.log(cola_id, hela_id_origen, hela_id_destino, viandasData);
+        console.log(cola_id, hela_id_origen, hela_id_destino, motivo, fecha, viandasData);
 
         if(!cola_id || !hela_id_origen || !hela_id_destino || !viandasData) {
             return NextResponse.json({message: "cola_id, heladeraOrigen, heladeraDestino y viandas son requeridos"}, {status: 400});
@@ -45,10 +45,32 @@ export async function POST(req: Request) {
         const resultados = await Promise.allSettled(updates);
         const exitosos = resultados.filter(r => r.status === "fulfilled").map(r => r.value);
 
-        return NextResponse.json({
-            message: `Se actualizó la heladera de ${exitosos.length} viandas y se les asignó el estado "pendiente distribucion"`,
-            viandasActualizadas: exitosos
-        }, {status: 200})
+        const nuevaDistribucion = await prisma.distribucion_vianda.create({
+            data: {
+                dist_colaborador: cola_id,
+                dist_heladera_origen: hela_id_origen,
+                dist_heladera_destino: hela_id_destino,
+                dist_estado: "pendiente de entrega",
+                dist_cantidad: exitosos.length,
+                dist_motivo: motivo,
+                dist_fecha: fecha
+            }
+        })
+
+        if(!nuevaDistribucion){
+            return NextResponse.json({
+                message: `Se actualizó la heladera de ${exitosos.length} viandas y se les asignó el estado "pendiente distribucion"`,
+                viandasActualizadas: exitosos
+            }, {status: 200})
+        } else {
+            return NextResponse.json({
+                message: `Se cargo la distribucion y se actualizó la heladera de ${exitosos.length} viandas y se les asignó el estado "pendiente distribucion"`,
+                viandasActualizadas: exitosos
+            }, {status: 201})
+
+        }
+
+        
 
 
     } catch(error) {

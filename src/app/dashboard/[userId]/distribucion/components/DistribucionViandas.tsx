@@ -2,7 +2,10 @@
 import React, { useEffect, useState } from 'react';
 
 export default function DistribucionViandasForm() {
-    const userId = localStorage.getItem("userId");
+    const [userId, setUserId] = useState<number|"">('');
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
 
     const [heladeraOrigen, setHeladeraOrigen] = useState<number|"">('');
     const [heladeraDestino, setHeladeraDestino] = useState<number|"">('');
@@ -14,6 +17,7 @@ export default function DistribucionViandasForm() {
     const [espDisponible, setEspDisponible] = useState<number|"">("");
     const [viandas, setViandas] = useState<Number[]>([]);
     const [viandasSeleccionadas, setViandasSeleccionadas] = useState<string[]>([]);
+
 
 
     async function handleSubmit(e: React.FormEvent) {
@@ -43,6 +47,8 @@ export default function DistribucionViandasForm() {
                     cola_id: userId,
                     hela_id_origen: heladeraOrigen,
                     hela_id_destino: heladeraDestino,
+                    motivo: motivo,
+                    fecha: new Date(fecha).toISOString(),
                     viandasData: viandasSeleccionadas
                 })
             });
