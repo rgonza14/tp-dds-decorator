@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 
 export default function DistribucionViandasForm() {
+    const userId = localStorage.getItem("userId");
+
     const [heladeraOrigen, setHeladeraOrigen] = useState<number|"">('');
     const [heladeraDestino, setHeladeraDestino] = useState<number|"">('');
     const [motivo, setMotivo] = useState('');
@@ -13,24 +15,63 @@ export default function DistribucionViandasForm() {
     const [viandas, setViandas] = useState<Number[]>([]);
     const [viandasSeleccionadas, setViandasSeleccionadas] = useState<string[]>([]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
         if(Number(espDisponible) < viandasSeleccionadas.length) {
             setError(true);
             setMensaje("La heladera destino no tiene espacio suficiente");
-            console.log("La heladera destino no tiene espacio suficiente");
             return;
         }
+        
+        try {
+            console.log('fetch "/api/distribucion_vianda"')
+            console.log({
+                cola_id: userId,
+                hela_id_origen: heladeraOrigen,
+                hela_id_destino: heladeraDestino,
+                viandasData: viandasSeleccionadas
+            });
 
-        console.log({
-            heladeraOrigen,
-            heladeraDestino,
-            motivo,
-            fecha
-        });
-        setError(true);
-        setMensaje("carga de distribuciones en desarrollo");
+            const response = await fetch("/api/distribucion_vianda",{
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cola_id: userId,
+                    hela_id_origen: heladeraOrigen,
+                    hela_id_destino: heladeraDestino,
+                    viandasData: viandasSeleccionadas
+                })
+            });
+
+            const result = await response.json();
+
+            if(response.ok) {
+                setError(false);
+                setMensaje("distribucion cargada y viandas actualizadas correctamente");
+                setHeladeraOrigen("");
+                setHeladeraDestino("");
+                setMotivo("");
+                setFecha("");
+                setHeladerasArray([]);
+                setEspDisponible("");
+                setViandas([]);
+                setViandasSeleccionadas([]);
+            } else {
+                setError(true);
+                setMensaje(result.message || 'Error al enviar actualizar las viandas');
+
+            }
+
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error de base de datos');
+            setError(true);
+        }
     };
         
     async function fetchData() {
