@@ -14,22 +14,8 @@ export default function FormularioVianda(){
     const [mensaje, setMensaje] = useState<string>('');
     const [heladerasArray, setHeladerasArray] = useState([]);
     const [cantidad, setCantidad] = useState<number | ''>(1);
-    
 
-    const isFormValid = () => {
-        return (
-            comida !== '' &&
-            fechaCaducidad !== '' &&
-            fechaDonacion !== '' &&
-            heladera !== '' &&
-            calorias !== '' &&
-            peso !== '' &&
-            estado !== '' &&
-            cantidad !== ''
-        );
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
         try {
@@ -228,7 +214,16 @@ export default function FormularioVianda(){
             <button
                 className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'
                 type='submit'
-                disabled={!isFormValid()}
+                disabled={
+                    !comida &&
+                    !fechaCaducidad &&
+                    !fechaDonacion &&
+                    !heladera &&
+                    !calorias &&
+                    !peso &&
+                    !estado &&
+                    !cantidad
+                }
             >
                 Enviar
             </button>
