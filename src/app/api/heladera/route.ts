@@ -71,7 +71,7 @@ export async function GET(req: Request) {
             if(!heladera) {
                 return NextResponse.json({message: "Heladera no encontrada"}, {status: 404});
             }
-            return NextResponse.json({heladera: heladera, capacidadDisponible: capacidadOcupada}, {status: 200});
+            return NextResponse.json({heladera: heladera, capacidadOcupada: capacidadOcupada}, {status: 200});
         } else if(cola_id) {
             // buscar las heladeras de ese colaborador
             const heladeras = await prisma.heladera.findMany({
