@@ -4,20 +4,28 @@ import React, { useEffect, useState } from 'react';
 export default function DistribucionViandasForm() {
     const [heladeraOrigen, setHeladeraOrigen] = useState<number|"">('');
     const [heladeraDestino, setHeladeraDestino] = useState<number|"">('');
-    const [cantidadViandas, setCantidadViandas] = useState<number|"">("");
     const [motivo, setMotivo] = useState('');
     const [fecha, setFecha] = useState('');
     const [heladerasArray, setHeladerasArray] = useState([]);
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
     const [espDisponible, setEspDisponible] = useState<number|"">("");
+    const [viandas, setViandas] = useState<Number[]>([]);
+    const [viandasSeleccionadas, setViandasSeleccionadas] = useState<string[]>([]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if(Number(espDisponible) < viandasSeleccionadas.length) {
+            setError(true);
+            setMensaje("La heladera destino no tiene espacio suficiente");
+            console.log("La heladera destino no tiene espacio suficiente");
+            return;
+        }
+
         console.log({
             heladeraOrigen,
             heladeraDestino,
-            cantidadViandas,
             motivo,
             fecha
         });
@@ -58,26 +66,62 @@ export default function DistribucionViandasForm() {
         setHeladeraDestino(Number(hela_id));
 
         if(!hela_id) {
+            setHeladeraDestino("");
             setEspDisponible("");
             return
 
         }
         try {
-            const response = await fetch(`/api/heladera?hela_id=${hela_id}`, {
+            // obtener heladera y disponiibilidad
+            const heladeraResponse = await fetch(`/api/heladera?hela_id=${hela_id}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
                 },
             });
 
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-
+            if (!heladeraResponse.ok) {
+                throw new Error(`Error HTTP: ${heladeraResponse.status}`);
             }
 
-            const {heladera, capacidadOcupada} = await response.json();
+            
+            const {heladera, capacidadOcupada} = await heladeraResponse.json();
             setEspDisponible(heladera.hela_capacidad - capacidadOcupada);
+            
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al recibir los datos de la heladera destino');
+            setError(true);
+        }
 
+    }
+
+    async function handleChangeHeladeraOrigen(hela_id: number|string) {
+        setHeladeraOrigen(Number(hela_id));
+        setViandas([]);
+
+        if(!hela_id) {
+            setHeladeraOrigen("");
+            setViandas([]);
+            return
+
+        }
+        try {
+            
+            // obtener viandas de esa heladera
+            const viandasResponse = await fetch(`/api/donacion_vianda?hela_id=${hela_id}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!viandasResponse.ok) {
+                throw new Error(`Error HTTP: ${viandasResponse.status}`);
+            }
+
+            const {donaciones} = await viandasResponse.json();
+            setViandas(donaciones);
 
         } catch (error) {
             console.error("Error obteniendo los datos:", error);
@@ -105,7 +149,7 @@ export default function DistribucionViandasForm() {
                     id='heladeraOrigen'
                     className='mt-1 p-2 border rounded-md w-full'
                     value={heladeraOrigen}
-                    onChange={e => setHeladeraOrigen(Number(e.target.value))}
+                    onChange={e => handleChangeHeladeraOrigen(Number(e.target.value))}
                     required
                 >
                     <option value="">Seleccionar heladera</option>
@@ -118,6 +162,36 @@ export default function DistribucionViandasForm() {
                     )}
                 </select>
             </div>
+
+            {heladeraOrigen && <div>
+                <label
+                    htmlFor='viandasSeleccionadas'
+                    className='block text-sm font-medium text-blue-600'
+                >
+                    Viandas:
+                    {viandasSeleccionadas && `${viandasSeleccionadas.length} seleccionadas`}
+                </label>
+                <select
+                    id='viandasSeleccionadas'
+                    className='mt-1 p-2 border rounded-md w-full'
+                    multiple 
+                    value={viandasSeleccionadas}
+                    onChange={e => {
+                        const selectedValues = Array.from(e.target.selectedOptions, (option) => option.value);
+                        setViandasSeleccionadas(selectedValues);
+                        console.log("selectedValues", selectedValues);
+                    }}
+                    required
+                >
+                    {viandas.map(
+                        (v: any, index) => {
+                            return (
+                                <option key={index} value={String(v.dv_id)}>{`${v.dv_id} ${v.dv_comida}`}</option>
+                            )
+                        }
+                    )}
+                </select>
+            </div>}
 
             <div>
                 <label
@@ -145,23 +219,6 @@ export default function DistribucionViandasForm() {
                         }
                     )}
                 </select>
-            </div>
-
-            <div>
-                <label
-                    htmlFor='cantidadViandas'
-                    className='block text-sm font-medium'
-                >
-                    Cantidad de Viandas:
-                </label>
-                <input
-                    type='number'
-                    id='cantidadViandas'
-                    value={cantidadViandas}
-                    onChange={e => setCantidadViandas(Number(e.target.value))}
-                    required
-                    className='mt-1 p-2 border rounded-md w-full'
-                />
             </div>
 
             <div>
@@ -205,7 +262,6 @@ export default function DistribucionViandasForm() {
                     disabled={
                         !heladeraOrigen &&
                         !heladeraDestino &&
-                        !cantidadViandas &&
                         !motivo &&
                         !fecha &&
                         heladeraOrigen == heladeraDestino
