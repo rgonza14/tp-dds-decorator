@@ -20,24 +20,10 @@ import { useEffect, useState } from 'react';
 export type PersonaVulnerable = {
     id: string;
     nombre: string;
-    tarjeta: string;
+    apellido: string;
     cantMenoresACargo: number;
 };
 
-const personasVulnerables: PersonaVulnerable[] = [
-    {
-        id: '1',
-        nombre: 'adsd',
-        tarjeta: '123123',
-        cantMenoresACargo: 0
-    },
-    {
-        id: '2',
-        nombre: 'dasdasda',
-        tarjeta: '0o3102o30',
-        cantMenoresACargo: 1
-    }
-];
 export const columns: ColumnDef<PersonaVulnerable>[] = [
     {
         accessorKey: 'id',
@@ -48,8 +34,8 @@ export const columns: ColumnDef<PersonaVulnerable>[] = [
         header: 'Nombre'
     },
     {
-        accessorKey: 'tarjeta',
-        header: 'Tarjeta asociada'
+        accessorKey: 'apellido',
+        header: 'Apellido'
     },
     {
         id: 'actions',
@@ -67,7 +53,7 @@ export function DataTablePersonasVulnerables() {
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
 
-    
+
 
     async function fetchData() {
         try {
@@ -84,7 +70,14 @@ export function DataTablePersonasVulnerables() {
             }
 
             const {personas} = await response.json();
-            setArrayPersonas(personas);
+            setArrayPersonas(personas.map((persona: any) => {
+                return {
+                    id: persona.psv_id,
+                    nombre: persona.psv_nombre,
+                    apellido: persona.psv_apellido,
+                    cantMenoresACargo: persona.psv_menores_a_cargo,
+                }
+            }));
             // BORRAR LOG AL TERMINAR
             console.log("-> personas:",personas);
 
@@ -102,27 +95,27 @@ export function DataTablePersonasVulnerables() {
     },[mostrarTodos]);
 
     const table = useReactTable({
-        data: personasVulnerables,
+        data: arrayPersonas,
         columns,
         getCoreRowModel: getCoreRowModel()
     });
 
     return (
         <div className='rounded-md border'>
-        <div>
+        <div className='flex gap-2'>
+            <input
+                type='checkbox'
+                id='mostrarTodos'
+                className='mt-1 p-2 border rounded-md '
+                checked={mostrarTodos}
+                onChange={e => setMostrarTodos(Boolean(e.target.checked))}
+            />
             <label
                 htmlFor='mostrarTodos'
                 className='block text-sm font-medium'
             >
-                Fecha de Funcionamiento:
+                Mostrar todos:
             </label>
-            <input
-                type='checkbox'
-                id='mostrarTodos'
-                className='mt-1 p-2 border rounded-md w-full'
-                checked={mostrarTodos}
-                onChange={e => setMostrarTodos(Boolean(e.target.checked))}
-            />
         </div>
 
             <Table>
@@ -168,7 +161,7 @@ export function DataTablePersonasVulnerables() {
                                 colSpan={columns.length}
                                 className='h-24 text-center'
                             >
-                                Sin resultados
+                                Cargando...
                             </TableCell>
                         </TableRow>
                     )}
