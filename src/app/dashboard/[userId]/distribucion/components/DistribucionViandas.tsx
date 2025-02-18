@@ -9,6 +9,8 @@ export default function DistribucionViandasForm() {
     const [fecha, setFecha] = useState('');
     const [heladerasArray, setHeladerasArray] = useState([]);
     const [mensaje, setMensaje] = useState<string>('');
+    const [error, setError] = useState<boolean>(false);
+    const [espDisponible, setEspDisponible] = useState<number|"">("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,6 +21,8 @@ export default function DistribucionViandasForm() {
             motivo,
             fecha
         });
+        setError(true);
+        setMensaje("carga de distribuciones en desarrollo");
     };
         
     async function fetchData() {
@@ -42,6 +46,7 @@ export default function DistribucionViandasForm() {
         } catch (error) {
             console.error("Error obteniendo los datos:", error);
             setMensaje('Error al obtener los datos de las heladeras');
+            setError(true);
         }
     }
 
@@ -49,9 +54,45 @@ export default function DistribucionViandasForm() {
         fetchData();
     },[])
 
+    async function handleChangeHeladeraDestino(hela_id: number|string) {
+        setHeladeraDestino(Number(hela_id));
+
+        if(!hela_id) {
+            setEspDisponible("");
+            return
+
+        }
+        try {
+            const response = await fetch(`/api/heladera?hela_id=${hela_id}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+
+            }
+
+            const {heladera, capacidadOcupada} = await response.json();
+            setEspDisponible(heladera.hela_capacidad - capacidadOcupada);
+
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al recibir los datos de la heladera destino');
+            setError(true);
+        }
+
+    }
+
     return (
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
             <h2 className='text-lg font-semibold'>Distribución de Viandas</h2>
+            {mensaje && <div className={`${
+                        error ? 'text-red-600' : 'text-green-600'
+                    }`}>{mensaje}</div>}
 
             <div>
                 <label
@@ -85,11 +126,14 @@ export default function DistribucionViandasForm() {
                 >
                     Heladera Destino:
                 </label>
+                <div className="text-blue-600">
+                    {`Espacio disponible: ${espDisponible}`}
+                </div>
                 <select
                     id='heladeraDestino'
                     className='mt-1 p-2 border rounded-md w-full'
                     value={heladeraDestino}
-                    onChange={e => setHeladeraDestino(Number(e.target.value))}
+                    onChange={e =>handleChangeHeladeraDestino(Number(e.target.value))}
                     required
                 >
                     <option value="">Seleccionar heladera</option>
@@ -158,6 +202,14 @@ export default function DistribucionViandasForm() {
             <button
                 type='submit'
                 className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'
+                    disabled={
+                        !heladeraOrigen &&
+                        !heladeraDestino &&
+                        !cantidadViandas &&
+                        !motivo &&
+                        !fecha &&
+                        heladeraOrigen == heladeraDestino
+                    }
             >
                 Enviar
             </button>
