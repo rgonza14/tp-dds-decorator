@@ -1,8 +1,4 @@
 'use client';
-import Link from 'next/link';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 
 export default function FormPersona() {
@@ -21,19 +17,8 @@ export default function FormPersona() {
     const [cantMenoresACargo, setCantMenoresACargo] = useState<number | "">(0);
 
     const [mensaje, setMensaje] = useState<string>('');
-        const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
 
-    const form = useForm({
-        defaultValues: {
-            nombre: '',
-            fechaNacimiento: '',
-            tipoDoc: '',
-            numDoc: '',
-            poseeDomicilio: false,
-            domicilio: '',
-            cantMenoresACargo: '0'
-        }
-    });
 
     async function handleSubmit(){
         try {

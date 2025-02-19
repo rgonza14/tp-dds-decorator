@@ -3,13 +3,14 @@
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 
-const DetalleTarjeta = () => {
+export default function DetalleTarjeta({ data }: { data: any }) {
+    console.log("-->data: ",data)
     const [fields] = useState([
+        { label: 'Beneficiario', value: `${data.nombre} ${data.apellido}`},
         { label: 'Número de tarjeta', value: '1234567890xa' },
         { label: 'Usos en el día', value: '1' },
         { label: 'Usos restantes', value: '3' },
 
-        { label: 'Persona a cargo', value: 'Lopez Larriega' },
         { label: 'Colaborador a cargo del tramite', value: 'Franco Martinez' }
     ]);
 
@@ -37,5 +38,3 @@ const DetalleTarjeta = () => {
         </div>
     );
 };
-
-export default DetalleTarjeta;

@@ -75,6 +75,11 @@ export function DataTablePersonasVulnerables() {
                     id: persona.psv_id,
                     nombre: persona.psv_nombre,
                     apellido: persona.psv_apellido,
+                    fechaNacimiento: persona.psv_fecha_nacimiento,
+                    fechaRegistro: persona.psv_fecha_registro,
+                    direccion: persona.psv_direccion,
+                    dniTipo: persona.psv_dni_tipo,
+                    dniNro: persona.psv_dni_nro,
                     cantMenoresACargo: persona.psv_menores_a_cargo,
                 }
             }));

@@ -21,11 +21,11 @@ import DetalleTarjeta from './DetalleTarjeta';
 
 // const fetcher = (url: string) => client.get(url);
 
-export const PersonaVulnerableAction = ({ data }: { data: any }) => {
+export function PersonaVulnerableAction({ data }: { data: any }) {
     const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [isOpenDelete, setIsOpenDelete] = useState(false);
     const [isOpenEdit, setIsOpenEdit] = useState(false);
-    const [isOpenDetalleTarjeta, setIsOpenDetalleTarjeta] = useState(false);
+    const [isOpenDetalle, setIsOpenDetalle] = useState(false);
     const router = useRouter();
     const { idUser } = useParams();
     // const { trigger } = useSWRMutation(
@@ -57,8 +57,8 @@ export const PersonaVulnerableAction = ({ data }: { data: any }) => {
             <AlertModal
                 title='¿Estás seguro que quieres continuar?'
                 description='Esta acción no puede revertirse.'
-                isOpen={open}
-                onClose={() => setOpen(false)}
+                isOpen={isOpenDelete}
+                onClose={() => setIsOpenDelete(false)}
                 onConfirm={onConfirmDelete}
                 loading={loading}
             />
@@ -79,10 +79,10 @@ export const PersonaVulnerableAction = ({ data }: { data: any }) => {
             <Modal
                 title='Detalle de tarjeta asociada'
                 description=''
-                isOpen={isOpenDetalleTarjeta}
-                onClose={() => setIsOpenDetalleTarjeta(false)}
+                isOpen={isOpenDetalle}
+                onClose={() => setIsOpenDetalle(false)}
             >
-                <DetalleTarjeta />
+                <DetalleTarjeta data={data}/>
             </Modal>
 
             <DropdownMenu modal={false}>
@@ -92,20 +92,25 @@ export const PersonaVulnerableAction = ({ data }: { data: any }) => {
                         <MoreHorizontal className='h-4 w-4' />
                     </Button>
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent align='end'>
                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
 
                     <DropdownMenuItem onClick={handleUpdateService}>
-                        <Edit className='mr-2 h-4 w-4' /> Actualizar
+                        <Edit className='mr-2 h-4 w-4' />
+                        Actualizar
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                        onClick={() => setIsOpenDetalleTarjeta(true)}
-                    >
-                        <Eye className='mr-2 h-4 w-4' /> Ver detalle tarjeta
+
+                    <DropdownMenuItem onClick={() => setIsOpenDetalle(true)}>
+                        <Eye className='mr-2 h-4 w-4' />
+                        Ver detalle tarjeta
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setOpen(true)}>
-                        <Trash className='mr-2 h-4 w-4' /> Eliminar
+
+                    <DropdownMenuItem onClick={() => setIsOpenDelete(true)}>
+                        <Trash className='mr-2 h-4 w-4' />
+                        Eliminar
                     </DropdownMenuItem>
+
                 </DropdownMenuContent>
             </DropdownMenu>
         </>
