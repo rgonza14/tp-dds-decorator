@@ -38,12 +38,12 @@ CREATE TABLE smaa.persona_humana(
 );
 
 CREATE TABLE smaa.tarjeta_colaborador(
-	tarc_id INT NOT NULL,
-	tarc_nro CHAR(11) NOT NULL,
-    t_fecha_alta DATE,
-    t_colaborador INT,
+	tarc_id INT NOT NULL AUTO_INCREMENT,
+	tarc_nro CHAR(11) NOT NULL UNIQUE,
+    tarc_fecha_alta DATE,
+    tarc_colaborador INT,
     PRIMARY KEY (tarc_id),
-    FOREIGN KEY (t_colaborador) REFERENCES smaa.colaborador(cola_id)
+    FOREIGN KEY (tarc_colaborador) REFERENCES smaa.colaborador(cola_id)
 );
 
 CREATE TABLE smaa.persona_situacion_vulnerable(
@@ -62,8 +62,8 @@ CREATE TABLE smaa.persona_situacion_vulnerable(
 );
 
 CREATE TABLE smaa.tarjeta_beneficiario(
-	tarb_id INT NOT NULL,
-	tarb_nro CHAR(11) NOT NULL,
+	tarb_id INT NOT NULL AUTO_INCREMENT,
+	tarb_nro CHAR(11) NOT NULL UNIQUE,
     tarb_fecha_alta DATE,
     tarb_colaborador INT,
     tarb_beneficiario INT,

@@ -162,8 +162,8 @@ model suscripcion_heladera {
 }
 
 model tarjeta_beneficiario {
-  tarb_id                      Int                           @id
-  tarb_nro                     String                        @db.Char(11)
+  tarb_id                      Int                           @id @default(autoincrement())
+  tarb_nro                     String                        @unique(map: "tarb_nro") @db.Char(11)
   tarb_fecha_alta              DateTime?                     @db.Date
   tarb_colaborador             Int?
   tarb_beneficiario            Int?
@@ -175,13 +175,13 @@ model tarjeta_beneficiario {
 }
 
 model tarjeta_colaborador {
-  tarc_id       Int          @id
-  tarc_nro      String       @db.Char(11)
-  t_fecha_alta  DateTime?    @db.Date
-  t_colaborador Int?
-  colaborador   colaborador? @relation(fields: [t_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "tarjeta_colaborador_ibfk_1")
+  tarc_id          Int          @id @default(autoincrement())
+  tarc_nro         String       @unique(map: "tarc_nro") @db.Char(11)
+  tarc_fecha_alta  DateTime?    @db.Date
+  tarc_colaborador Int?
+  colaborador      colaborador? @relation(fields: [tarc_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "tarjeta_colaborador_ibfk_1")
 
-  @@index([t_colaborador], map: "t_colaborador")
+  @@index([tarc_colaborador], map: "tarc_colaborador")
 }
 
 model tecnico {

@@ -25,7 +25,7 @@ export default function RegistroPersonasSection() {
             </Button>
         
             <Modal
-                title='Nuevo empleado'
+                title='Registrar Persona Vulnerable'
                 description=''
                 isOpen={isOpenModalRegistroPersona}
                 onClose={() => setIsOpenModalRegistroPersona(false)}

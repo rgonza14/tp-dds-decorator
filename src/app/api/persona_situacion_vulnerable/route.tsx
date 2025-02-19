@@ -7,8 +7,6 @@ export async function POST(req: Request) {
 
     try {
         const {cola_id, personaData} = await req.json();
-        console.log("--> POST persona_situacion_vulnerable");
-        console.log(cola_id, personaData);
         if(!cola_id || !esPersonaValida(personaData)) {
             return NextResponse.json({message: "datos insuficientes"}, {status:400});
         }

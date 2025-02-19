@@ -15,6 +15,8 @@ export default function FormPersona() {
     const [dniTipo, setDniTipo] = useState<string>("");
     const [dniNro, setDniNro] = useState<string>("");
     const [cantMenoresACargo, setCantMenoresACargo] = useState<number | "">(0);
+    const [tarjetaNro, setTarjetaNro] = useState<string>("");
+    const [registrarTarjeta, setRegistrarTarjeta] = useState<boolean>(true);
 
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
@@ -219,6 +221,39 @@ export default function FormPersona() {
                             required
                         />
                     </div>
+
+                    <div className='flex gap-2'>
+                        <input
+                            type='checkbox'
+                            id='registrarTarjeta'
+                            className='mt-1 p-2 border rounded-md '
+                            checked={registrarTarjeta}
+                            onChange={e => setRegistrarTarjeta(Boolean(e.target.checked))}
+                        />
+                        <label
+                            htmlFor='mostrarTodos'
+                            className='block text-sm font-medium'
+                        >
+                            Asociar Tarjeta:
+                        </label>
+                    </div>
+
+                    {registrarTarjeta && <div>
+                        <label
+                            htmlFor='tarjetaNro'
+                            className='block text-sm font-medium'
+                        >
+                            Nro Tarjeta:
+                        </label>
+                        <input
+                            type='text'
+                            id='tarjetaNro'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={tarjetaNro}
+                            onChange={e => setTarjetaNro(e.target.value)}
+                            required
+                        />
+                    </div>}
 
                     <button
                         className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
