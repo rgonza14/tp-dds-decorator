@@ -38,7 +38,8 @@ CREATE TABLE smaa.persona_humana(
 );
 
 CREATE TABLE smaa.tarjeta_colaborador(
-	tarc_id CHAR(11) NOT NULL,
+	tarc_id INT NOT NULL,
+	tarc_nro CHAR(11) NOT NULL,
     t_fecha_alta DATE,
     t_colaborador INT,
     PRIMARY KEY (tarc_id),
@@ -61,7 +62,8 @@ CREATE TABLE smaa.persona_situacion_vulnerable(
 );
 
 CREATE TABLE smaa.tarjeta_beneficiario(
-	tarb_id CHAR(11) NOT NULL,
+	tarb_id INT NOT NULL,
+	tarb_nro CHAR(11) NOT NULL,
     tarb_fecha_alta DATE,
     tarb_colaborador INT,
     tarb_beneficiario INT,
