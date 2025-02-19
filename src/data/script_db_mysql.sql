@@ -48,6 +48,7 @@ CREATE TABLE smaa.tarjeta_colaborador(
 CREATE TABLE smaa.persona_situacion_vulnerable(
 	psv_id INT NOT NULL AUTO_INCREMENT,
     psv_nombre CHAR(50),
+    psv_apellido CHAR(50),
     psv_fecha_nacimiento DATE,
     psv_fecha_registro DATE,
     psv_colaborador INT,
