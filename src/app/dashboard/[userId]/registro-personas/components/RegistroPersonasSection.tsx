@@ -30,7 +30,7 @@ export default function RegistroPersonasSection() {
                 isOpen={isOpenModalRegistroPersona}
                 onClose={() => setIsOpenModalRegistroPersona(false)}
             >
-                <FormPersona />
+                <FormPersona closeModal={() => setIsOpenModalRegistroPersona(false)}/>
             </Modal>
             <DataTablePersonasVulnerables/>
         </div>

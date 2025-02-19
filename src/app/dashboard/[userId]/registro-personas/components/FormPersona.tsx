@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-export default function FormPersona() {
+export default function FormPersona({closeModal}: {closeModal: ()=>void}) {
+
     const [userId, setUserId] = useState<number|"">("");
     useEffect(() => {
         setUserId(Number(localStorage.getItem("userId")))
@@ -22,7 +23,8 @@ export default function FormPersona() {
     const [error, setError] = useState<boolean>(false);
 
 
-    async function handleSubmit(){
+    async function handleSubmit(e: React.FormEvent){
+        e.preventDefault();
         try {
             const response = await fetch("/api/persona_situacion_vulnerable", {
                 method: "POST",
@@ -45,11 +47,31 @@ export default function FormPersona() {
                 })
             });
 
+            
             const result = await response.json();
+            
+            if(registrarTarjeta) {
+                const responseT = await fetch("/api/tarjeta_beneficiario", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        tarjeta_nro: tarjetaNro,
+                        fecha: (new Date()).toISOString(),
+                        cola_id: userId,
+                        psv_id: result.persona.psv_id
+                    })
+                });
+                if(!responseT.ok) {
+                    alert("Error al cargar la tarjeta");
+                }
+            }
 
             if(response.ok) {
                 setMensaje(result.mensaje);
                 setError(false);
+                closeModal();
 
             } else {
                 setMensaje(result.mensaje || 'Error al registrar la heladera');
