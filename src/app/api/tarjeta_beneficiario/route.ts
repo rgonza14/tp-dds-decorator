@@ -6,22 +6,15 @@ const prisma = new PrismaClient();
 // POST solo carga el numero de la tarjeta y la DB le asigna un ID:
 // los colaboradores reciben las tarjetas "sin activar" y al entregarlas a persona en situacion vulnerable, se completan los datos faltantos y se activan
 export async function POST(req: Request) {
-    console.log("--> POST /api/tarjeta_beneficiario");
+
     try {
         const {tarjeta_nro, fecha, cola_id, psv_id} = await req.json();
         if(!tarjeta_nro) {
             return NextResponse.json({message: "datos insuficientes"},{status: 400});
         }
         
-    console.log("--> AAAAAAAA");
         const tarb_fecha_alta = fecha ?? (new Date()).toISOString();
-        console.log("--> BBBBBBBBBB", {
-            tarb_nro: String(tarjeta_nro),
-            tarb_fecha_alta: Number(psv_id)?tarb_fecha_alta:null,
-            tarb_colaborador: Number(cola_id)?Number(cola_id):null,
-            tarb_beneficiario: Number(psv_id)?Number(psv_id):null
-        });
-
+        
         const nuevaTarjeta = await prisma.tarjeta_beneficiario.create({
             data: {
                 tarb_nro: String(tarjeta_nro),
@@ -30,12 +23,10 @@ export async function POST(req: Request) {
                 tarb_beneficiario: Number(psv_id)?Number(psv_id):null
             }
         });
-        console.log("--> CCCCCCCCCC");
 
         if(!nuevaTarjeta) {
             return NextResponse.json({message: "Error en la creacion de la tarjeta"}, {status: 404});
         }
-        console.log("--> DDDDDDDDDDDD");
 
         return NextResponse.json({
             tarjeta: nuevaTarjeta,

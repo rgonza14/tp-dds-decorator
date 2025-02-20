@@ -17,7 +17,7 @@ export default function FormPersona({closeModal}: {closeModal: ()=>void}) {
     const [dniNro, setDniNro] = useState<string>("");
     const [cantMenoresACargo, setCantMenoresACargo] = useState<number | "">(0);
     const [tarjetaNro, setTarjetaNro] = useState<string>("");
-    const [registrarTarjeta, setRegistrarTarjeta] = useState<boolean>(true);
+    const [registrarTarjeta, setRegistrarTarjeta] = useState<boolean>(false);
 
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
