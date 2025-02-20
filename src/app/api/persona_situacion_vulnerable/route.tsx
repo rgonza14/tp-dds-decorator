@@ -107,7 +107,6 @@ function esPersonaValida(personaData: any) {
     if(!personaData.psv_nombre ||
     !personaData.psv_fecha_nacimiento ||
     !personaData.psv_fecha_registro ||
-    !personaData.psv_direccion||
     !personaData.psv_dni_tipo ||
     !personaData.psv_dni_nro ||
     personaData.psv_menores_a_cargo<0){

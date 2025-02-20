@@ -74,14 +74,14 @@ export default function FormRegistroPersona({closeModal}: {closeModal: ()=>void}
                 closeModal();
 
             } else {
-                setMensaje(result.mensaje || 'Error al registrar la heladera');
+                setMensaje(result.mensaje || 'Error al registrar la persona');
                 setError(true);
 
             }
 
         } catch (error) {
-            console.error('Error al registrar la heladera:', error);
-            setMensaje('Error al registrar la heladera');
+            console.error('Error al registrar la persona:', error);
+            setMensaje('Error al registrar la persona');
         }
     };
 
@@ -89,9 +89,6 @@ export default function FormRegistroPersona({closeModal}: {closeModal: ()=>void}
         <div className='flex justify-center mt-6'>
             <div className='w-3/4 bg-white shadow-lg rounded-lg p-6'>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-                    <h2 className='text-lg font-semibold'>
-                        Registro Persona
-                    </h2>
                     {mensaje && (
                         <div
                             className={`text-lg font-semibold text-center mb-2 ${
