@@ -54,14 +54,14 @@ export default function FormEdicionPersona({ data }: { data: any }) {
                 // closeModal();
 
             } else {
-                setMensaje(result.mensaje || 'Error al registrar la heladera');
+                setMensaje(result.mensaje || 'Error al editar persona');
                 setError(true);
 
             }
 
         } catch (error) {
-            console.error('Error al registrar la heladera:', error);
-            setMensaje('Error al registrar la heladera');
+            console.error('Error al editar persona:', error);
+            setMensaje('Error al editar persona');
         }
     };
 
