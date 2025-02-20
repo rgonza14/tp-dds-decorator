@@ -49,12 +49,12 @@ export default function FormEdicionPersona({ data }: { data: any }) {
             const result = await response.json();
 
             if(response.ok) {
-                setMensaje(result.mensaje);
+                setMensaje(result.message);
                 setError(false);
                 // closeModal();
 
             } else {
-                setMensaje(result.mensaje || 'Error al editar persona');
+                setMensaje(result.message || 'Error al editar persona');
                 setError(true);
 
             }
