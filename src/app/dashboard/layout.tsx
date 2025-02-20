@@ -14,10 +14,10 @@ export default function DashboardLayout({
     const [userId, setUserId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
-        console.log('storedUserId: ', storedUserId);
-        if (storedUserId) {
-            setUserId(storedUserId);
+        const userId = localStorage.getItem('userId');
+        console.log('userId: ', userId);
+        if (userId) {
+            setUserId(userId);
         } else {
             redirect('/auth');
         }
