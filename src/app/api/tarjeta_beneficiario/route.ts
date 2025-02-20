@@ -79,6 +79,7 @@ export async function GET(req: Request) {
         const {searchParams} = new URL(req.url);
         const tarb_id = searchParams.get("tarb_id");
         const tarb_nro = searchParams.get("tarb_nro");
+        const psv_id = searchParams.get("psv_id");
 
         if(tarb_id) {
             const tarjeta = await prisma.tarjeta_beneficiario.findUnique({
@@ -95,6 +96,18 @@ export async function GET(req: Request) {
         if(tarb_nro) {
             const tarjeta = await prisma.tarjeta_beneficiario.findUnique({
                 where: {tarb_nro: tarb_nro}
+            });
+            if(!tarjeta) {
+                return NextResponse.json({message: "Tarjeta no encontrada"}, {status: 404});
+            }
+            return NextResponse.json({
+                tarjeta: tarjeta,
+            },{status: 200});
+        }
+        
+        if(psv_id) {
+            const tarjeta = await prisma.tarjeta_beneficiario.findFirst({
+                where: {tarb_beneficiario: Number(psv_id)}
             });
             if(!tarjeta) {
                 return NextResponse.json({message: "Tarjeta no encontrada"}, {status: 404});
