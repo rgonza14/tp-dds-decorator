@@ -22,19 +22,19 @@ const DashboardNav = ({ userId, isMobileNav = false }: DashboardNavProps) => {
 
     const items = [
         {
-            title: 'Puntos y canjes',
-            href: `/dashboard/${userId}/puntos-y-canjes`,
-            icon: 'carrito'
+            title: 'Editar Perfil',
+            href: `/dashboard/${userId}/editar-perfil`,
+            icon: 'editarPerfil'
         },
         {
-            title: 'Heladeras',
+            title: 'Donacion de dinero',
+            href: `/dashboard/${userId}/donaciones`,
+            icon: 'donaciones'
+        },
+        {
+            title: 'Gestion de heladeras',
             href: `/dashboard/${userId}/heladeras`,
             icon: 'heladera'
-        },
-        {
-            title: 'Registro Personas en Situación Vulnerable',
-            href: `/dashboard/${userId}/registro-personas`,
-            icon: 'persona'
         },
         {
             title: 'Carga de Viandas',
@@ -42,24 +42,19 @@ const DashboardNav = ({ userId, isMobileNav = false }: DashboardNavProps) => {
             icon: 'vianda'
         },
         {
-            title: 'Donaciones',
-            href: `/dashboard/${userId}/donaciones`,
-            icon: 'donaciones'
-        },
-        {
-            title: 'Distribución Viandas',
+            title: 'Distribución de viandas',
             href: `/dashboard/${userId}/distribucion`,
             icon: 'camion'
         },
         {
-            title: 'Gestión Técnicos',
-            href: `/dashboard/${userId}/tecnicos`,
-            icon: 'tecnico'
+            title: 'Gestión de personas en Situación Vulnerable',
+            href: `/dashboard/${userId}/registro-personas`,
+            icon: 'persona'
         },
         {
-            title: 'Editar Perfil',
-            href: `/dashboard/${userId}/editar-perfil`,
-            icon: 'editarPerfil'
+            title: 'Gestión de técnicos',
+            href: `/dashboard/${userId}/tecnicos`,
+            icon: 'tecnico'
         },
         {
             title: 'Administradores',
@@ -67,10 +62,15 @@ const DashboardNav = ({ userId, isMobileNav = false }: DashboardNavProps) => {
             icon: 'administrador'
         },
         {
-            title: 'Carga de Colaboradores',
+            title: 'Carga masiva de Colaboraciones',
             href: `/dashboard/${userId}/cargar-colaboraciones`,
             icon: 'cargaColaboraciones'
-        }
+        },
+        {
+            title: 'Tienda de puntos',
+            href: `/dashboard/${userId}/puntos-y-canjes`,
+            icon: 'carrito'
+        },
     ];
 
     async function handleLogout(evt: React.MouseEvent<HTMLButtonElement>) {
