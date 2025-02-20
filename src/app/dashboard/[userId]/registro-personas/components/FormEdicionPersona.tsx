@@ -16,8 +16,6 @@ export default function FormEdicionPersona({ data }: { data: any }) {
     const [dniTipo, setDniTipo] = useState<string>(data.dniTipo);
     const [dniNro, setDniNro] = useState<string>(data.dniNro);
     const [cantMenoresACargo, setCantMenoresACargo] = useState<number | "">(data.cantMenoresACargo);
-    const [tarjetaNro, setTarjetaNro] = useState<string>("");
-    const [editarTarjeta, setEditarTarjeta] = useState<boolean>(false);
 
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
@@ -244,39 +242,6 @@ export default function FormEdicionPersona({ data }: { data: any }) {
                             required
                         />
                     </div>
-
-                    <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='registrarTarjeta'
-                            className='mt-1 p-2 border rounded-md '
-                            checked={editarTarjeta}
-                            onChange={e => setEditarTarjeta(Boolean(e.target.checked))}
-                        />
-                        <label
-                            htmlFor='mostrarTodos'
-                            className='block text-sm font-medium'
-                        >
-                            Editar Tarjeta:
-                        </label>
-                    </div>
-
-                    {editarTarjeta && <div>
-                        <label
-                            htmlFor='tarjetaNro'
-                            className='block text-sm font-medium'
-                        >
-                            Nro Tarjeta:
-                        </label>
-                        <input
-                            type='text'
-                            id='tarjetaNro'
-                            className='mt-1 p-2 border rounded-md w-full'
-                            value={tarjetaNro}
-                            onChange={e => setTarjetaNro(e.target.value)}
-                            required
-                        />
-                    </div>}
 
                     <button
                         className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
