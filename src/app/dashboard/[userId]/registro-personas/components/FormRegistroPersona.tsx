@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-export default function FormPersona({closeModal}: {closeModal: ()=>void}) {
+export default function FormRegistroPersona({closeModal}: {closeModal: ()=>void}) {
 
     const [userId, setUserId] = useState<number|"">("");
     useEffect(() => {

@@ -16,6 +16,7 @@ import { Edit, Eye, MoreHorizontal, Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import DetalleTarjeta from './DetalleTarjeta';
+import FormEdicionPersona from './FormEdicionPersona';
 // import { toast } from 'sonner';
 // import useSWRMutation from 'swr/mutation';
 
@@ -28,10 +29,6 @@ export function PersonaVulnerableAction({ data }: { data: any }) {
     const [isOpenDetalle, setIsOpenDetalle] = useState(false);
     const router = useRouter();
     const { idUser } = useParams();
-    // const { trigger } = useSWRMutation(
-    //     `/businesses/${idUser}/services`,
-    //     fetcher
-    // );
 
     async function onConfirmDelete() {
         // try {
@@ -48,9 +45,6 @@ export function PersonaVulnerableAction({ data }: { data: any }) {
         // }
     }
 
-    const handleUpdateService = () => {
-        setIsOpenEdit(true);
-    };
 
     return (
         <>
@@ -69,11 +63,7 @@ export function PersonaVulnerableAction({ data }: { data: any }) {
                 isOpen={isOpenEdit}
                 onClose={() => setIsOpenEdit(false)}
             >
-                {/* <ServiceForm
-                    idUser={`${idUser}`}
-                    data={data}
-                    afterOnSubmit={() => setIsOpenEdit(false)}
-                /> */}
+                <FormEdicionPersona data={data}/>
             </Modal>
 
             <Modal
@@ -96,9 +86,9 @@ export function PersonaVulnerableAction({ data }: { data: any }) {
                 <DropdownMenuContent align='end'>
                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
 
-                    <DropdownMenuItem onClick={handleUpdateService}>
+                    <DropdownMenuItem onClick={() => setIsOpenEdit(true)}>
                         <Edit className='mr-2 h-4 w-4' />
-                        Actualizar
+                        Editar
                     </DropdownMenuItem>
 
                     <DropdownMenuItem onClick={() => setIsOpenDetalle(true)}>

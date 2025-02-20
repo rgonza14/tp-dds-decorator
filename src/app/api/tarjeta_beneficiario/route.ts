@@ -3,8 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// POST solo carga el numero de la tarjeta y la DB le asigna un ID:
-// los colaboradores reciben las tarjetas "sin activar" y al entregarlas a persona en situacion vulnerable, se completan los datos faltantos y se activan
+
 export async function POST(req: Request) {
 
     try {

@@ -83,8 +83,6 @@ export function DataTablePersonasVulnerables() {
                     cantMenoresACargo: persona.psv_menores_a_cargo,
                 }
             }));
-            // BORRAR LOG AL TERMINAR
-            console.log("-> personas:",personas);
 
             setError(false);
             setMensaje('');
