@@ -44,7 +44,14 @@ export async function PUT(req: Request) {
 
     try {
         const {tarjeta_nro, fecha, cola_id, psv_id, tarb_id} = await req.json();
-        if((!tarjeta_nro&&!tarb_id) || !fecha || !cola_id || !psv_id) {
+        console.log("--> OUT: ",{
+            tarjeta_nro: tarjeta_nro,
+            fecha: fecha,
+            cola_id: cola_id,
+            psv_id: psv_id,
+            tarb_id: tarb_id
+        })
+        if((!tarjeta_nro&&!tarb_id) || !cola_id || !psv_id) {
             return NextResponse.json({message: "Datos insuficientes"},{status: 400});
         }
 
@@ -53,8 +60,9 @@ export async function PUT(req: Request) {
         const tarjetaActualizada = await prisma.tarjeta_beneficiario.update({
             where: tarb_id ? {tarb_id: tarb_id} : {tarb_nro: tarjeta_nro},
             data: {
-                tarb_colaborador: cola_id,
-                tarb_fecha_alta: tarb_fecha_alta
+                tarb_colaborador: Number(cola_id),
+                tarb_fecha_alta: tarb_fecha_alta,
+                tarb_beneficiario: Number(psv_id)
             }
         });
 

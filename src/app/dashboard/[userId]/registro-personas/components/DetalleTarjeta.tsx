@@ -1,22 +1,16 @@
 'use client';
-
-import { Label } from '@/components/ui/label';
 import { useEffect, useState } from 'react';
 
 export default function DetalleTarjeta({ data }: { data: any }) {
-    console.log("-->data: ",data)
+
+    const [userId, setUserId] = useState<number|"">("");
+    useEffect(() => {
+        setUserId(Number(localStorage.getItem("userId")))
+    },[]);
     const [tarjetaNro, setTarjetaNro] = useState("");
+    const [nuevaTarjetaNro, setNuevaTarjetaNro] = useState("");
     const [usosRealizados, setUsosRealizados] = useState(0);
     const usosDiarios = 4 + 2 * data.cantMenoresACargo;
-    
-    const [fields] = useState([
-        { label: 'Beneficiario', value: `${data.nombre} ${data.apellido}`},
-        { label: 'Número de tarjeta', value: tarjetaNro },
-        { label: 'Usos en el día', value: '1' },
-        { label: 'Usos restantes', value: '3' },
-
-        { label: 'Colaborador a cargo del tramite', value: 'Franco Martinez' }
-    ]);
 
 
     async function fetchTarjeta() {
@@ -74,6 +68,40 @@ export default function DetalleTarjeta({ data }: { data: any }) {
         }
     }
 
+    async function handleSubmit(e: React.FormEvent) {
+        try {
+            const response = await fetch("/api/tarjeta_beneficiario", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tarjeta_nro: nuevaTarjetaNro,
+                    cola_id: userId,
+                    psv_id: data.id,
+                    fecha: (new Date()).toISOString()
+                })
+            });
+
+            const result = await response.json();
+
+            if(response.ok) {
+                console.log(result.message);
+                // setMensaje(result.message);
+                // setError(false);
+
+            } else {
+                console.error(result.message);
+                // setMensaje(result.message);
+                // setError(false);
+
+            }
+        } catch (error) {
+            console.error('Error al editar persona:', error);
+            // setMensaje('Error al editar persona');
+        }
+    }
+
     useEffect(() => {
         fetchTarjeta();
         fetchExtracciones();
@@ -100,77 +128,114 @@ export default function DetalleTarjeta({ data }: { data: any }) {
                 />
             </div>
 
-            <div>
-                <label
-                    htmlFor='tarjetaNro'
-                    className='block text-sm font-medium'
-                >
-                    Número de tarjeta:
-                </label>
-                <input
-                    type='text'
-                    id='tarjetaNro'
-                    className='mt-1 p-2 border rounded-md w-full'
-                    value={tarjetaNro}
-                    readOnly
-                    // onChange={}
-                    required
-                />
-            </div>
+            {Boolean(tarjetaNro) && <div>
 
-            <div>
-                <label
-                    htmlFor='usosDiarios'
-                    className='block text-sm font-medium'
-                >
-                    Usos diarios:
-                </label>
-                <input
-                    type='number'
-                    id='usosDiarios'
-                    className='mt-1 p-2 border rounded-md w-full'
-                    value={usosDiarios}
-                    readOnly
-                    // onChange={}
-                    required
-                />
-            </div>
+                <div>
+                    <label
+                        htmlFor='tarjetaNro'
+                        className='block text-sm font-medium'
+                    >
+                        Número de tarjeta:
+                    </label>
+                    <input
+                        type='text'
+                        id='tarjetaNro'
+                        className='mt-1 p-2 border rounded-md w-full'
+                        value={tarjetaNro}
+                        readOnly
+                        // onChange={}
+                        required
+                    />
+                </div>
 
-            <div>
-                <label
-                    htmlFor='usosRealizados'
-                    className='block text-sm font-medium'
-                >
-                    Usos realizados:
-                </label>
-                <input
-                    type='number'
-                    id='usosRealizados'
-                    className='mt-1 p-2 border rounded-md w-full'
-                    value={usosRealizados}
-                    readOnly
-                    // onChange={}
-                    required
-                />
-            </div>
+                <div>
+                    <label
+                        htmlFor='usosDiarios'
+                        className='block text-sm font-medium'
+                    >
+                        Usos diarios:
+                    </label>
+                    <input
+                        type='number'
+                        id='usosDiarios'
+                        className='mt-1 p-2 border rounded-md w-full'
+                        value={usosDiarios}
+                        readOnly
+                        // onChange={}
+                        required
+                    />
+                </div>
 
-            <div>
-                <label
-                    htmlFor='usosRestantes'
-                    className='block text-sm font-medium'
-                >
-                    Usos restantes:
-                </label>
-                <input
-                    type='number'
-                    id='usosRestantes'
-                    className='mt-1 p-2 border rounded-md w-full'
-                    value={usosDiarios - usosRealizados}
-                    readOnly
-                    // onChange={}
-                    required
-                />
-            </div>
+                <div>
+                    <label
+                        htmlFor='usosRealizados'
+                        className='block text-sm font-medium'
+                    >
+                        Usos realizados:
+                    </label>
+                    <input
+                        type='number'
+                        id='usosRealizados'
+                        className='mt-1 p-2 border rounded-md w-full'
+                        value={usosRealizados}
+                        readOnly
+                        // onChange={}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label
+                        htmlFor='usosRestantes'
+                        className='block text-sm font-medium'
+                    >
+                        Usos restantes:
+                    </label>
+                    <input
+                        type='number'
+                        id='usosRestantes'
+                        className='mt-1 p-2 border rounded-md w-full'
+                        value={usosDiarios - usosRealizados}
+                        readOnly
+                        // onChange={}
+                        required
+                    />
+                </div>
+            </div>}
+
+            {Boolean(!tarjetaNro) && <div>
+                La persona no tiene asociada una tarjeta.
+                <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+                    <h2 className='text-lg font-semibold'>
+                        Asociar Tarjeta
+                    </h2>
+
+                <div>
+                    <label
+                        htmlFor='tarjetaNro'
+                        className='block text-sm font-medium'
+                    >
+                        Número de tarjeta:
+                    </label>
+                    <input
+                        type='text'
+                        id='tarjetaNro'
+                        className='mt-1 p-2 border rounded-md w-full'
+                        value={nuevaTarjetaNro}
+                        onChange={e => setNuevaTarjetaNro(e.target.value)}
+                        required
+                    />
+                </div>
+
+                    <button
+                        className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
+                        type='submit'
+                    >
+                        Asociar Tarjeta
+                    </button>
+                    </form>
+
+            </div>}
 
         </div>
     );
