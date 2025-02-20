@@ -69,6 +69,38 @@ export async function GET(req: Request) {
 
 }
 
+export async function PUT(req: Request) {
+
+    try {
+        const {psv_id, personaData} = await req.json();
+        if(!psv_id) {
+            return NextResponse.json({message: "se requiere id de la persona"}, {status:400});
+        }
+
+        const personaActualizada = await prisma.persona_situacion_vulnerable.update({
+            where: {
+                psv_id: psv_id
+            },
+            data: personaData
+        });
+
+        if(!personaActualizada) {
+            return NextResponse.json({
+                message: "Falla en la edicion de la persona"
+            }, {status: 400});
+        }
+
+        return NextResponse.json({
+            persona: personaActualizada,
+            message: "persona en situación vulnerable editada exitosamente"
+        }, {status: 201});
+
+    } catch(error) {
+        return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
+    }
+
+}
+
 
 function esPersonaValida(personaData: any) {
 

@@ -22,66 +22,47 @@ export default function FormEdicionPersona({ data }: { data: any }) {
 
 
     async function handleSubmit(e: React.FormEvent){
-        e.preventDefault();
-        alert("Edición en desarrollo");
-        // try {
-        //     const response = await fetch("/api/persona_situacion_vulnerable", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         body: JSON.stringify({
-        //             cola_id: userId,
-        //             personaData: {
-        //                 psv_nombre: nombre,
-        //                 psv_apellido: apellido,
-        //                 psv_fecha_nacimiento: new Date(fechaNacimiento).toISOString(),
-        //                 psv_fecha_registro: new Date(fechaRegistro).toISOString(),
-        //                 psv_direccion: direccion,
-        //                 psv_dni_tipo: dniTipo,
-        //                 psv_dni_nro: dniNro,
-        //                 psv_menores_a_cargo: Number(cantMenoresACargo)
+        // e.preventDefault();
+        try {
+            const response = await fetch("/api/persona_situacion_vulnerable", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    psv_id: data.id,
+                    personaData: {
+                        psv_nombre: nombre,
+                        psv_apellido: apellido,
+                        psv_fecha_nacimiento: new Date(fechaNacimiento).toISOString(),
+                        psv_fecha_registro: new Date(fechaRegistro).toISOString(),
+                        psv_direccion: direccion,
+                        psv_dni_tipo: dniTipo,
+                        psv_dni_nro: dniNro,
+                        psv_menores_a_cargo: Number(cantMenoresACargo)
 
-        //             }
-        //         })
-        //     });
+                    }
+                })
+            });
 
             
-        //     const result = await response.json();
-            
-        //     if(registrarTarjeta) {
-        //         const responseT = await fetch("/api/tarjeta_beneficiario", {
-        //             method: "POST",
-        //             headers: {
-        //                 "Content-Type": "application/json"
-        //             },
-        //             body: JSON.stringify({
-        //                 tarjeta_nro: tarjetaNro,
-        //                 fecha: (new Date()).toISOString(),
-        //                 cola_id: userId,
-        //                 psv_id: result.persona.psv_id
-        //             })
-        //         });
-        //         if(!responseT.ok) {
-        //             alert("Error al cargar la tarjeta");
-        //         }
-        //     }
+            const result = await response.json();
 
-        //     if(response.ok) {
-        //         setMensaje(result.mensaje);
-        //         setError(false);
-        //         closeModal();
+            if(response.ok) {
+                setMensaje(result.mensaje);
+                setError(false);
+                // closeModal();
 
-        //     } else {
-        //         setMensaje(result.mensaje || 'Error al registrar la heladera');
-        //         setError(true);
+            } else {
+                setMensaje(result.mensaje || 'Error al registrar la heladera');
+                setError(true);
 
-        //     }
+            }
 
-        // } catch (error) {
-        //     console.error('Error al registrar la heladera:', error);
-        //     setMensaje('Error al registrar la heladera');
-        // }
+        } catch (error) {
+            console.error('Error al registrar la heladera:', error);
+            setMensaje('Error al registrar la heladera');
+        }
     };
 
     return (
