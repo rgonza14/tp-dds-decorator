@@ -81,6 +81,7 @@ export function DataTablePersonasVulnerables() {
                     dniTipo: persona.psv_dni_tipo,
                     dniNro: persona.psv_dni_nro,
                     cantMenoresACargo: persona.psv_menores_a_cargo,
+                    colaborador: persona.psv_colaborador
                 }
             }));
 
