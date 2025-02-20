@@ -1,7 +1,7 @@
 'use client';
 
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function DetalleTarjeta({ data }: { data: any }) {
     console.log("-->data: ",data)
@@ -13,6 +13,39 @@ export default function DetalleTarjeta({ data }: { data: any }) {
 
         { label: 'Colaborador a cargo del tramite', value: 'Franco Martinez' }
     ]);
+
+    const [tarjetaNro, setTarjetaNro] = useState("");
+
+    async function fetchTarjeta() {
+        try {
+            const response = await fetch(`/api/tarjeta_beneficiario?psv_id=${data.id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const {tarjeta} = await response.json();
+
+            if(!response.ok) {
+                console.error('Error al obtener datos de la tarjeta:');
+                // setMensaje('Error al editar persona');
+                // setError(true);
+                return;
+            }
+
+            setTarjetaNro(tarjeta.tarb_nro);
+            
+
+        } catch (error) {
+            console.error('Error al obtener datos de la tarjeta:', error);
+            // setMensaje('Error al obtener datos de la tarjeta');
+        }
+    }
+
+    useEffect(() => {
+        fetchTarjeta();
+    }, [])
 
     return (
         <div className='grid gap-4 py-4'>
