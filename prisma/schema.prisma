@@ -82,17 +82,18 @@ model donacion_dinero {
 }
 
 model donacion_vianda {
-  dv_id              Int          @id @default(autoincrement())
-  dv_comida          String?      @db.Char(50)
-  dv_fecha_doncacion DateTime?    @db.Date
-  dv_fecha_caducidad DateTime?    @db.Date
-  dv_calorias        Decimal?     @db.Decimal(10, 2)
-  dv_peso            Decimal?     @db.Decimal(10, 2)
-  dv_estado          String?      @db.Char(50)
+  dv_id              Int                 @id @default(autoincrement())
+  dv_comida          String?             @db.Char(50)
+  dv_fecha_doncacion DateTime?           @db.Date
+  dv_fecha_caducidad DateTime?           @db.Date
+  dv_calorias        Decimal?            @db.Decimal(10, 2)
+  dv_peso            Decimal?            @db.Decimal(10, 2)
+  dv_estado          String?             @db.Char(50)
   dv_colaborador     Int?
   dv_heladera        Int?
-  colaborador        colaborador? @relation(fields: [dv_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_vianda_ibfk_1")
-  heladera           heladera?    @relation(fields: [dv_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_vianda_ibfk_2")
+  colaborador        colaborador?        @relation(fields: [dv_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_vianda_ibfk_1")
+  heladera           heladera?           @relation(fields: [dv_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_vianda_ibfk_2")
+  extraccion_vianda  extraccion_vianda[]
 
   @@index([dv_colaborador], map: "dv_colaborador")
   @@index([dv_heladera], map: "dv_heladera")
@@ -141,6 +142,7 @@ model persona_situacion_vulnerable {
   psv_dni_nro          String?                @db.Char(10)
   psv_menores_a_cargo  Int?
   psv_apellido         String?                @db.Char(50)
+  extraccion_vianda    extraccion_vianda[]
   colaborador          colaborador?           @relation(fields: [psv_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "persona_situacion_vulnerable_ibfk_1")
   tarjeta_beneficiario tarjeta_beneficiario[]
 
@@ -191,4 +193,16 @@ model tecnico {
   tec_dni_tipo String?     @db.Char(3)
   tec_dni_nro  Decimal?    @db.Decimal(10, 0)
   incidente    incidente[]
+}
+
+model extraccion_vianda {
+  extr_id                      Int                          @id @default(autoincrement())
+  extr_vianda                  Int
+  extr_beneficiario            Int
+  extr_fecha                   DateTime?                    @db.Date
+  donacion_vianda              donacion_vianda              @relation(fields: [extr_vianda], references: [dv_id], onDelete: NoAction, onUpdate: NoAction, map: "extraccion_vianda_ibfk_1")
+  persona_situacion_vulnerable persona_situacion_vulnerable @relation(fields: [extr_beneficiario], references: [psv_id], onDelete: NoAction, onUpdate: NoAction, map: "extraccion_vianda_ibfk_2")
+
+  @@index([extr_beneficiario], map: "extr_beneficiario")
+  @@index([extr_vianda], map: "extr_vianda")
 }

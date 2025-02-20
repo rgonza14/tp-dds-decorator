@@ -126,6 +126,16 @@ CREATE TABLE smaa.distribucion_vianda(
     FOREIGN KEY (dist_heladera_destino) REFERENCES smaa.heladera(hela_id)
 );
 
+CREATE TABLE smaa.extraccion_vianda(
+	extr_id INT NOT NULL AUTO_INCREMENT,
+    extr_vianda INT NOT NULL UNIQUE,
+    extr_beneficiario INT NOT NULL,
+    extr_fecha DATE,
+    PRIMARY KEY (extr_id),
+    FOREIGN KEY (extr_vianda) REFERENCES smaa.donacion_vianda(dv_id),
+    FOREIGN KEY (extr_beneficiario) REFERENCES smaa.persona_situacion_vulnerable(psv_id)
+);
+
 CREATE TABLE smaa.coeficiente_reconocimiento(
 	coef_id INT NOT NULL AUTO_INCREMENT,
     coef_descripcion CHAR(50),
