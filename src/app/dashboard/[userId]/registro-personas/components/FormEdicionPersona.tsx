@@ -70,7 +70,7 @@ export default function FormEdicionPersona({ data }: { data: any }) {
             <div className='w-3/4 bg-white shadow-lg rounded-lg p-6'>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <h2 className='text-lg font-semibold'>
-                        Registro Persona
+                        Edición Persona
                     </h2>
                     {mensaje && (
                         <div
@@ -228,7 +228,7 @@ export default function FormEdicionPersona({ data }: { data: any }) {
                         className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
                         type='submit'
                     >
-                        Registrar Persona
+                        Editar Persona
                     </button>
                 </form>
             </div>

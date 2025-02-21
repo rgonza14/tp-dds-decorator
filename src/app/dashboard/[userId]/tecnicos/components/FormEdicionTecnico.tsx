@@ -70,7 +70,7 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
             <div className='w-3/4 bg-white shadow-lg rounded-lg p-6'>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <h2 className='text-lg font-semibold'>
-                        Editar técnico
+                        Edición técnico
                     </h2>
                     {mensaje && (
                         <div
