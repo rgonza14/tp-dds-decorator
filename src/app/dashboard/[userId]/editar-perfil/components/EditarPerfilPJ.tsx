@@ -93,6 +93,7 @@ export default function EditarPerfilPJ() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={razonSocial}
                             onChange={e => setRazonSocial(e.target.value)}
+                            required
                         />
                     </div>
     
@@ -103,13 +104,19 @@ export default function EditarPerfilPJ() {
                         >
                             Tipo:
                         </label>
-                        <input
-                            type='text'
+                        <select
                             id='tipo'
                             className='mt-1 p-2 border rounded-md w-full'
                             value={tipo}
                             onChange={e => setTipo(e.target.value)}
-                        />
+                            required
+                        >
+                            <option value=''>Seleccione una opción</option>
+                            <option value='Gubernamental'>Gubernamental</option>
+                            <option value='ONG'>ONG</option>
+                            <option value='Empresa'>Empresa</option>
+                            <option value='Institución'>Institución</option>
+                        </select>
                     </div>
     
                     <div>
@@ -125,6 +132,7 @@ export default function EditarPerfilPJ() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={rubro}
                             onChange={e => setRubro(e.target.value)}
+                            required
                         />
                     </div>
     
@@ -141,6 +149,7 @@ export default function EditarPerfilPJ() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={email}
                             onChange={e => setEmail(e.target.value)}
+                            required={telefono?false:true}
                         />
                     </div>
     
@@ -157,6 +166,7 @@ export default function EditarPerfilPJ() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={telefono}
                             onChange={e => setTelefono(e.target.value)}
+                            required={email?false:true}
                         />
                     </div>
     
@@ -176,19 +186,12 @@ export default function EditarPerfilPJ() {
                         />
                     </div>
     
-                    <Button
+                    <button
                         className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'
                         type='submit'
-                        disabled={
-                            !razonSocial &&
-                            !tipo &&
-                            !rubro &&
-                            !email &&
-                            !direccion
-                        }
                     >
                         Guardar Cambios
-                    </Button>
+                    </button>
                 </form>
             </div>
     )
