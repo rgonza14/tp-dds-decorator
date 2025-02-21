@@ -73,7 +73,7 @@ export default function EditarPerfilPJ() {
                     </div>
                 )}
                 <h1 className='text-2xl font-bold mb-4'>
-                    Editar Perfil de Usuario (EN DESARROLLO)
+                    Editar Perfil de Usuario
                 </h1>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <h2 className='text-lg font-semibold'>
