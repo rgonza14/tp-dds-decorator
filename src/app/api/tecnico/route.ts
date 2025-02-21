@@ -33,3 +33,18 @@ export async function POST(req: Request) {
     }
 
 }
+
+export async function GET(req: Request) {
+    try {
+
+        const tecnicos = await prisma.tecnico.findMany();
+        return NextResponse.json({
+            tecnicos: tecnicos,
+        },{status: 200});
+
+        
+
+    } catch(error) {
+        return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
+    }
+}
