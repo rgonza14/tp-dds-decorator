@@ -102,7 +102,7 @@ const DonacionesForm: React.FC = () => {
                         value={frecuencia}
                         onChange={e => setFrecuencia(e.target.value)}
                     >
-                        <option value="">Seleccionar id</option>
+                        <option value="">Seleccionar frecuencia</option>
                         <option value='una vez'>Una vez</option>
                         <option value='semanal'>Semanal</option>
                         <option value='mensual'>Mensual</option>
