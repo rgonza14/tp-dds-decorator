@@ -41,8 +41,8 @@ model persona_juridica {
   pj_tipo         String?     @db.Char(50)
   pj_rubro        String?     @db.Char(50)
   pj_direccion    String?     @db.Char(50)
-  ph_telefono     String?     @db.Char(50)
   pj_mail         String?     @db.Char(50)
+  pj_telefono     String?     @db.Char(50)
   colaborador     colaborador @relation(fields: [pj_id], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pj_colaborador")
 }
 

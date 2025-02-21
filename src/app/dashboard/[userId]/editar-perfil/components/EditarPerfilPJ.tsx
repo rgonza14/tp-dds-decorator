@@ -15,7 +15,7 @@ export default function EditarPerfilPJ() {
     const [tipo, setTipo] = useState<string>(persona.pj_tipo);
     const [rubro, setRubro] = useState<string>(persona.pj_rubro);
     const [email, setEmail] = useState<string>(persona.pj_mail);
-    const [telefono, setTelefono] = useState<string>(persona.pj_telefono);//REVISAR SI HACE FALTA TELEFONO
+    const [telefono, setTelefono] = useState<string>(persona.pj_telefono);
     const [direccion, setDireccion] = useState<string>(persona.pj_direccion);
 
     const [resultado, setResultado] = useState<any>(null);
@@ -40,6 +40,7 @@ export default function EditarPerfilPJ() {
                         pj_tipo: tipo,
                         pj_rubro: rubro,
                         pj_direccion: direccion,
+                        pj_telefono: telefono,
                         pj_mail: email
                     }
                 })
@@ -100,7 +101,7 @@ export default function EditarPerfilPJ() {
                             htmlFor='tipo'
                             className='block text-sm font-medium'
                         >
-                            tipo:
+                            Tipo:
                         </label>
                         <input
                             type='text'
@@ -108,6 +109,22 @@ export default function EditarPerfilPJ() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={tipo}
                             onChange={e => setTipo(e.target.value)}
+                        />
+                    </div>
+    
+                    <div>
+                        <label
+                            htmlFor='rubro'
+                            className='block text-sm font-medium'
+                        >
+                            Rubro:
+                        </label>
+                        <input
+                            type='text'
+                            id='rubro'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={rubro}
+                            onChange={e => setRubro(e.target.value)}
                         />
                     </div>
     
@@ -127,7 +144,6 @@ export default function EditarPerfilPJ() {
                         />
                     </div>
     
-    {/* REVISAR SI HACE FALTA TELEFONO */}
                     <div>
                         <label
                             htmlFor='telefono'
