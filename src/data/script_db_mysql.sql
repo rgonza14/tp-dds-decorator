@@ -139,7 +139,7 @@ CREATE TABLE smaa.extraccion_vianda(
 
 CREATE TABLE smaa.coeficiente_reconocimiento(
 	coef_id INT NOT NULL AUTO_INCREMENT,
-    coef_descripcion CHAR(50),
+    coef_descripcion CHAR(50) UNIQUE,
     coef_coeficiente DECIMAL(10,2),
     PRIMARY KEY (coef_id)
 );

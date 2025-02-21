@@ -49,7 +49,7 @@ model persona_juridica {
 
 model coeficiente_reconocimiento {
   coef_id          Int      @id @default(autoincrement())
-  coef_descripcion String?  @db.Char(50)
+  coef_descripcion String?  @unique(map: "coef_descripcion") @db.Char(50)
   coef_coeficiente Decimal? @db.Decimal(10, 2)
 }
 
