@@ -162,6 +162,9 @@ CREATE TABLE smaa.tecnico(
     tec_apellido CHAR(50),
     tec_dni_tipo CHAR(3),
     tec_dni_nro DECIMAL(10,0),
+    tec_cuil char(12),
+    tec_mail CHAR(50),
+    tec_telefono CHAR(50),
     PRIMARY KEY (tec_id)
 );
 

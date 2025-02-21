@@ -188,12 +188,16 @@ model tarjeta_colaborador {
 }
 
 model tecnico {
-  tec_id       Int         @id @default(autoincrement())
-  tec_nombre   String?     @db.Char(50)
-  tec_apellido String?     @db.Char(50)
-  tec_dni_tipo String?     @db.Char(3)
-  tec_dni_nro  Decimal?    @db.Decimal(10, 0)
-  incidente    incidente[]
+  tec_id             Int         @id @default(autoincrement())
+  tec_nombre         String?     @db.Char(50)
+  tec_apellido       String?     @db.Char(50)
+  tec_dni_tipo       String?     @db.Char(3)
+  tec_dni_nro        Decimal?    @db.Decimal(10, 0)
+  tec_cuil           String?     @db.Char(20)
+  tec_mail           String?     @db.Char(50)
+  tec_telefono       String?     @db.Char(50)
+  tec_area_cobertura String?     @db.Char(50)
+  incidente          incidente[]
 }
 
 model extraccion_vianda {
