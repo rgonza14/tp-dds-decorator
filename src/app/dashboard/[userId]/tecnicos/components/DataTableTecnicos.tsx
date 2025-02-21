@@ -17,14 +17,13 @@ import {
 import { TecnicoAction } from './TecnicoAction';
 import { useEffect, useState } from 'react';
 
-export type PersonaVulnerable = {
+export type Tecnico = {
     id: string;
     nombre: string;
     apellido: string;
-    cantMenoresACargo: number;
 };
 
-export const columns: ColumnDef<PersonaVulnerable>[] = [
+export const columns: ColumnDef<Tecnico>[] = [
     {
         accessorKey: 'id',
         header: 'id'
@@ -48,8 +47,7 @@ export function DataTableTecnicos() {
     useEffect(() => {
         setUserId(Number(localStorage.getItem("userId")))
     },[]);
-    const [arrayPersonas, setArrayPersonas] = useState<any[]>([]);
-    const [mostrarTodos, setMostrarTodos] = useState<boolean>(false);
+    const [arrayTecnicos, setArrayTecnicos] = useState<any[]>([]);
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
 
@@ -57,7 +55,7 @@ export function DataTableTecnicos() {
 
     async function fetchData() {
         try {
-            const response = await fetch(`/api/persona_situacion_vulnerable${mostrarTodos?``:`?cola_id=${userId}`}`, {
+            const response = await fetch("/api/tecnico", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -69,19 +67,18 @@ export function DataTableTecnicos() {
 
             }
 
-            const {personas} = await response.json();
-            setArrayPersonas(personas.map((persona: any) => {
+            const {tecnicos} = await response.json();
+            setArrayTecnicos(tecnicos.map((persona: any) => {
                 return {
-                    id: persona.psv_id,
-                    nombre: persona.psv_nombre,
-                    apellido: persona.psv_apellido,
-                    fechaNacimiento: persona.psv_fecha_nacimiento,
-                    fechaRegistro: persona.psv_fecha_registro,
-                    direccion: persona.psv_direccion,
-                    dniTipo: persona.psv_dni_tipo,
-                    dniNro: persona.psv_dni_nro,
-                    cantMenoresACargo: persona.psv_menores_a_cargo,
-                    colaborador: persona.psv_colaborador
+                    id: persona.tec_id,
+                    nombre: persona.tec_nombre,
+                    apellido: persona.tec_apellido,
+                    dniTipo: persona.tec_dni_tipo,
+                    dniNro: persona.tec_dni_nro,
+                    cuil: persona.tec_cuil,
+                    email: persona.tec_mail,
+                    telefono: persona.tec_telefono,
+                    areaCobertura: persona.tec_area_cobertura,
                 }
             }));
 
@@ -96,31 +93,16 @@ export function DataTableTecnicos() {
 
     useEffect(() => {
         fetchData();
-    },[mostrarTodos]);
+    },[]);
 
     const table = useReactTable({
-        data: arrayPersonas,
+        data: arrayTecnicos,
         columns,
         getCoreRowModel: getCoreRowModel()
     });
 
     return (
         <div className='rounded-md border'>
-        <div className='flex gap-2'>
-            <input
-                type='checkbox'
-                id='mostrarTodos'
-                className='mt-1 p-2 border rounded-md '
-                checked={mostrarTodos}
-                onChange={e => setMostrarTodos(Boolean(e.target.checked))}
-            />
-            <label
-                htmlFor='mostrarTodos'
-                className='block text-sm font-medium'
-            >
-                Mostrar todos:
-            </label>
-        </div>
 
             <Table>
                 <TableHeader>
