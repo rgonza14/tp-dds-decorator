@@ -10,6 +10,7 @@ CREATE TABLE smaa.colaborador(
     cola_usuario CHAR(64) NOT NULL UNIQUE,
     cola_contrasena CHAR(64) NOT NULL,
     cola_tipo_colaborador CHAR(50) NOT NULL,
+    cola_admin BOOLEAN DEFAULT false,
     PRIMARY KEY (cola_id)
 );
 
