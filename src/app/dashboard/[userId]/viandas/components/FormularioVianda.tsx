@@ -19,6 +19,7 @@ export default function FormularioVianda(){
     const [error, setError] = useState<boolean>(false);
     const [heladerasArray, setHeladerasArray] = useState([]);
     const [cantidad, setCantidad] = useState<number | ''>(1);
+    const [espDisponible, setEspDisponible] = useState<number|"">("");
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -95,6 +96,40 @@ export default function FormularioVianda(){
         fetchData();
     },[])
 
+    async function handleChangeHeladera(hela_id: number|string) {
+        setHeladera(Number(hela_id));
+
+        if(!hela_id) {
+            setHeladera("");
+            setEspDisponible("");
+            return
+
+        }
+        try {
+            // obtener heladera y disponiibilidad
+            const heladeraResponse = await fetch(`/api/heladera?hela_id=${hela_id}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!heladeraResponse.ok) {
+                throw new Error(`Error HTTP: ${heladeraResponse.status}`);
+            }
+
+            
+            const {heladera, capacidadOcupada} = await heladeraResponse.json();
+            setEspDisponible(heladera.hela_capacidad - capacidadOcupada);
+            
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+            setMensaje('Error al recibir los datos de la heladera destino');
+            setError(true);
+        }
+
+    }
+
     return (
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
             <h2 className='text-lg font-semibold'>Formulario de Viandas</h2>
@@ -108,11 +143,14 @@ export default function FormularioVianda(){
                 >
                     heladera:
                 </label>
+                {espDisponible && <div className="text-blue-600">
+                    {`Espacio disponible: ${espDisponible}`}
+                </div>}
                 <select
                     id='heladera'
                     className='mt-1 p-2 border rounded-md w-full'
                     value={heladera}
-                    onChange={e => setHeladera(Number(e.target.value))}
+                    onChange={e => handleChangeHeladera(Number(e.target.value))}
                     required
                 >
                     <option value="">Seleccionar heladera</option>

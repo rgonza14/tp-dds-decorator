@@ -247,9 +247,9 @@ export default function DistribucionViandasForm() {
                 >
                     Heladera Destino:
                 </label>
-                <div className="text-blue-600">
+                {espDisponible && <div className="text-blue-600">
                     {`Espacio disponible: ${espDisponible}`}
-                </div>
+                </div>}
                 <select
                     id='heladeraDestino'
                     className='mt-1 p-2 border rounded-md w-full'
