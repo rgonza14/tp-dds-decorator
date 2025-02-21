@@ -10,12 +10,12 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
 
     const [nombre, setNombre] = useState<string>(data.nombre);
     const [apellido, setApellido] = useState<string>(data.apellido);
-    const [fechaNacimiento, setFechaNacimiento] = useState<string>(data.fechaNacimiento.split("T")[0]);
-    const [fechaRegistro, setFechaRegistro] = useState<string>(data.fechaRegistro.split("T")[0]);
-    const [direccion, setDireccion] = useState<string>(data.direccion);
     const [dniTipo, setDniTipo] = useState<string>(data.dniTipo);
     const [dniNro, setDniNro] = useState<string>(data.dniNro);
-    const [cantMenoresACargo, setCantMenoresACargo] = useState<number | "">(data.cantMenoresACargo);
+    const [cuil, setCuil] = useState<string>(data.cuil);
+    const [email, setEmail] = useState<string>(data.email);
+    const [telefono, setTelefono] = useState<string>(data.telefono);
+    const [areaCobertura, setAreaCobertura] = useState<string>(data.areaCobertura);
 
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
@@ -24,22 +24,22 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
     async function handleSubmit(e: React.FormEvent){
         // e.preventDefault();
         try {
-            const response = await fetch("/api/persona_situacion_vulnerable", {
+            const response = await fetch("/api/tecnico", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    psv_id: data.id,
-                    personaData: {
-                        psv_nombre: nombre,
-                        psv_apellido: apellido,
-                        psv_fecha_nacimiento: new Date(fechaNacimiento).toISOString(),
-                        psv_fecha_registro: new Date(fechaRegistro).toISOString(),
-                        psv_direccion: direccion,
-                        psv_dni_tipo: dniTipo,
-                        psv_dni_nro: dniNro,
-                        psv_menores_a_cargo: Number(cantMenoresACargo)
+                    tec_id: data.id,
+                    tecnicoData: {
+                        tec_nombre: nombre,
+                        tec_apellido: apellido,
+                        tec_dni_tipo: dniTipo,
+                        tec_dni_nro: dniNro,
+                        tec_cuil: cuil,
+                        tec_mail: email,
+                        tec_telefono: telefono,
+                        tec_area_cobertura: areaCobertura
 
                     }
                 })
@@ -54,14 +54,14 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
                 // closeModal();
 
             } else {
-                setMensaje(result.message || 'Error al editar persona');
+                setMensaje(result.message || 'Error al editar técnico');
                 setError(true);
 
             }
 
         } catch (error) {
-            console.error('Error al editar persona:', error);
-            setMensaje('Error al editar persona');
+            console.error('Error al editar técnico:', error);
+            setMensaje('Error al editar técnico');
         }
     };
 
@@ -70,7 +70,7 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
             <div className='w-3/4 bg-white shadow-lg rounded-lg p-6'>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <h2 className='text-lg font-semibold'>
-                        Registro Persona
+                        Editar técnico
                     </h2>
                     {mensaje && (
                         <div
@@ -115,60 +115,39 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
                             required
                         />
                     </div>
-                    
+
                     <div>
                         <label
-                            htmlFor='fechaNacimiento'
+                            htmlFor='email'
                             className='block text-sm font-medium'
                         >
-                            Fecha de nacimiento:
+                            Mail:
                         </label>
                         <input
-                            type='date'
-                            id='fechaNacimiento'
+                            type='text'
+                            id='email'
                             className='mt-1 p-2 border rounded-md w-full'
-                            value={fechaNacimiento}
-                            onChange={e =>
-                                setFechaNacimiento(e.target.value)
-                            }
-                            required
-                        />
-                    </div>
-                    
-                    <div>
-                        <label
-                            htmlFor='fechaRegistro'
-                            className='block text-sm font-medium'
-                        >
-                            Fecha de registro:
-                        </label>
-                        <input
-                            type='date'
-                            id='fechaRegistro'
-                            className='mt-1 p-2 border rounded-md w-full'
-                            value={fechaRegistro}
-                            onChange={e =>
-                                setFechaRegistro(e.target.value)
-                            }
-                            required
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                         />
                     </div>
 
                     <div>
                         <label
-                            htmlFor='direccion'
+                            htmlFor='telefono'
                             className='block text-sm font-medium'
                         >
-                            Direccion (opcional):
+                            Teléfono:
                         </label>
                         <input
                             type='text'
-                            id='direccion'
+                            id='telefono'
                             className='mt-1 p-2 border rounded-md w-full'
-                            value={direccion}
-                            onChange={e => setDireccion(e.target.value)}
+                            value={telefono}
+                            onChange={e => setTelefono(e.target.value)}
                         />
                     </div>
+
                     <div>
                         <label
                             htmlFor='dniTipo'
@@ -209,18 +188,34 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
 
                     <div>
                         <label
-                            htmlFor='cantMenoresACargo'
+                            htmlFor='cuil'
                             className='block text-sm font-medium'
                         >
-                            Menores a cargo:
+                            CUIL:
                         </label>
                         <input
-                            type='number'
-                            id='cantMenoresACargo'
+                            type='text'
+                            id='cuil'
                             className='mt-1 p-2 border rounded-md w-full'
-                            value={cantMenoresACargo}
-                            onChange={e => setCantMenoresACargo(Number(e.target.value))}
+                            value={cuil}
+                            onChange={e => setCuil(e.target.value)}
                             required
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor='areaCobertura'
+                            className='block text-sm font-medium'
+                        >
+                            Área de cobertura:
+                        </label>
+                        <input
+                            type='text'
+                            id='areaCobertura'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={areaCobertura}
+                            onChange={e => setAreaCobertura(e.target.value)}
                         />
                     </div>
 
@@ -228,7 +223,7 @@ export default function FormEdicionTecnico({ data }: { data: any }) {
                         className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
                         type='submit'
                     >
-                        Registrar Persona
+                        Editar Técnico
                     </button>
                 </form>
             </div>
