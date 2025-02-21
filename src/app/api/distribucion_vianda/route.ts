@@ -77,3 +77,31 @@ export async function POST(req: Request) {
         return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
     }
 }
+
+export async function GET(req: Request) {
+
+    try {
+        const {searchParams} = new URL(req.url);
+        const cola_id = Number(searchParams.get("cola_id"));
+
+        if(!cola_id) {
+            return NextResponse.json({message: "Se requiere id del colaborador"}, {status:400});
+        }
+        
+        const distribuciones = await prisma.distribucion_vianda.findMany({
+            where: {dist_colaborador: cola_id}
+        });
+
+        if(!distribuciones) {
+            return NextResponse.json({message: "Distribuciones no encontradas"}, {status: 404});
+        }
+        return NextResponse.json({
+            distribuciones: distribuciones,
+        },{status: 200});
+        
+        
+    } catch(error) {
+        return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
+    }
+
+}
