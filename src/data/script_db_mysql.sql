@@ -28,6 +28,8 @@ CREATE TABLE smaa.persona_juridica(
 
 CREATE TABLE smaa.persona_humana(
 	ph_id INT NOT NULL,
+    ph_dni_tipo CHAR(3),
+    ph_dni_nro CHAR(10),
     ph_nombre CHAR(50),
     ph_apellido CHAR(50),
     ph_telefono CHAR(50),

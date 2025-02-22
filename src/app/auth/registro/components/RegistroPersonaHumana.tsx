@@ -10,6 +10,8 @@ interface PersonaHumanaJSON {
     cola_tipo_colaborador: string;
     ph_nombre: string;
     ph_apellido: string;
+    ph_dni_tipo: string;
+    ph_dni_nro: string;
     ph_telefono: string;
     ph_mail: string;
     ph_fecha_nacimiento: string;
@@ -20,6 +22,8 @@ export default function RegistroPersonaHumana() {
     const router = useRouter();
     const [nombre, setNombre] = useState<string>('');
     const [apellido, setApellido] = useState<string>('');
+    const [dniTipo, setDniTipo] = useState<string>("");
+    const [dniNro, setDniNro] = useState<string>("");
     const [email, setEmail] = useState<string>('');
     const [telefono, setTelefono] = useState<string>('');
     const [direccion, setDireccion] = useState<string>('');
@@ -38,6 +42,8 @@ export default function RegistroPersonaHumana() {
             cola_tipo_colaborador: "persona_humana",
             ph_nombre: nombre,
             ph_apellido: apellido,
+            ph_dni_tipo: dniTipo,
+            ph_dni_nro: dniNro,
             ph_telefono: telefono,
             ph_mail: email,
             ph_fecha_nacimiento: new Date(fechaNacimiento).toISOString(),
@@ -108,6 +114,44 @@ export default function RegistroPersonaHumana() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={apellido}
                             onChange={e => setApellido(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor='dniTipo'
+                            className='block text-sm font-medium'
+                        >
+                            DNI Tipo:
+                        </label>
+                        <select
+                            id='id'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={dniTipo}
+                            onChange={e => setDniTipo(e.target.value)}
+                            required
+                        >
+                            <option value="">Seleccionar id</option>
+                            <option value="DNI">DNI: Documento nacional de identidad</option>
+                            <option value="LC">LC: Libreta cívica</option>
+                            <option value="LE">LE: Libreta de enrolamiento</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor='dniNro'
+                            className='block text-sm font-medium'
+                        >
+                            DNI Nro:
+                        </label>
+                        <input
+                            type='text'
+                            id='dniNro'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={dniNro}
+                            onChange={e => setDniNro(e.target.value)}
                             required
                         />
                     </div>

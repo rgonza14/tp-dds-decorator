@@ -13,6 +13,8 @@ export default function EditarPerfilPH(){
 
     const [nombre, setNombre] = useState<string>(persona.ph_nombre);
     const [apellido, setApellido] = useState<string>(persona.ph_apellido);
+    const [dniTipo, setDniTipo] = useState<string>(persona.ph_dni_tipo);
+    const [dniNro, setDniNro] = useState<string>(persona.ph_dni_nro);
     const [email, setEmail] = useState<string>(persona.ph_mail);
     const [telefono, setTelefono] = useState<string>(persona.ph_telefono);
     const [direccion, setDireccion] = useState<string>(persona.ph_direccion);
@@ -38,6 +40,8 @@ export default function EditarPerfilPH(){
                     personaData: {
                         ph_nombre: nombre,
                         ph_apellido: apellido,
+                        ph_dni_tipo: dniTipo,
+                        ph_dni_nro: dniNro,
                         ph_mail: email,
                         ph_telefono: telefono,
                         ph_fecha_nacimiento: fechaNacimiento,
@@ -111,6 +115,44 @@ export default function EditarPerfilPH(){
                         onChange={e => setApellido(e.target.value)}
                     />
                 </div>
+                    
+                    <div>
+                        <label
+                            htmlFor='dniTipo'
+                            className='block text-sm font-medium'
+                        >
+                            DNI Tipo:
+                        </label>
+                        <select
+                            id='id'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={dniTipo}
+                            onChange={e => setDniTipo(e.target.value)}
+                            required
+                        >
+                            <option value="">Seleccionar id</option>
+                            <option value="DNI">DNI: Documento nacional de identidad</option>
+                            <option value="LC">LC: Libreta cívica</option>
+                            <option value="LE">LE: Libreta de enrolamiento</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor='dniNro'
+                            className='block text-sm font-medium'
+                        >
+                            DNI Nro:
+                        </label>
+                        <input
+                            type='text'
+                            id='dniNro'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={dniNro}
+                            onChange={e => setDniNro(e.target.value)}
+                            required
+                        />
+                    </div>
 
                 <div>
                     <label

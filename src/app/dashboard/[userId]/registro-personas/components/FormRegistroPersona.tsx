@@ -186,6 +186,7 @@ export default function FormRegistroPersona({closeModal}: {closeModal: ()=>void}
                             onChange={e => setDireccion(e.target.value)}
                         />
                     </div>
+                    
                     <div>
                         <label
                             htmlFor='dniTipo'

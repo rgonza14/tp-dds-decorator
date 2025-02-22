@@ -22,44 +22,62 @@ export default function CargarColaboracionesForm() {
             header: true,
             skipEmptyLines: true,
             complete: (result) => {
-                console.log("CSV Data:", result.data);
                 setData(result.data);
             },
         });
     };
 
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        console.log("->Data: ", data);
+    }
+
     return (
         <div className="p-4">
             <input type="file" accept=".csv" onChange={handleFileUpload} className="mb-4" />
             {data.length > 0 && (
-            <table className="border-collapse border border-gray-300 w-full">
-                <thead>
-                    <tr>
-                        <th className="border p-2">Tipo Doc</th>
-                        <th className="border p-2">Documento</th>
-                        <th className="border p-2">Nombre</th>
-                        <th className="border p-2">Apellido</th>
-                        <th className="border p-2">Mail</th>
-                        <th className="border p-2">Fecha de colaboración</th>
-                        <th className="border p-2">Forma de colaboración</th>
-                        <th className="border p-2">Cantidad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((row, index) => (
-                        <tr key={index}>
-                            <td className="border p-2">{row["Tipo Doc"]}</td>
-                            <td className="border p-2">{row.Documento}</td>
-                            <td className="border p-2">{row.Nombre}</td>
-                            <td className="border p-2">{row.Apellido}</td>
-                            <td className="border p-2">{row.Mail}</td>
-                            <td className="border p-2">{row["Fecha de colaboración"]}</td>
-                            <td className="border p-2">{row["Forma de colaboración"]}</td>
-                            <td className="border p-2">{row.Cantidad}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+                    <button
+                        type='submit'
+                        className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'
+                    >
+                        Confirmar
+                    </button>
+                    <table className="border-collapse border border-gray-300 w-full">
+                        <thead>
+                            <tr>
+                                <th className="border p-2">Tipo Doc</th>
+                                <th className="border p-2">Documento</th>
+                                <th className="border p-2">Nombre</th>
+                                <th className="border p-2">Apellido</th>
+                                <th className="border p-2">Mail</th>
+                                <th className="border p-2">Fecha de colaboración</th>
+                                <th className="border p-2">Forma de colaboración</th>
+                                <th className="border p-2">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((row, index) => (
+                                <tr key={index}>
+                                    <td className="border p-2">{row["Tipo Doc"]}</td>
+                                    <td className="border p-2">{row.Documento}</td>
+                                    <td className="border p-2">{row.Nombre}</td>
+                                    <td className="border p-2">{row.Apellido}</td>
+                                    <td className="border p-2">{row.Mail}</td>
+                                    <td className="border p-2">{row["Fecha de colaboración"]}</td>
+                                    <td className="border p-2">{row["Forma de colaboración"]}</td>
+                                    <td className="border p-2">{row.Cantidad}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <button
+                        type='submit'
+                        className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'
+                    >
+                        Confirmar
+                    </button>
+                </form>
             )}
         </div>
     );
