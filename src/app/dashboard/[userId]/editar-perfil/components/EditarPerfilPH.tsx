@@ -16,7 +16,7 @@ export default function EditarPerfilPH(){
     const [email, setEmail] = useState<string>(persona.ph_mail);
     const [telefono, setTelefono] = useState<string>(persona.ph_telefono);
     const [direccion, setDireccion] = useState<string>(persona.ph_direccion);
-    const [fechaNacimiento, setFechaNacimiento] = useState<string>(persona.ph_fecha_nacimiento);
+    const [fechaNacimiento, setFechaNacimiento] = useState<string>(persona.ph_fecha_nacimiento.split("T")[0]);
 
     const [resultado, setResultado] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
