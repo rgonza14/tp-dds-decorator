@@ -179,3 +179,11 @@ CREATE TABLE smaa.incidente(
     PRIMARY KEY (inc_id),
     FOREIGN KEY (inc_tecnico) REFERENCES smaa.tecnico(tec_id)
 );
+
+INSERT INTO smaa.coeficiente_reconocimiento(coef_descripcion, coef_coeficiente)
+VALUES
+("PESOS_DONADOS", 0.5),
+("VIANDAS_DISTRIBUIDAS", 1),
+("VIANDAS_DONADAS", 1.5),
+("TARJETAS_REPARTIDAS", 2),
+("ACTIVIDAD_HELADERAS", 5);
