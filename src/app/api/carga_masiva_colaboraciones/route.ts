@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt';
-import { Row } from "@tanstack/react-table";
 
 const prisma = new PrismaClient();
 
@@ -24,12 +23,15 @@ export async function POST(req: Request) {
         if(!colaboracionesData) {
             return NextResponse.json({message: "Colaboraciones no recibidas"},{status: 400});
         }
-
-        const colaboraciones = colaboracionesData.map( (row: RowData) => {
-            return procesarData(row);
-
-        });
         
+        const colaboraciones: any[] = [];
+
+        for (const row of colaboracionesData) {
+            const resultado =  await procesarData(row);
+            colaboraciones.push(resultado);
+
+        }
+
         return NextResponse.json({
             colaboraciones: colaboraciones,
             message: "colaboraciones cargadas"},
@@ -43,19 +45,19 @@ export async function POST(req: Request) {
 }
 
 async function procesarData(row: RowData) {
-    var cola_id = await existe(row["Tipo Doc"], String(row.Documento))
-    if(!cola_id) {
-        const colaborador = await crearColaboradorH(String(row.Nombre)+String(row.Documento), String(row.Nombre)+String(row.Documento));
-        const persona = await crearPersonaHumana(colaborador.cola_id, row["Tipo Doc"], String(row.Documento), row.Nombre, row.Apellido, row.Mail);
-        cola_id = colaborador.cola_id;
-    }
+    var cola_id = await getOrCreateColaboradorID(row);
+
+    const [dia, mes, ano] = "02/04/2000".split("/")
+    const fecha = new Date(Number(ano), Number(mes) - 1, Number(dia));
+    const fechaISO = fecha.toISOString();
+
     var colaboracion = null;
     switch(row["Forma de colaboración"]) {
         case "DINERO":
             colaboracion = await prisma.donacion_dinero.create({
                 data:{
                     dd_colaborador: cola_id,
-                    dd_fecha: row["Fecha de colaboración"],
+                    dd_fecha: fechaISO,
                     dd_frecuencia: "una vez",
                     dd_monto: row.Cantidad
                 }
@@ -67,7 +69,7 @@ async function procesarData(row: RowData) {
                 const donacion = await prisma.donacion_vianda.create({
                     data: {
                         dv_colaborador: cola_id,
-                        dv_fecha_doncacion: row["Fecha de colaboración"]
+                        dv_fecha_doncacion: fechaISO
                     }
                 });
                 colaboracion.push(donacion);
@@ -77,7 +79,7 @@ async function procesarData(row: RowData) {
             colaboracion = await prisma.distribucion_vianda.create({
                 data: {
                     dist_colaborador: cola_id,
-                    dist_fecha: row["Fecha de colaboración"],
+                    dist_fecha: fechaISO,
                     dist_cantidad: row.Cantidad,
                     dist_estado: "entregado"
                 }
@@ -106,20 +108,33 @@ async function procesarData(row: RowData) {
 
 }
 
-async function existe(dniTipo: string, dniNro: string): Promise<false|number> {
+async function getOrCreateColaboradorID(row: RowData): Promise<number> {
     
     const persona = await prisma.persona_humana.findFirst({
         where: {
-            ph_dni_tipo: dniTipo,
-            ph_dni_nro: dniNro
+            ph_dni_tipo: row["Tipo Doc"],
+            ph_dni_nro: String(row.Documento)
         }
     });
 
     if(persona) {
+        console.log("--> existe persona: ", persona);
+
         return persona.ph_id;
     } else {
-        return false;
+        console.log("--> NO existe persona: ", {
+            ph_dni_tipo: row["Tipo Doc"],
+            ph_dni_nro: String(row.Documento)
+        })
+
+        const colaborador = await crearColaboradorH(String(row.Nombre)+String(row.Documento), String(row.Nombre)+String(row.Documento));
+        const persona = await crearPersonaHumana(colaborador.cola_id, row["Tipo Doc"], String(row.Documento), row.Nombre, row.Apellido, row.Mail);
+        console.log("--> persona creada: ", persona);
+        
+        return persona.ph_id;
     }
+
+
 }
 
 async function crearColaboradorH(usuario: string, contrasena: string) {
@@ -159,13 +174,3 @@ async function crearPersonaHumana(id: number, dniTipo: string, dniNro: string, n
     return persona;
 }
 
-
-
-
-export async function GET() {
-    const colaborador = await crearColaboradorH("sniper12345", "sniper12345");
-    const persona = await crearPersonaHumana(colaborador.cola_id, "DNI", "12345678", "Franco", "Tirador", "sniper@gmail.com");
-
-    return NextResponse.json({colaborador: colaborador, persona: persona}, {status:200})
-
-}

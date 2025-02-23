@@ -78,7 +78,7 @@ CREATE TABLE smaa.tarjeta_beneficiario(
 CREATE TABLE smaa.donacion_dinero(
 	dd_id INT NOT NULL AUTO_INCREMENT,
     dd_colaborador INT,
-    dd_monto DECIMAL(7,2),
+    dd_monto DECIMAL(20,2),
     dd_frecuencia CHAR(50),
     dd_fecha DATE,
     PRIMARY KEY (dd_id),

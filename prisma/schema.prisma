@@ -27,14 +27,14 @@ model colaborador {
 
 model persona_humana {
   ph_id               Int         @id
+  ph_dni_tipo         String?     @db.Char(3)
+  ph_dni_nro          String?     @db.Char(10)
   ph_nombre           String?     @db.Char(50)
   ph_apellido         String?     @db.Char(50)
   ph_telefono         String?     @db.Char(50)
   ph_mail             String?     @db.Char(50)
   ph_fecha_nacimiento String?     @db.Char(50)
   ph_direccion        String?     @db.Char(50)
-  ph_dni_tipo         String?     @db.Char(3)
-  ph_dni_nro          String?     @db.Char(10)
   colaborador         colaborador @relation(fields: [ph_id], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_ph_colaborador")
 }
 
@@ -76,7 +76,7 @@ model distribucion_vianda {
 model donacion_dinero {
   dd_id          Int          @id @default(autoincrement())
   dd_colaborador Int?
-  dd_monto       Decimal?     @db.Decimal(7, 2)
+  dd_monto       Decimal?     @db.Decimal(20, 2)
   dd_frecuencia  String?      @db.Char(50)
   dd_fecha       DateTime?    @db.Date
   colaborador    colaborador? @relation(fields: [dd_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "donacion_dinero_ibfk_1")
