@@ -168,7 +168,7 @@ model suscripcion_heladera {
 
 model tarjeta_beneficiario {
   tarb_id                      Int                           @id @default(autoincrement())
-  tarb_nro                     String                        @unique(map: "tarb_nro") @db.Char(11)
+  tarb_nro                     String?                       @unique(map: "tarb_nro") @db.Char(11)
   tarb_fecha_alta              DateTime?                     @db.Date
   tarb_colaborador             Int?
   tarb_beneficiario            Int?

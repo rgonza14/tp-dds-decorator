@@ -66,7 +66,7 @@ CREATE TABLE smaa.persona_situacion_vulnerable(
 
 CREATE TABLE smaa.tarjeta_beneficiario(
 	tarb_id INT NOT NULL AUTO_INCREMENT,
-	tarb_nro CHAR(11) NOT NULL UNIQUE,
+	tarb_nro CHAR(11) UNIQUE,
     tarb_fecha_alta DATE,
     tarb_colaborador INT,
     tarb_beneficiario INT,

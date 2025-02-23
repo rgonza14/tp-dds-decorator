@@ -14,6 +14,9 @@ interface RowData {
 export default function CargarColaboracionesForm() {
     const [data, setData] = useState<RowData[]>([]);
 
+    const [resultado, setResultado] = useState<any>(null);
+    const [error, setError] = useState<boolean>(false);
+
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -29,7 +32,34 @@ export default function CargarColaboracionesForm() {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        console.log("->Data: ", data);
+        try {
+            const response = await fetch("/api/carga_masiva_colaboraciones", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    colaboracionesData: data
+                })
+            });
+
+            const {colaboraciones} = await response.json();
+
+            if(!response.ok) {
+                setResultado('Error, por favor intentá de nuevo');
+                setError(true);
+                console.log("error, colaboraciones POST => ", colaboraciones);
+            } else {
+                setResultado('Colaboraciones cargadas exitosamente');
+                setError(false);
+                console.log("colaboraciones cargadas POST => ", colaboraciones);
+
+            }
+        } catch(error: any) {
+            setResultado('Error, por favor intentá de nuevo');
+            setError(true);
+            console.error(error);
+        }
     }
 
     return (
@@ -37,6 +67,15 @@ export default function CargarColaboracionesForm() {
             <input type="file" accept=".csv" onChange={handleFileUpload} className="mb-4" />
             {data.length > 0 && (
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+                    {resultado && (
+                        <div
+                            className={`text-lg font-semibold text-center mb-2 ${
+                                error ? 'text-red-600' : 'text-blue-600'
+                            }`}
+                        >
+                            {resultado}
+                        </div>
+                    )}
                     <button
                         type='submit'
                         className='mt-4 bg-primary text-white py-2 rounded-md hover:bg-primary-dark'

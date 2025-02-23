@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt';
+import { Row } from "@tanstack/react-table";
 
 const prisma = new PrismaClient();
 
@@ -24,9 +25,15 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "Colaboraciones no recibidas"},{status: 400});
         }
 
-        colaboracionesData.array.forEach( (row: RowData) => {
-            procesarData(row);
+        const colaboraciones = colaboracionesData.map( (row: RowData) => {
+            return procesarData(row);
+
         });
+        
+        return NextResponse.json({
+            colaboraciones: colaboraciones,
+            message: "colaboraciones cargadas"},
+        {status: 201});
 
     } catch(error: any) {
         console.error("Error en el servidor", error);
@@ -36,10 +43,70 @@ export async function POST(req: Request) {
 }
 
 async function procesarData(row: RowData) {
+    var cola_id = await existe(row["Tipo Doc"], String(row.Documento))
+    if(!cola_id) {
+        const colaborador = await crearColaboradorH(String(row.Nombre)+String(row.Documento), String(row.Nombre)+String(row.Documento));
+        const persona = await crearPersonaHumana(colaborador.cola_id, row["Tipo Doc"], String(row.Documento), row.Nombre, row.Apellido, row.Mail);
+        cola_id = colaborador.cola_id;
+    }
+    var colaboracion = null;
+    switch(row["Forma de colaboración"]) {
+        case "DINERO":
+            colaboracion = await prisma.donacion_dinero.create({
+                data:{
+                    dd_colaborador: cola_id,
+                    dd_fecha: row["Fecha de colaboración"],
+                    dd_frecuencia: "una vez",
+                    dd_monto: row.Cantidad
+                }
+            });
+        break;
+        case "DONACION_VIANDAS":
+            colaboracion = [];
+            for(let i = 0; i < row.Cantidad; i++) {
+                const donacion = await prisma.donacion_vianda.create({
+                    data: {
+                        dv_colaborador: cola_id,
+                        dv_fecha_doncacion: row["Fecha de colaboración"]
+                    }
+                });
+                colaboracion.push(donacion);
+            }
+        break;
+        case "REDISTRIBUCION_VIANDAS":
+            colaboracion = await prisma.distribucion_vianda.create({
+                data: {
+                    dist_colaborador: cola_id,
+                    dist_fecha: row["Fecha de colaboración"],
+                    dist_cantidad: row.Cantidad,
+                    dist_estado: "entregado"
+                }
+            })
+        break;
+        case "ENTREGA_TARJETAS":
+            
+        colaboracion = [];
+        for(let i = 0; i < row.Cantidad; i++) {
+            const tarjeta = await prisma.tarjeta_beneficiario.create({
+                data: {
+                    tarb_colaborador: cola_id
+                }
+            });
+            colaboracion.push(tarjeta);
+        }
+        break;
+    }
+
+    if(!colaboracion) {
+        console.error(`Error en la carga de la colaboracion ${String(row)}`);
+        throw new Error(`Error en la carga de la colaboracion ${String(row)}`);
+    }
+
+    return colaboracion;
 
 }
 
-async function existe(dniTipo: string, dniNro: string): Promise<boolean> {
+async function existe(dniTipo: string, dniNro: string): Promise<false|number> {
     
     const persona = await prisma.persona_humana.findFirst({
         where: {
@@ -49,7 +116,7 @@ async function existe(dniTipo: string, dniNro: string): Promise<boolean> {
     });
 
     if(persona) {
-        return true;
+        return persona.ph_id;
     } else {
         return false;
     }
@@ -66,6 +133,9 @@ async function crearColaboradorH(usuario: string, contrasena: string) {
             cola_tipo_colaborador: "persona_humana"
         }
     });
+    if(!colaborador) {
+        throw new Error("Error en la creación del nuevo colaborador");
+    }
 
     return colaborador;
 }
@@ -82,6 +152,9 @@ async function crearPersonaHumana(id: number, dniTipo: string, dniNro: string, n
             ph_mail: mail,
         }
     });
+    if(!persona) {
+        throw new Error("Error en la creación de la nueva persona");
+    }
 
     return persona;
 }
