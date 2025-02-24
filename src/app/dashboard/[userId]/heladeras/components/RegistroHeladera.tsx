@@ -64,6 +64,7 @@ export default function RegistroHeladeras() {
                         Registrar Heladera
                     </h2>
                     {mensaje && <div className='text-green-600'>{mensaje}</div>}{' '}
+
                     <div>
                         <label
                             htmlFor='nombre'
@@ -80,6 +81,7 @@ export default function RegistroHeladeras() {
                             required
                         />
                     </div>
+
                     <div>
                         <label
                             htmlFor='direccion'
@@ -96,23 +98,7 @@ export default function RegistroHeladeras() {
                             required
                         />
                     </div>
-                    <div>
-                        <label
-                            htmlFor='longitud'
-                            className='block text-sm font-medium'
-                        >
-                            Longitud:
-                        </label>
-                        <input
-                            type='number'
-                            id='longitud'
-                            className='mt-1 p-2 border rounded-md w-full'
-                            value={longitud}
-                            onChange={e => setLongitud(e.target.value)}
-                            step='any'
-                            required
-                        />
-                    </div>
+
                     <div>
                         <label
                             htmlFor='latitud'
@@ -130,6 +116,25 @@ export default function RegistroHeladeras() {
                             required
                         />
                     </div>
+
+                    <div>
+                        <label
+                            htmlFor='longitud'
+                            className='block text-sm font-medium'
+                        >
+                            Longitud:
+                        </label>
+                        <input
+                            type='number'
+                            id='longitud'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={longitud}
+                            onChange={e => setLongitud(e.target.value)}
+                            step='any'
+                            required
+                        />
+                    </div>
+
                     <div>
                         <label
                             htmlFor='capacidad'
@@ -146,6 +151,7 @@ export default function RegistroHeladeras() {
                             required
                         />
                     </div>
+
                     <div>
                         <label
                             htmlFor='fechaFuncionamiento'
@@ -164,6 +170,7 @@ export default function RegistroHeladeras() {
                             required
                         />
                     </div>
+                    
                     <button
                         className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
                         type='submit'
