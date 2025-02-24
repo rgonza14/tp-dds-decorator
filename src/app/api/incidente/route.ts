@@ -22,11 +22,27 @@ export async function POST(req:Request) {
 
         if(!nuevoIncidente){
             return NextResponse.json({
-                message: "Error en la base de datos"
+                message: "error en la carga del incidente"
             }, {status: 200});
         }
 
-        return NextResponse.json({nuevoIncidente: nuevoIncidente}, {status: 201});
+
+        const heladeraActualizada = await prisma.heladera.update({
+            where: {
+                hela_id: hela_id
+            },
+            data: {
+                hela_estado: "inactiva"
+            }
+        });
+
+        if(!heladeraActualizada){
+            return NextResponse.json({
+                message: "error en la actualizacion de la heladera"
+            }, {status: 200});
+        }
+
+        return NextResponse.json({nuevoIncidente: nuevoIncidente, heladeraActualizada: heladeraActualizada}, {status: 201});
 
     } catch(error) {
         console.error(error);
