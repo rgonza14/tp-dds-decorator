@@ -172,14 +172,26 @@ CREATE TABLE smaa.tecnico(
 
 CREATE TABLE smaa.incidente(
 	inc_id INT NOT NULL AUTO_INCREMENT,
-    inc_tecnico INT,
+    inc_heladera INT,
+    inc_colaborador INT,
     inc_tipo CHAR(50),
-    inc_fecha_registro DATE,
-    inc_fecha_visita DATE,
+    inc_fecha_registro DATETIME,
     inc_estado CHAR(50),
-    inc_reporte CHAR(200),
+    inc_descripcion CHAR(200),
     PRIMARY KEY (inc_id),
-    FOREIGN KEY (inc_tecnico) REFERENCES smaa.tecnico(tec_id)
+    FOREIGN KEY (inc_heladera) REFERENCES smaa.heladera(hela_id)
+);
+
+CREATE TABLE smaa.visita_tecnica(
+	vite_id INT NOT NULL AUTO_INCREMENT,
+    vite_incidente INT,
+    vite_tecnico INT,
+    vite_fecha_visita DATETIME,
+    vite_reporte CHAR(200),
+    vite_resuelto BOOLEAN,
+    PRIMARY KEY (vite_id),
+    FOREIGN KEY (vite_incidente) REFERENCES smaa.incidente(inc_id),
+    FOREIGN KEY (vite_tecnico) REFERENCES smaa.tecnico(tec_id)
 );
 
 INSERT INTO smaa.coeficiente_reconocimiento(coef_descripcion, coef_coeficiente)

@@ -116,22 +116,24 @@ model heladera {
   distribucion_vianda_distribucion_vianda_dist_heladera_destinoToheladera distribucion_vianda[]  @relation("distribucion_vianda_dist_heladera_destinoToheladera")
   donacion_vianda                                                         donacion_vianda[]
   colaborador                                                             colaborador?           @relation(fields: [hela_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "heladera_ibfk_1")
+  incidente                                                               incidente[]
   suscripcion_heladera                                                    suscripcion_heladera[]
 
   @@index([hela_colaborador], map: "hela_colaborador")
 }
 
 model incidente {
-  inc_id             Int       @id @default(autoincrement())
-  inc_tecnico        Int?
-  inc_tipo           String?   @db.Char(50)
-  inc_fecha_registro DateTime? @db.Date
-  inc_fecha_visita   DateTime? @db.Date
-  inc_estado         String?   @db.Char(50)
-  inc_reporte        String?   @db.Char(200)
-  tecnico            tecnico?  @relation(fields: [inc_tecnico], references: [tec_id], onDelete: NoAction, onUpdate: NoAction, map: "incidente_ibfk_1")
+  inc_id             Int              @id @default(autoincrement())
+  inc_heladera       Int?
+  inc_colaborador    Int?
+  inc_tipo           String?          @db.Char(50)
+  inc_fecha_registro DateTime?        @db.DateTime(0)
+  inc_estado         String?          @db.Char(50)
+  inc_descripcion    String?          @db.Char(200)
+  heladera           heladera?        @relation(fields: [inc_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "incidente_ibfk_1")
+  visita_tecnica     visita_tecnica[]
 
-  @@index([inc_tecnico], map: "inc_tecnico")
+  @@index([inc_heladera], map: "inc_heladera")
 }
 
 model persona_situacion_vulnerable {
@@ -190,15 +192,15 @@ model tarjeta_colaborador {
 }
 
 model tecnico {
-  tec_id       Int         @id @default(autoincrement())
-  tec_nombre   String?     @db.Char(50)
-  tec_apellido String?     @db.Char(50)
-  tec_dni_tipo String?     @db.Char(3)
-  tec_dni_nro  Decimal?    @db.Decimal(10, 0)
-  tec_cuil     String?     @db.Char(12)
-  tec_mail     String?     @db.Char(50)
-  tec_telefono String?     @db.Char(50)
-  incidente    incidente[]
+  tec_id         Int              @id @default(autoincrement())
+  tec_nombre     String?          @db.Char(50)
+  tec_apellido   String?          @db.Char(50)
+  tec_dni_tipo   String?          @db.Char(3)
+  tec_dni_nro    Decimal?         @db.Decimal(10, 0)
+  tec_cuil       String?          @db.Char(12)
+  tec_mail       String?          @db.Char(50)
+  tec_telefono   String?          @db.Char(50)
+  visita_tecnica visita_tecnica[]
 }
 
 model extraccion_vianda {
@@ -210,4 +212,18 @@ model extraccion_vianda {
   persona_situacion_vulnerable persona_situacion_vulnerable @relation(fields: [extr_beneficiario], references: [psv_id], onDelete: NoAction, onUpdate: NoAction, map: "extraccion_vianda_ibfk_2")
 
   @@index([extr_beneficiario], map: "extr_beneficiario")
+}
+
+model visita_tecnica {
+  vite_id           Int        @id @default(autoincrement())
+  vite_incidente    Int?
+  vite_tecnico      Int?
+  vite_fecha_visita DateTime?  @db.DateTime(0)
+  vite_reporte      String?    @db.Char(200)
+  vite_resuelto     Boolean?
+  incidente         incidente? @relation(fields: [vite_incidente], references: [inc_id], onDelete: NoAction, onUpdate: NoAction, map: "visita_tecnica_ibfk_1")
+  tecnico           tecnico?   @relation(fields: [vite_tecnico], references: [tec_id], onDelete: NoAction, onUpdate: NoAction, map: "visita_tecnica_ibfk_2")
+
+  @@index([vite_incidente], map: "vite_incidente")
+  @@index([vite_tecnico], map: "vite_tecnico")
 }

@@ -232,23 +232,6 @@ export default function EdicionHeladera() {
                     </div>
                     <div>
                         <label
-                            htmlFor='longitud'
-                            className='block text-sm font-medium'
-                        >
-                            Longitud:
-                        </label>
-                        <input
-                            type='number'
-                            id='longitud'
-                            className='mt-1 p-2 border rounded-md w-full'
-                            value={longitud}
-                            onChange={e => setLongitud(e.target.value)}
-                            step='any'
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label
                             htmlFor='latitud'
                             className='block text-sm font-medium'
                         >
@@ -260,6 +243,23 @@ export default function EdicionHeladera() {
                             className='mt-1 p-2 border rounded-md w-full'
                             value={latitud}
                             onChange={e => setLatitud(e.target.value)}
+                            step='any'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label
+                            htmlFor='longitud'
+                            className='block text-sm font-medium'
+                        >
+                            Longitud:
+                        </label>
+                        <input
+                            type='number'
+                            id='longitud'
+                            className='mt-1 p-2 border rounded-md w-full'
+                            value={longitud}
+                            onChange={e => setLongitud(e.target.value)}
                             step='any'
                             required
                         />
