@@ -24,16 +24,18 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "Colaboraciones no recibidas"},{status: 400});
         }
         
-        const colaboraciones: any[] = [];
+        const nuevasCredenciales: any[] = [];
 
         for (const row of colaboracionesData) {
             const resultado =  await procesarData(row);
-            colaboraciones.push(resultado);
+            if(resultado) {
+                nuevasCredenciales.push(resultado);
+            }
 
         }
 
         return NextResponse.json({
-            colaboraciones: colaboraciones,
+            nuevasCredenciales: nuevasCredenciales,
             message: "colaboraciones cargadas"},
         {status: 201});
 
@@ -45,7 +47,7 @@ export async function POST(req: Request) {
 }
 
 async function procesarData(row: RowData) {
-    var cola_id = await getOrCreateColaboradorID(row);
+    var {cola_id, usuario, contrasena, mail} = await getOrCreateColaboradorID(row);
 
     const [dia, mes, ano] = "02/04/2000".split("/")
     const fecha = new Date(Number(ano), Number(mes) - 1, Number(dia));
@@ -104,11 +106,19 @@ async function procesarData(row: RowData) {
         throw new Error(`Error en la carga de la colaboracion ${String(row)}`);
     }
 
-    return colaboracion;
+    if(usuario) {
+        return {
+                usuario: usuario,
+                contrasena: contrasena,
+                mail: mail
+            };
+    } else {
+        return null;
+    }
 
 }
 
-async function getOrCreateColaboradorID(row: RowData): Promise<number> {
+async function getOrCreateColaboradorID(row: RowData): Promise<{cola_id: number, usuario?: string, contrasena?: string, mail?: string}> {
     
     const persona = await prisma.persona_humana.findFirst({
         where: {
@@ -118,20 +128,16 @@ async function getOrCreateColaboradorID(row: RowData): Promise<number> {
     });
 
     if(persona) {
-        console.log("--> existe persona: ", persona);
-
-        return persona.ph_id;
+        return {cola_id: persona.ph_id};
     } else {
-        console.log("--> NO existe persona: ", {
-            ph_dni_tipo: row["Tipo Doc"],
-            ph_dni_nro: String(row.Documento)
-        })
-
         const colaborador = await crearColaboradorH(String(row.Nombre)+String(row.Documento), String(row.Nombre)+String(row.Documento));
         const persona = await crearPersonaHumana(colaborador.cola_id, row["Tipo Doc"], String(row.Documento), row.Nombre, row.Apellido, row.Mail);
-        console.log("--> persona creada: ", persona);
-        
-        return persona.ph_id;
+        return {
+            cola_id: persona.ph_id,
+            usuario: String(row.Nombre)+String(row.Documento),
+            contrasena: String(row.Nombre)+String(row.Documento),
+            mail: row.Mail
+        };
     }
 
 
