@@ -8,9 +8,10 @@ const loadLeaflet = async () => {
 };
 
 const Mapa: React.FC<{
-    ubicaciones: { lat: number; lng: number; nombre: string }[];
+    heladeras: { lat: number; lng: number; nombre: string }[];
+    suscripciones: any[];
     mapId: string;
-}> = ({ ubicaciones, mapId }) => {
+}> = ({ heladeras, suscripciones, mapId }) => {
     const mapRef = useRef<L.Map | null>(null);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const Mapa: React.FC<{
 
             if (!mapRef.current) {
                 mapRef.current = L.map(mapId).setView(
-                    [ubicaciones[0]?.lat || 0, ubicaciones[0]?.lng || 0],
+                    [heladeras[0]?.lat || 0, heladeras[0]?.lng || 0],
                     12
                 );
 
@@ -38,19 +39,19 @@ const Mapa: React.FC<{
                     popupAnchor: [1, -34],
                     shadowUrl:
                         'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-                    shadowSize: [41, 41]
+                    shadowSize: [41, 41],
                 });
 
-                ubicaciones.forEach(ubicacion => {
+                heladeras.forEach(heladera => {
                     if (
-                        ubicacion.lat !== undefined &&
-                        ubicacion.lng !== undefined
+                        heladera.lat !== undefined &&
+                        heladera.lng !== undefined
                     ) {
-                        L.marker([ubicacion.lat, ubicacion.lng], {
+                        L.marker([heladera.lat, heladera.lng], {
                             icon: markerIcon
                         })
                             .addTo(mapRef?.current)
-                            .bindPopup(ubicacion.nombre);
+                            .bindPopup(heladera.nombre);
                     }
                 });
             }
@@ -66,7 +67,7 @@ const Mapa: React.FC<{
                 mapRef.current = null;
             }
         };
-    }, [ubicaciones, mapId]);
+    }, [heladeras, mapId]);
 
     return <div id={mapId} className={styles.mapContainer}></div>;
 };

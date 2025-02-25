@@ -13,11 +13,21 @@ export async function POST(req: Request) {
 
         const nuevaSuscripcion = await prisma.suscripcion_heladera.upsert({
             where: {
-                susc_colaborador: cola_id,
-                susc_heladera: hela_id,
+                susc_colaborador_susc_heladera: {
+                    susc_colaborador: cola_id,
+                    susc_heladera: hela_id
+                }
             },
             update: suscripcionData,
-            create: suscripcionData
+            create: {
+                colaborador: {
+                    connect: {cola_id: cola_id}
+                },
+                heladera: {
+                    connect: {hela_id: hela_id}
+                },
+                ...suscripcionData
+            }
         });
 
         if(!nuevaSuscripcion){
@@ -30,6 +40,7 @@ export async function POST(req: Request) {
 
 
     } catch(error) {
+        console.error(error);
         return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
     }
 }

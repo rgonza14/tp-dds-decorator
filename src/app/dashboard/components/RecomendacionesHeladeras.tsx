@@ -134,7 +134,7 @@ const RecomendacionesHeladeras: React.FC = () => {
                             ))}
                         </ul>
                         <MapaHeladeras
-                            ubicaciones={ubicacionesRecomendadas}
+                            heladeras={ubicacionesRecomendadas}
                             mapId='recomendaciones'
                         />
                     </div>
