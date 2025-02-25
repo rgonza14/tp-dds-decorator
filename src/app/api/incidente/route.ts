@@ -23,7 +23,7 @@ export async function POST(req:Request) {
         if(!nuevoIncidente){
             return NextResponse.json({
                 message: "error en la carga del incidente"
-            }, {status: 200});
+            }, {status: 400});
         }
 
 

@@ -155,16 +155,15 @@ model persona_situacion_vulnerable {
 }
 
 model suscripcion_heladera {
-  susc_id                          Int          @id @default(autoincrement())
-  susc_colaborador                 Int?
-  susc_heladera                    Int?
+  susc_colaborador                 Int
+  susc_heladera                    Int
   susc_notif_n_viandas_disponibles Int?
   susc_notif_n_viandas_faltantes   Int?
-  susc_notif_desperfecto           Int?
-  colaborador                      colaborador? @relation(fields: [susc_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "suscripcion_heladera_ibfk_1")
-  heladera                         heladera?    @relation(fields: [susc_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "suscripcion_heladera_ibfk_2")
+  susc_notif_desperfecto           Boolean?
+  colaborador                      colaborador @relation(fields: [susc_colaborador], references: [cola_id], onDelete: NoAction, onUpdate: NoAction, map: "suscripcion_heladera_ibfk_1")
+  heladera                         heladera    @relation(fields: [susc_heladera], references: [hela_id], onDelete: NoAction, onUpdate: NoAction, map: "suscripcion_heladera_ibfk_2")
 
-  @@index([susc_colaborador], map: "susc_colaborador")
+  @@id([susc_colaborador, susc_heladera])
   @@index([susc_heladera], map: "susc_heladera")
 }
 

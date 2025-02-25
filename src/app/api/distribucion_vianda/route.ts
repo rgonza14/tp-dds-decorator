@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
-    console.log("--> POST /api/distribucion_vianda");
     try {
         const {cola_id, hela_id_origen, hela_id_destino, motivo, fecha, viandasData} = await req.json();
         

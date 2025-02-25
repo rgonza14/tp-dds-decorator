@@ -30,16 +30,18 @@ export default function SuscripcionHeladera() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         try {
-            const response = await fetch("/api/incidente", {
+            const response = await fetch("/api/suscripcion_heladera", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    cola_id: userId,
                     hela_id: Number(id),
-                    incidenteData: {
-                        inc_colaborador: userId,
-
+                    suscripcionData: {
+                        susc_notif_n_viandas_disponibles: notifDisponibles?nDisponibles:null,
+                        susc_notif_n_viandas_faltantes: notifFaltantes?nFaltantes:null,
+                        susc_notif_desperfecto: notifDesperfecto
                     }
                 })
             });
@@ -47,7 +49,7 @@ export default function SuscripcionHeladera() {
             const result = await response.json();
 
             if (response.ok) {
-                setMensaje("Incidente cargado exitosamente");
+                setMensaje("Suscripcion cargada exitosamente");
                 setId("");
                 setDireccion('');
                 setLongitud('');
@@ -56,14 +58,19 @@ export default function SuscripcionHeladera() {
                 setCapacidad('');
                 setFechaFuncionamiento('');
                 setEstado("");
+                setNotifDisponibles(false);
+                setNDisponibles("");
+                setNotifFaltantes(false);
+                setNFaltantes("");
+                setNotifDesperfecto(false);
             } else {
-                setMensaje(result.mensaje || 'Error al cargar el incidente');
+                setMensaje(result.mensaje || 'Error al cargar la suscripcion');
             }
 
             
         } catch (error) {
-            console.error('Error al cargar el incidente:', error);
-            setMensaje('Error al cargar el incidente');
+            console.error('Error al cargar la suscripcion:', error);
+            setMensaje('Error al cargar la suscripcion');
         }
 
     }
@@ -81,10 +88,10 @@ export default function SuscripcionHeladera() {
 
             if (!response.ok) {
                 throw new Error(`Error HTTP: ${response.status}`);
-
             }
 
             const {heladera} = await response.json();
+
             setId(hela_id);
             setNombre(heladera.hela_nombre);
             setDireccion(heladera.hela_direccion);
@@ -93,6 +100,39 @@ export default function SuscripcionHeladera() {
             setCapacidad(heladera.hela_capacidad);
             setEstado(heladera.hela_estado);
             setFechaFuncionamiento(heladera.hela_fecha_registro.split("T")[0]);
+
+            const responseNotif = await fetch(`/api/suscripcion_heladera?cola_id=${userId}&hela_id=${hela_id}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }); 
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+
+            const {suscripcion} = await responseNotif.json();
+            console.log("--> suscripcion ", suscripcion);
+            console.log(suscripcion.susc_notif_n_viandas_disponibles);
+            if(suscripcion.susc_notif_n_viandas_disponibles >= 0) {
+                console.log("AAAA");
+                setNotifDisponibles(true);
+                setNDisponibles(suscripcion.susc_notif_n_viandas_disponibles);
+            } else {
+                setNotifDisponibles(false);
+                setNDisponibles("");
+            }
+            if(suscripcion.susc_notif_n_viandas_faltantes >= 0) {
+                console.log("BBB");
+                setNotifFaltantes(true);
+                setNFaltantes(suscripcion.susc_notif_n_viandas_faltantes);
+            } else {
+                setNotifFaltantes(false);
+                setNFaltantes("");
+            }
+            
+            setNotifDesperfecto(suscripcion.susc_notif_desperfecto??false);
 
         } catch (error) {
             console.error("Error obteniendo los datos:", error);

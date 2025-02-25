@@ -147,13 +147,12 @@ CREATE TABLE smaa.coeficiente_reconocimiento(
 );
 
 CREATE TABLE smaa.suscripcion_heladera(
-	susc_id INT NOT NULL AUTO_INCREMENT,
     susc_colaborador INT NOT NULL,
     susc_heladera INT NOT NULL,
     susc_notif_n_viandas_disponibles INT,
     susc_notif_n_viandas_faltantes INT,
     susc_notif_desperfecto BOOLEAN,
-    PRIMARY KEY (susc_id),
+    PRIMARY KEY (susc_colaborador, susc_heladera),
     FOREIGN KEY (susc_colaborador) REFERENCES smaa.colaborador(cola_id),
     FOREIGN KEY (susc_heladera) REFERENCES smaa.heladera(hela_id)
 );
