@@ -17,7 +17,7 @@ export default function HomePage({ userId }:  {userId: string|null}) {
             </section>
             <section className={styles.section}>
                 <h1 className={styles.title}>
-                Notificaciones
+                🔔Notificaciones🔔
                 </h1>
                 <Notificaciones/>
             </section>

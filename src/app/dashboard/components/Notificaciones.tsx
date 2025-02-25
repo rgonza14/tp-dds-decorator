@@ -38,7 +38,6 @@ export default function Notificaciones() {
     }, []);
     return (
         <div>
-            <h2>Notificaciones: </h2>
             {mensaje && (
                 <div
                     className={`text-lg font-semibold text-center mb-2 ${
@@ -50,40 +49,48 @@ export default function Notificaciones() {
             )}
             <ul>
             {
-                notificacionesDB.map((notificacion, index) => {
-                    
-                    return(
-                        <li key={index}>
-                            {index+1}) Heladera: {notificacion.hela_nombre}
-                            <ul>
-
-                                {notificacion.susc_notif_n_viandas_disponibles &&
-                                notificacion.viandasDisponibles <= notificacion.susc_notif_n_viandas_disponibles &&
-                                <li>
-                                    Viandas disponibles: {notificacion.viandasDisponibles}
-                                </li>
-                                }
-
-                                {notificacion.susc_notif_n_viandas_faltantes &&
-                                notificacion.viandasFaltantes >= notificacion.susc_notif_n_viandas_faltantes &&
-                                <li>
-                                    Viandas faltantes: {notificacion.viandasFaltantes}
-                                </li>
-                                }
-
-                                {notificacion.susc_notif_desperfecto &&
-                                notificacion.hela_estado != "activa" &&
-                                <li>
-                                    Estado: {notificacion.hela_estado}
-                                </li>
-                                }
-                            </ul>
-                        </li>
-                    );
+                procesarNotificaciones(notificacionesDB).map((notif, index) => {
+                    return (<li key={index}>
+                        ❗{notif}
+                    </li>)
                 })
             }
             </ul>
         </div>
 
     );
+}
+
+
+
+function procesarNotificaciones(notificacionesData: any): string[] {
+    const notificaciones: string[] = [];
+
+    notificacionesData.forEach((notif: any) => {
+        
+        if(
+            notif.susc_notif_n_viandas_disponibles !== null &&
+            notif.viandasDisponibles <= notif.susc_notif_n_viandas_disponibles
+        ) {
+            notificaciones.push(`Heladera "${notif.hela_nombre}": viandas disponibles: ${notif.viandasDisponibles}`);
+        }
+        
+        if(
+            notif.susc_notif_n_viandas_faltantes !== null &&
+            notif.viandasFaltantes >= notif.susc_notif_n_viandas_faltantes
+        ) {
+            notificaciones.push(`Heladera "${notif.hela_nombre}": viandas faltantes: ${notif.viandasFaltantes}`);
+        }
+        
+        if(
+            notif.susc_notif_desperfecto &&
+            notif.hela_estado !==  "activa"
+
+        ) {
+            notificaciones.push(`Heladera "${notif.hela_nombre}": estado: ${notif.hela_estado}`);
+        }
+
+    });
+
+    return notificaciones;
 }
