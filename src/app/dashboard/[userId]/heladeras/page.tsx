@@ -7,6 +7,7 @@ import { PageContainer } from '../../components/PageContainer';
 import HeladerasSection from './components/HeladerasSection';
 import RecomendacionesHeladeras from '@/app/dashboard/components/RecomendacionesHeladeras';
 import CargaIncidente from './components/CargaIncidente';
+import SuscripcionHeladera from './components/SuscripcionHeladera';
 
 
 
@@ -19,6 +20,7 @@ export default function Heladeras() {
     const [abrirRegistro, setAbrirRegistro] = useState<boolean>(false);
     const [abrirEdicion, setAbrirEdicion] = useState<boolean>(false);
     const [abrirIncidente, setAbrirIncidente] = useState<boolean>(false);
+    const [abrirSuscripcion, setabrirSuscripcion] = useState<boolean>(false);
 
     return (
         <PageContainer>
@@ -66,11 +68,24 @@ export default function Heladeras() {
                             Cargar Incidente
                         </button>
 
+                        <button
+                            onClick={() => {
+                                setAbrirRegistro(false);
+                                setAbrirEdicion(false);
+                                setAbrirIncidente(false);
+                                setabrirSuscripcion(true);
+                            }}
+                            className='bg-green-600 text-white py-2 px-4 rounded-md shadow-lg transition transform hover:bg-red-green hover:scale-105'
+                        >
+                            Suscribirse
+                        </button>
+
                     </div>
                 </section>
                 {abrirRegistro && <RegistroHeladera />}
                 {abrirEdicion && <EdicionHeladera />}
                 {abrirIncidente && <CargaIncidente />}
+                {abrirSuscripcion && <SuscripcionHeladera />}
             </div>
         </PageContainer>
     );

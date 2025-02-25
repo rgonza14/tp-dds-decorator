@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-export default function CargaIncidente() {
+export default function SuscripcionHeladera() {
     const [userId, setUserId] = useState<number|"">('');
     useEffect(() => {
         setUserId(Number(localStorage.getItem("userId")))
@@ -20,12 +20,12 @@ export default function CargaIncidente() {
     const [heladerasIdArray, setHeladerasIdArray] = useState([]);
     const [mostrarInfoH, setMostrarInfoH] = useState<boolean>(false);
 
-    // estados del incidente
-    const fecha: string = (new Date()).toISOString();
-    const tipoFalla: string = "falla tecnica";
-    const [descripcion, setDescripcion] = useState<string>("");
-    const estadoIncidente: string = "pendiente";
-
+    // estados de la suscripcion
+    const [notifDisponibles, setNotifDisponibles] = useState<boolean>(false);
+    const [nDisponibles, setNDisponibles] = useState<number|"">("")
+    const [notifFaltantes, setNotifFaltantes] = useState<boolean>(false);
+    const [nFaltantes, setNFaltantes] = useState<number|"">("")
+    const [notifDesperfecto, setNotifDesperfecto] = useState<boolean>(false);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -39,10 +39,6 @@ export default function CargaIncidente() {
                     hela_id: Number(id),
                     incidenteData: {
                         inc_colaborador: userId,
-                        inc_tipo: tipoFalla,
-                        inc_fecha_registro: fecha,
-                        inc_estado: estadoIncidente,
-                        inc_descripcion: descripcion
 
                     }
                 })
@@ -60,7 +56,6 @@ export default function CargaIncidente() {
                 setCapacidad('');
                 setFechaFuncionamiento('');
                 setEstado("");
-                setDescripcion("");
             } else {
                 setMensaje(result.mensaje || 'Error al cargar el incidente');
             }
@@ -283,35 +278,93 @@ export default function CargaIncidente() {
                     </div>
                     }
 
-                    <div>
+                    
+                    <div className='flex gap-2 items-center'>
+                        <input
+                            type='checkbox'
+                            id='mostrarTodos'
+                            className='mt-1 p-2 border rounded-md '
+                            checked={notifDisponibles}
+                            onChange={e => setNotifDisponibles(Boolean(e.target.checked))}
+                        />
                         <label
-                            htmlFor='nombre'
+                            htmlFor='mostrarTodos'
                             className='block text-sm font-medium'
                         >
-                            Descripcion del incidente:
+                            Notificar cuando queden 
                         </label>
-                        <textarea
-                            
-                            id='nombre'
-                            className='mt-1 p-2 border rounded-md w-full'
-                            value={descripcion}
-                            onChange={(e) => setDescripcion(e.target.value)}
-                            rows={4}
-                            maxLength={200}
-                            required
+                        <input
+                            type='number'
+                            id='mostrarTodos'
+                            className='p-2 border rounded-md w-min
+'
+                            value={nDisponibles}
+                            onChange={e => setNDisponibles(Number(e.target.value))}
                         />
+
+                        <label
+                            htmlFor='mostrarTodos'
+                            className='block text-sm font-medium'
+                        >
+                            viandas disponibles
+                        </label>
+                    </div>
+                    
+                    <div className='flex gap-2 items-center'>
+                        <input
+                            type='checkbox'
+                            id='mostrarTodos'
+                            className='mt-1 p-2 border rounded-md '
+                            checked={notifFaltantes}
+                            onChange={e => setNotifFaltantes(Boolean(e.target.checked))}
+                        />
+                        <label
+                            htmlFor='mostrarTodos'
+                            className='block text-sm font-medium'
+                        >
+                            Notificar cuando falten 
+                        </label>
+                        <input
+                            type='number'
+                            id='mostrarTodos'
+                            className='p-2 border rounded-md w-min
+'
+                            value={nFaltantes}
+                            onChange={e => setNFaltantes(Number(e.target.value))}
+                        />
+
+                        <label
+                            htmlFor='mostrarTodos'
+                            className='block text-sm font-medium'
+                        >
+                            viandas
+                        </label>
+                    </div>
+                    
+                    <div className='flex gap-2 items-center'>
+                        <input
+                            type='checkbox'
+                            id='mostrarTodos'
+                            className='mt-1 p-2 border rounded-md '
+                            checked={notifDesperfecto}
+                            onChange={e => setNotifDesperfecto(Boolean(e.target.checked))}
+                        />
+                        <label
+                            htmlFor='mostrarTodos'
+                            className='block text-sm font-medium'
+                        >
+                            Notificar ante un desperfecto 
+                        </label>
                     </div>
 
                     <button
                         className='mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition'
                         type='submit'
                     >
-                        Cargar incidente
+                        Suscribirse
                     </button>
                 </form>
             </div>
         </div>
     );
 };
-
-
