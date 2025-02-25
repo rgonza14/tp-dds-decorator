@@ -193,6 +193,9 @@ CREATE TABLE smaa.visita_tecnica(
     FOREIGN KEY (vite_tecnico) REFERENCES smaa.tecnico(tec_id)
 );
 
+INSERT INTO smaa.colaborador(cola_usuario, cola_contrasena, cola_tipo_colaborador)
+VALUES ("decoratorAdmin3.1416", "$2b$10$k8U8DydaoaoflBAdpwO2YeUqpXJe0cip3Tm83fiYyw/GGqAidCqke", "admin");
+
 INSERT INTO smaa.coeficiente_reconocimiento(coef_descripcion, coef_coeficiente)
 VALUES
 ("PESOS_DONADOS", 0.5),

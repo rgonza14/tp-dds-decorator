@@ -37,6 +37,17 @@ export const getPageData = (
                 }
             ]
         },
+        heladerasPH: {
+            title: 'Heladeras',
+            description: 'Gestiona el alta y baja de las heladeras',
+            breadcrumbs: [
+                { title: 'Inicio', link: '/' },
+                {
+                    title: 'Heladeras',
+                    link: `/${userId}/heladeras`
+                }
+            ]
+        },
         'registro-personas': {
             title: 'Personas en Situación Vulnerable',
             description:

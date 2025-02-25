@@ -12,12 +12,15 @@ export default function DashboardLayout({
     modal: React.ReactNode;
 }) {
     const [userId, setUserId] = useState<string | undefined>(undefined);
+    const [tipo_colaborador, setTipo_colaborador] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        const userId = localStorage.getItem('userId');
-        console.log('userId: ', userId);
-        if (userId) {
-            setUserId(userId);
+        const id = localStorage.getItem('userId');
+        const tipo = localStorage.getItem("tipo_colaborador");
+        console.log('userId: ', id);
+        if (id) {
+            setUserId(id);
+            setTipo_colaborador(String(tipo));
         } else {
             redirect('/auth');
         }
@@ -25,7 +28,7 @@ export default function DashboardLayout({
 
     return (
         <div className='flex h-full'>
-            <Sidebar userId={userId} />
+            <Sidebar userId={userId} tipo_colaborador={tipo_colaborador} />
             <main className='w-full flex-1 overflow-hidden'>
                 <Header />
                 <div

@@ -9,9 +9,10 @@ import styles from './styles/sidebar.module.css';
 
 type SidebarProps = {
     userId?: string;
+    tipo_colaborador?: string;
 };
 
-export default function Sidebar({ userId }: SidebarProps) {
+export default function Sidebar({ userId, tipo_colaborador}: SidebarProps) {
     const { isMinimized, toggle } = useDashboard();
 
     const handleToggle = () => {
@@ -35,7 +36,7 @@ export default function Sidebar({ userId }: SidebarProps) {
                     } transition transform`}
                 >
                     <AvatarImage src={''} alt='logo del negocio' />
-                    <AvatarFallback>NN</AvatarFallback>
+                    <AvatarFallback>smaa</AvatarFallback>
                 </Avatar>
             </div>
 
@@ -47,7 +48,7 @@ export default function Sidebar({ userId }: SidebarProps) {
                 onClick={handleToggle}
             />
             <div className='navigation-list'>
-                <DashboardNav userId={userId} />
+                <DashboardNav userId={userId} tipo_colaborador={tipo_colaborador}/>
             </div>
         </aside>
     );

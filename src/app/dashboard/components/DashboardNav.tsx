@@ -13,66 +13,73 @@ import { useRouter } from 'next/navigation';
 
 interface DashboardNavProps {
     userId?: string;
+    tipo_colaborador?: string;
     isMobileNav?: boolean;
 }
 
-const DashboardNav = ({ userId, isMobileNav = false }: DashboardNavProps) => {
+const DashboardNav = ({ userId, tipo_colaborador, isMobileNav = false }: DashboardNavProps) => {
     const { isMinimized } = useDashboard();
     const router = useRouter();
 
-    const items = [
-        {
-            title: 'Editar Perfil',
-            href: `/dashboard/${userId}/editar-perfil`,
-            icon: 'editarPerfil'
-        },
-        {
-            title: 'Donacion de dinero',
-            href: `/dashboard/${userId}/donaciones`,
-            icon: 'donaciones'
-        },
-        {
-            title: 'Gestion de heladeras',
-            href: `/dashboard/${userId}/heladeras`,
-            icon: 'heladera'
-        },
-        {
-            title: 'Carga de Viandas',
-            href: `/dashboard/${userId}/viandas`,
-            icon: 'vianda'
-        },
-        {
-            title: 'Distribución de viandas',
-            href: `/dashboard/${userId}/distribucion`,
-            icon: 'camion'
-        },
-        {
-            title: 'Gestión de personas en Situación Vulnerable',
-            href: `/dashboard/${userId}/registro-personas`,
-            icon: 'persona'
-        },
-        {
-            title: 'Gestión de técnicos',
-            href: `/dashboard/${userId}/tecnicos`,
-            icon: 'tecnico'
-        },
-        {
-            title: 'Administradores',
-            href: `/dashboard/${userId}/administradores`,
-            icon: 'administrador'
-        },
-        {
-            title: 'Carga masiva de Colaboraciones',
-            href: `/dashboard/${userId}/cargar-colaboraciones`,
-            icon: 'cargaColaboraciones'
-        },
-        {
-            title: 'Tienda de puntos',
-            href: `/dashboard/${userId}/puntos-y-canjes`,
-            icon: 'carrito'
-        },
-    ];
+    // const items = [
+    //     {
+    //         title: 'Editar Perfil',
+    //         href: `/dashboard/${userId}/editar-perfil`,
+    //         icon: 'editarPerfil'
+    //     },
+    //     {
+    //         title: 'Donacion de dinero',
+    //         href: `/dashboard/${userId}/donaciones`,
+    //         icon: 'donaciones'
+    //     },
+    //     {
+    //         title: 'Gestion de heladeras',
+    //         href: `/dashboard/${userId}/heladeras`,
+    //         icon: 'heladera'
+    //     },
+    //     {
+    //         title: 'Gestion de heladeras',
+    //         href: `/dashboard/${userId}/heladerasPH`,
+    //         icon: 'heladera'
+    //     },
+    //     {
+    //         title: 'Carga de Viandas',
+    //         href: `/dashboard/${userId}/viandas`,
+    //         icon: 'vianda'
+    //     },
+    //     {
+    //         title: 'Distribución de viandas',
+    //         href: `/dashboard/${userId}/distribucion`,
+    //         icon: 'camion'
+    //     },
+    //     {
+    //         title: 'Gestión de personas en Situación Vulnerable',
+    //         href: `/dashboard/${userId}/registro-personas`,
+    //         icon: 'persona'
+    //     },
+    //     {
+    //         title: 'Gestión de técnicos',
+    //         href: `/dashboard/${userId}/tecnicos`,
+    //         icon: 'tecnico'
+    //     },
+    //     {
+    //         title: 'Administradores',
+    //         href: `/dashboard/${userId}/administradores`,
+    //         icon: 'administrador'
+    //     },
+    //     {
+    //         title: 'Carga masiva de Colaboraciones',
+    //         href: `/dashboard/${userId}/cargar-colaboraciones`,
+    //         icon: 'cargaColaboraciones'
+    //     },
+    //     {
+    //         title: 'Tienda de puntos',
+    //         href: `/dashboard/${userId}/puntos-y-canjes`,
+    //         icon: 'carrito'
+    //     },
+    // ];
 
+    const items = itemsByUser(userId, tipo_colaborador);
     async function handleLogout(evt: React.MouseEvent<HTMLButtonElement>) {
         evt.preventDefault();
         try {
@@ -190,3 +197,93 @@ const DashboardNav = ({ userId, isMobileNav = false }: DashboardNavProps) => {
 };
 
 export default DashboardNav;
+
+function itemsByUser(userId?: string, tipo_colaborador?: string): any[] {
+    switch(tipo_colaborador) {
+        case "persona_humana":
+            return [
+                {
+                    title: 'Editar Perfil',
+                    href: `/dashboard/${userId}/editar-perfil`,
+                    icon: 'editarPerfil'
+                },
+                {
+                    title: 'Donacion de dinero',
+                    href: `/dashboard/${userId}/donaciones`,
+                    icon: 'donaciones'
+                },
+                {
+                    title: 'Gestion de heladeras',
+                    href: `/dashboard/${userId}/heladerasPH`,
+                    icon: 'heladera'
+                },
+                {
+                    title: 'Carga de Viandas',
+                    href: `/dashboard/${userId}/viandas`,
+                    icon: 'vianda'
+                },
+                {
+                    title: 'Distribución de viandas',
+                    href: `/dashboard/${userId}/distribucion`,
+                    icon: 'camion'
+                },
+                {
+                    title: 'Gestión de personas en Situación Vulnerable',
+                    href: `/dashboard/${userId}/registro-personas`,
+                    icon: 'persona'
+                },
+                {
+                    title: 'Tienda de puntos',
+                    href: `/dashboard/${userId}/puntos-y-canjes`,
+                    icon: 'carrito'
+                },
+            ];
+        break;
+        case "persona_juridica":
+            return [
+                {
+                    title: 'Editar Perfil',
+                    href: `/dashboard/${userId}/editar-perfil`,
+                    icon: 'editarPerfil'
+                },
+                {
+                    title: 'Donacion de dinero',
+                    href: `/dashboard/${userId}/donaciones`,
+                    icon: 'donaciones'
+                },
+                {
+                    title: 'Gestion de heladeras',
+                    href: `/dashboard/${userId}/heladeras`,
+                    icon: 'heladera'
+                },
+                {
+                    title: 'Tienda de puntos',
+                    href: `/dashboard/${userId}/puntos-y-canjes`,
+                    icon: 'carrito'
+                },
+            ];
+            break;
+            case "admin":
+                return [
+                    {
+                        title: 'Gestión de técnicos',
+                        href: `/dashboard/${userId}/tecnicos`,
+                        icon: 'tecnico'
+                    },
+                    {
+                        title: 'Administradores',
+                        href: `/dashboard/${userId}/administradores`,
+                        icon: 'administrador'
+                    },
+                    {
+                        title: 'Carga masiva de Colaboraciones',
+                        href: `/dashboard/${userId}/cargar-colaboraciones`,
+                        icon: 'cargaColaboraciones'
+                    },
+                ];
+            break;
+            default:
+                return [];
+            break;
+    }
+}
