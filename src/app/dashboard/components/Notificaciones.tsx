@@ -72,14 +72,14 @@ function procesarNotificaciones(notificacionesData: any): string[] {
             notif.susc_notif_n_viandas_disponibles !== null &&
             notif.viandasDisponibles <= notif.susc_notif_n_viandas_disponibles
         ) {
-            notificaciones.push(`Heladera "${notif.hela_nombre}": viandas disponibles: ${notif.viandasDisponibles}`);
+            notificaciones.push(`Heladera[${notif.hela_id}] "${notif.hela_nombre}": viandas disponibles: ${notif.viandasDisponibles}`);
         }
         
         if(
             notif.susc_notif_n_viandas_faltantes !== null &&
             notif.viandasFaltantes >= notif.susc_notif_n_viandas_faltantes
         ) {
-            notificaciones.push(`Heladera "${notif.hela_nombre}": viandas faltantes: ${notif.viandasFaltantes}`);
+            notificaciones.push(`Heladera[${notif.hela_id}] "${notif.hela_nombre}": viandas faltantes: ${notif.viandasFaltantes}`);
         }
         
         if(
@@ -87,7 +87,7 @@ function procesarNotificaciones(notificacionesData: any): string[] {
             notif.hela_estado !==  "activa"
 
         ) {
-            notificaciones.push(`Heladera "${notif.hela_nombre}": estado: ${notif.hela_estado}`);
+            notificaciones.push(`Heladera[${notif.hela_id}] "${notif.hela_nombre}": estado: ${notif.hela_estado}`);
         }
 
     });
