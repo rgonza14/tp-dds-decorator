@@ -6,12 +6,15 @@ import HomePage from './components/HomePage';
 
 const Home = () => {
     const [userId, setUserId] = useState<string | null>(null);
+        const [tipo_colaborador, setTipo_colaborador] = useState<string | null>(null);
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('userId');
+        const tipo = localStorage.getItem("tipo_colaborador");
         console.log('storedUserId: ', storedUserId);
         if (storedUserId) {
             setUserId(storedUserId);
+            setTipo_colaborador(String(tipo));
         } else {
             redirect('/auth');
         }
@@ -27,7 +30,7 @@ const Home = () => {
                 />
             </Head>
             <main>
-                <HomePage userId={userId} />
+                <HomePage userId={userId} tipo_colaborador={tipo_colaborador} />
             </main>
         </div>
     );

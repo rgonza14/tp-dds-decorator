@@ -5,7 +5,7 @@ import styles from './styles/homePage.module.css';
 import HeladerasSection from '../[userId]/heladeras/components/HeladerasSection';
 import Notificaciones from './Notificaciones';
 
-export default function HomePage({ userId }:  {userId: string|null}) {
+export default function HomePage({ userId, tipo_colaborador }:  {userId: string|null, tipo_colaborador: string|null}) {
     const router = useRouter();
 
     return (
@@ -15,12 +15,13 @@ export default function HomePage({ userId }:  {userId: string|null}) {
                     Bienvenido a la Plataforma de Contribuciones!
                 </h1>
             </section>
-            <section className={styles.section}>
+
+            {tipo_colaborador==="persona_humana" && <section className={styles.section}>
                 <h1 className={styles.title}>
                 🔔Notificaciones🔔
                 </h1>
                 <Notificaciones/>
-            </section>
+            </section>}
 
             <section className={styles.section}>
                 <h2 className={styles.title}>
