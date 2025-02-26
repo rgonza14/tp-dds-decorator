@@ -21,6 +21,7 @@ export type Administrador = {
     id: string;
     nombre: string;
     apellido: string;
+    baja: boolean;
 };
 
 export const columns: ColumnDef<Administrador>[] = [
@@ -35,6 +36,10 @@ export const columns: ColumnDef<Administrador>[] = [
     {
         accessorKey: 'apellido',
         header: 'Apellido'
+    },
+    {
+        accessorKey: 'baja',
+        header: 'Estado'
     },
     {
         id: 'actions',
@@ -73,6 +78,7 @@ export function DataTableAdministradores() {
                     id: admin.cola_id,
                     nombre: admin.persona_humana.ph_nombre,
                     apellido: admin.persona_humana.ph_apellido,
+                    baja: admin.cola_baja?"BAJA":"activo",
                     dniTipo: admin.persona_humana.ph_dni_tipo,
                     dniNro: admin.persona_humana.ph_dni_nro,
                     email: admin.persona_humana.ph_mail,

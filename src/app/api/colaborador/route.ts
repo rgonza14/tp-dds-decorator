@@ -110,6 +110,40 @@ export async function PUT(req: Request) {
 
 }
 
+export async function DELETE(req: Request) {
+    try {
+        const {cola_id} = await req.json();
+        console.log("--> DELETE ID:", cola_id);
+        if(!cola_id) {
+            return NextResponse.json({message: "Se requiere el ID para poder realizar dar de baja un colaborador"}, {status: 400})
+        }
+
+        const colaboradorEliminado = await prisma.colaborador.update({
+            where: {cola_id: Number(cola_id)},
+            data: {
+                cola_baja: true
+            }
+        });
+
+        console.log(colaboradorEliminado);
+
+        if(!colaboradorEliminado) {
+            return NextResponse.json({message: `No se encontró el colaborador id:${cola_id}`}, {status: 404})
+        }
+
+        return NextResponse.json({
+            message: "Colaborador Eliminado",
+            colaborador: colaboradorEliminado,
+        }, {status: 200});
+
+
+
+    } catch(error: any) {
+        console.error("Error en el servidor", error);
+        return NextResponse.json({message: "Error en el servidor", error: error.message}, {status: 500})
+    }
+}
+
 async function getPersona(colaborador: any) {
 
 

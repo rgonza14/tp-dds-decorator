@@ -29,18 +29,31 @@ export function AdministradorAction({ data }: { data: any }) {
     const { idUser } = useParams();
 
     async function onConfirmDelete() {
-        // try {
-        //     setLoading(true);
-        //     await client.delete(
-        //         `/businesses/${idUser}/services/${data.idService}`
-        //     );
-        //     trigger();
-        //     toast.success('Servicio eliminado con éxito');
-        // } catch (error) {
-        //     console.log(error);
-        // } finally {
-        //     setLoading(false);
-        // }
+        try {
+            setLoading(true);
+
+            const response = await fetch("/api/colaborador", {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({cola_id: data.id})
+            });
+
+            
+            const {colaborador} = await response.json();
+
+            if(!response.ok) {
+                alert("Error: no se pudo eliminar el colaborador");
+            } else {
+                console.log(colaborador);
+            }
+
+            setIsOpenDelete(false)
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
 
