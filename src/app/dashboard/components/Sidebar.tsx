@@ -6,6 +6,7 @@ import { useDashboard } from '@/store/dashboardStore';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import DashboardNav from './DashboardNav';
 import styles from './styles/sidebar.module.css';
+import { useRouter } from 'next/navigation';
 
 type SidebarProps = {
     userId?: string;
@@ -14,6 +15,7 @@ type SidebarProps = {
 
 export default function Sidebar({ userId, tipo_colaborador}: SidebarProps) {
     const { isMinimized, toggle } = useDashboard();
+    const router = useRouter();
 
     const handleToggle = () => {
         toggle();
@@ -35,8 +37,8 @@ export default function Sidebar({ userId, tipo_colaborador}: SidebarProps) {
                         isMinimized ? 'size-8' : 'size-12'
                     } transition transform`}
                 >
-                    <AvatarImage src={''} alt='logo del negocio' />
-                    <AvatarFallback>smaa</AvatarFallback>
+                    <AvatarImage src={'/dashboard/UTN_logo.jpg'} alt='logo del negocio' />
+                    <AvatarFallback onClick={() => router.push("/dashboard")} className='cursor-pointer'>smaa</AvatarFallback>
                 </Avatar>
             </div>
 
