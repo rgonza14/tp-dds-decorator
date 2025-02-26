@@ -271,15 +271,15 @@ function itemsByUser(userId?: string, tipo_colaborador?: string): any[] {
                         icon: 'tecnico'
                     },
                     {
-                        title: 'Administradores',
-                        href: `/dashboard/${userId}/administradores`,
-                        icon: 'administrador'
-                    },
-                    {
                         title: 'Carga masiva de Colaboraciones',
                         href: `/dashboard/${userId}/cargar-colaboraciones`,
                         icon: 'cargaColaboraciones'
                     },
+                    Number(userId)==1?{
+                        title: 'Administradores',
+                        href: `/dashboard/${userId}/administradores`,
+                        icon: 'administrador'
+                    }:{},
                 ];
             break;
             default:

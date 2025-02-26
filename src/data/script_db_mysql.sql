@@ -196,6 +196,8 @@ CREATE TABLE smaa.visita_tecnica(
 
 INSERT INTO smaa.colaborador(cola_usuario, cola_contrasena, cola_tipo_colaborador)
 VALUES ("decoratorAdmin3.1416", "$2b$10$k8U8DydaoaoflBAdpwO2YeUqpXJe0cip3Tm83fiYyw/GGqAidCqke", "admin");
+INSERT INTO smaa.persona_humana(ph_id)
+VALUES (1);
 
 INSERT INTO smaa.coeficiente_reconocimiento(coef_descripcion, coef_coeficiente)
 VALUES
