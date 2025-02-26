@@ -12,6 +12,7 @@ model colaborador {
   cola_usuario                 String                         @unique(map: "cola_usuario") @db.Char(64)
   cola_contrasena              String                         @db.Char(64)
   cola_tipo_colaborador        String                         @db.Char(50)
+  cola_baja                    Boolean?                       @default(false)
   distribucion_vianda          distribucion_vianda[]
   donacion_dinero              donacion_dinero[]
   donacion_vianda              donacion_vianda[]

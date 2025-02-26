@@ -1,10 +1,17 @@
-import { PageContainer } from '../../components/PageContainer';
-import FormAdministrador from './components/FormAdministrador';
 
-export default function AdministradorPage() {
+import Head from 'next/head';
+import { PageContainer } from '../../components/PageContainer';
+import AdministradoresSection from './components/AdministradoresSection';
+
+export default function RegistroPersonasPage() {
     return (
         <PageContainer>
-            <FormAdministrador />
+            <Head>
+                <title>Gestión de técnicos</title>
+            </Head>
+            <main>
+                <AdministradoresSection />
+            </main>
         </PageContainer>
     );
 }

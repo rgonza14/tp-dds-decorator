@@ -1,7 +1,8 @@
+// components/RegistroForm.jsx
 'use client';
-
 import { z } from 'zod';
-import Papa from 'papaparse';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -12,14 +13,12 @@ import {
     FormLabel,
     FormMessage
 } from '@/components/ui/form';
-import { useEffect, useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useState } from 'react';
 
 const formSchema = z
     .object({
-        email: z.string().email({ message: 'Mail no válido' }),
-
+        usuario: z.string(),
         password: z
             .string()
             .min(8, {
@@ -35,122 +34,126 @@ const formSchema = z
         path: ['password2']
     });
 
-const FormAdministrador = () => {
-    const [commonPasswords, setCommonPasswords] = useState(new Set());
+export default function RegistroForm({closeModal}: {closeModal: ()=>void}) {
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const [mensaje, setMensaje] = useState<string>('');
+    const [error, setError] = useState<boolean>(false);
+    
+    const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: '',
+            usuario: '',
             password: '',
             password2: ''
         }
     });
 
-    const onSubmit = (dataForm: z.infer<typeof formSchema>) => {
-        if (isCommonPassword(dataForm.password)) {
-            form.setError('password', {
-                message: 'La contraseña ingresada es débil'
-            });
-            return;
-        }
-    };
+    form.getValues().usuario
 
-    useEffect(() => {
-        const fetchCSV = async () => {
-            const response = await fetch('/common-passwords.csv');
-            const csvText = await response.text();
-
-            Papa.parse(csvText, {
-                header: true,
-                complete: (results: any) => {
-                    const passwordsSet = new Set(
-                        results.data
-                            .map((row: any) => row.password.trim())
-                            .filter(Boolean)
-                    );
-                    setCommonPasswords(passwordsSet);
+    async function handleSubmit() {
+        try {
+            const response = await fetch("/api/auth/registrarPH", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                error: (error: any) => {
-                    console.error('Error al analizar el archivo CSV:', error);
-                }
-            });
-        };
+                body: JSON.stringify({
+                        cola_usuario: form.getValues().usuario,
+                        cola_contrasena: form.getValues().password,
+                        cola_tipo_colaborador: "admin",
+                })
+            })
 
-        fetchCSV();
-    }, []);
+        } catch (error) {
+            console.error('Error al registrar el administrador:', error);
+            setMensaje('Error al registrar el administrador');
+        }
 
-    const isCommonPassword = (password: string) => {
-        return commonPasswords.has(password);
-    };
+    }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className='grid gap-y-8'>
-                    <div className='grid gap-2'>
-                        <FormField
-                            control={form.control}
-                            name='email'
-                            render={({ field, fieldState }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='johndoe@correo.com'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {fieldState.error?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className='grid gap-2'>
-                        <FormField
-                            control={form.control}
-                            name='password'
-                            render={({ field, fieldState }) => (
-                                <FormItem>
-                                    <FormLabel>Contraseña</FormLabel>
+        <div className='mx-auto grid w-[400px] gap-6'>
+            <div className='grid gap-2 text-left'>
+                <h1 className='text-2xl font-bold'>Registro de administradores</h1>
+            </div>
+            <div className='grid gap-y-3'>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)}>
+                        <div className='grid gap-y-6'>
+                            <div className='grid gap-2'>
+                                <FormField
+                                    control={form.control}
+                                    name='usuario'
+                                    render={({ field, fieldState }) => (
+                                        <FormItem>
+                                            <FormLabel>Usuario</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder='Usuario'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage>
+                                                {fieldState.error?.message}
+                                            </FormMessage>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
-                                    <FormControl>
-                                        <Input type='password' {...field} />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {fieldState.error?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className='grid gap-2'>
-                        <FormField
-                            control={form.control}
-                            name='password2'
-                            render={({ field, fieldState }) => (
-                                <FormItem>
-                                    <FormLabel>Confirmar Contraseña</FormLabel>
+                            <div className='grid gap-2'>
+                                <FormField
+                                    control={form.control}
+                                    name='password'
+                                    render={({ field, fieldState }) => (
+                                        <FormItem>
+                                            <FormLabel>Contraseña</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder='Contraseña'
+                                                    type='password'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage>
+                                                {fieldState.error?.message}
+                                            </FormMessage>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
-                                    <FormControl>
-                                        <Input type='password' {...field} />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {fieldState.error?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <Button type='submit' className='w-full' disabled={false}>
-                        Registrar administrador
-                    </Button>
-                </div>
-            </form>
-        </Form>
+                            <div className='grid gap-2'>
+                                <FormField
+                                    control={form.control}
+                                    name='password2'
+                                    render={({ field, fieldState }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Confirmar contraseña
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder='Repetir contraseña'
+                                                    {...field}
+                                                    type='password'
+                                                />
+                                            </FormControl>
+                                            <FormMessage>
+                                                {fieldState.error?.message}
+                                            </FormMessage>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
+                            <Button type='submit' className='w-full'>
+                                Crear cuenta
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+            </div>
+        </div>
     );
-};
-
-export default FormAdministrador;
+}

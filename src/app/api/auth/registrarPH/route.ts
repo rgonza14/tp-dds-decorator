@@ -55,6 +55,7 @@ export async function POST(req: Request) {
     }, {status: 201});
 
   } catch(error) {
+    console.error(error);
     return NextResponse.json({message: "Error en el servidor", error}, {status: 500});
   }
 }
@@ -75,6 +76,12 @@ async function getPersona(colaborador: any) {
               where: {ph_id: colaborador.cola_id}
           });
           return ph;
+      break;
+      case "admin":
+          const phadmin = await prisma.persona_humana.findUnique({
+              where: {ph_id: colaborador.cola_id}
+          });
+          return phadmin;
       break;
       default:
           return null;
