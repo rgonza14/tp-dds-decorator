@@ -48,7 +48,8 @@ export default function LoginPage({ setShowLogin }: LoginPageProps) {
             });
 
             if (!response.ok) {
-                alert("Usuario o contraseña incorrecto");
+                const {message} = await response.json();
+                alert(message);
                 throw new Error('Error en las credenciales del formulario');
             }
 

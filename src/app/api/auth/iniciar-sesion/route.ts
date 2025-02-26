@@ -33,7 +33,12 @@ export async function POST(req: Request) {
 
         // retornar si no coincide la contraseña
         if(!contrasenaCoincide) {
-            return NextResponse.json({message: "Credenciales incorrectas"}, {status: 401})
+            return NextResponse.json({message: "Usuario o contraseña incorrecto"}, {status: 401})
+        }
+
+        // retornar si esta dado de baja
+        if(colaborador.cola_baja) {
+            return NextResponse.json({message: "Colaborador dado de baja"}, {status: 401})
         }
 
         // buscar persona asociada al colaborador(usuario) humana o juridica
