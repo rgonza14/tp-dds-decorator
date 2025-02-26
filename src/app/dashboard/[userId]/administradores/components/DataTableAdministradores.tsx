@@ -70,7 +70,7 @@ export function DataTableAdministradores() {
             const {colaboradores} = await response.json();
             setArrayAdministradores(colaboradores.map((admin: any) => {
                 return {
-                    id: admin.tec_id,
+                    id: admin.cola_id,
                     nombre: admin.persona_humana.ph_nombre,
                     apellido: admin.persona_humana.ph_apellido,
                     dniTipo: admin.persona_humana.ph_dni_tipo,
