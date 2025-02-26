@@ -12,6 +12,15 @@ export async function GET(req: Request) {
         // obtener id del url
         const {searchParams} = new URL(req.url);
         const cola_id = Number(searchParams.get("cola_id"));
+        const tipo_colaborador = searchParams.get("tipo_colaborador");
+
+        if(tipo_colaborador) {
+            const colaboradores = await prisma.colaborador.findMany({
+                where: {cola_tipo_colaborador: tipo_colaborador},
+                include: {persona_humana: true}
+            });
+            return NextResponse.json({colaboradores: colaboradores}, {status: 200});
+        }
 
     
         // si no existe id devoler error
@@ -116,6 +125,12 @@ async function getPersona(colaborador: any) {
                 where: {ph_id: colaborador.cola_id}
             });
             return ph;
+        break;
+        case "admin":
+            const phadmin = await prisma.persona_humana.findUnique({
+                where: {ph_id: colaborador.cola_id}
+            });
+            return phadmin;
         break;
         default:
             return null;
