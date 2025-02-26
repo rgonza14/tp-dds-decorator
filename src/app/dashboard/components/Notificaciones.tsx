@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import styles from './styles/homePage.module.css';
 
 export default function Notificaciones() {
     const [userId, setUserId] = useState<number|"">('');
@@ -37,7 +38,11 @@ export default function Notificaciones() {
         fetchNotificacionesData();
     }, []);
     return (
-        <div>
+        <section className={styles.section}>
+            
+            <h1 className={styles.title}>
+                {notificacionesDB.length>0?"🔔Notificaciones🔔":"Notificaciones"}
+                </h1>
             {mensaje && (
                 <div
                     className={`text-lg font-semibold text-center mb-2 ${
@@ -56,7 +61,7 @@ export default function Notificaciones() {
                 })
             }
             </ul>
-        </div>
+        </section>
 
     );
 }

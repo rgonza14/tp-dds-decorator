@@ -16,12 +16,7 @@ export default function HomePage({ userId, tipo_colaborador }:  {userId: string|
                 </h1>
             </section>
 
-            {tipo_colaborador==="persona_humana" && <section className={styles.section}>
-                <h1 className={styles.title}>
-                🔔Notificaciones🔔
-                </h1>
-                <Notificaciones/>
-            </section>}
+            {tipo_colaborador==="persona_humana" && <Notificaciones/>}
 
             <section className={styles.section}>
                 <h2 className={styles.title}>
