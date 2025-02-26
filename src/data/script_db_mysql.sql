@@ -166,6 +166,7 @@ CREATE TABLE smaa.tecnico(
     tec_cuil char(12),
     tec_mail CHAR(50),
     tec_telefono CHAR(50),
+    tec_area_cobertura CHAR(50),
     PRIMARY KEY (tec_id)
 );
 
