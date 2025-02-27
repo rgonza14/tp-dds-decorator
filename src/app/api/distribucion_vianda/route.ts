@@ -34,7 +34,7 @@ export async function POST(req: Request) {
                     where: {dv_id: Number(vianda)},
                     data: {
                         dv_heladera: hela_id_destino,
-                        dv_estado: "pendiente distribucion"
+                        dv_estado: "pendiente_entrega"
 
                     }
                 });

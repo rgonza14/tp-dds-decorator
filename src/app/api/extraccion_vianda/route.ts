@@ -21,6 +21,15 @@ export async function POST(req: Request) {
             }
         );
 
+        const viandaActualizada = await prisma.donacion_vianda.update({
+            where: {
+                dv_id: dv_id
+            },
+            data: {
+                dv_estado: "consumida"
+            }
+        });
+
         if(!nuevaExtraccion) {
             return NextResponse.json({message: "Error en la extraccion"}, {status: 404});
         }

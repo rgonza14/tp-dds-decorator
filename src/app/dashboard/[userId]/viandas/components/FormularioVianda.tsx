@@ -243,8 +243,8 @@ export default function FormularioVianda(){
                     onChange={e => setEstado(e.target.value)}
                 >
                     <option value=''>Seleccionar estado</option>
-                    <option value='No Entregada'>No Entregada</option>
-                    <option value='Entregada'>Entregada</option>
+                    <option value='pendiente_entrega'>No Entregada</option>
+                    <option value='entregada'>Entregada</option>
                 </select>
             </div>
             <div>

@@ -66,7 +66,12 @@ export async function GET(req: Request) {
                 where: {hela_id: hela_id}
             });
             const capacidadOcupada = await prisma.donacion_vianda.count({
-                where: {dv_heladera: hela_id}
+                where: {
+                    dv_heladera: hela_id,
+                    dv_estado: {
+                        in: ["entregada", "pendiente_entrega"]
+                    }
+                }
             });
             if(!heladera) {
                 return NextResponse.json({message: "Heladera no encontrada"}, {status: 404});

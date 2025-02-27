@@ -66,7 +66,10 @@ export async function GET(req: Request) {
         
         if(hela_id) {
             const donaciones = await prisma.donacion_vianda.findMany({
-                where: {dv_heladera: hela_id}
+                where: {
+                    dv_heladera: hela_id,
+                    dv_estado: "entregada"
+                }
             });
             if(!donaciones) {
                 return NextResponse.json({message: "Donaciones no encontradas"}, {status: 404})
