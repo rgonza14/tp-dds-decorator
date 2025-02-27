@@ -15,7 +15,7 @@ export async function POST(req: Request) {
             data: {
                 ...heladeraData,
                 hela_colaborador: Number(cola_id),
-                hela_estado: "activo"
+                hela_estado: "activa"
             }
         });
         
