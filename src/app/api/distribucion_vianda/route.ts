@@ -17,6 +17,12 @@ export async function POST(req: Request) {
         const heladeraDestino = await prisma.heladera.findUnique({
             where: {hela_id: hela_id_destino}
         });
+        
+        if (heladeraDestino?.hela_estado != "activa") {
+            return NextResponse.json({message: "La heladera destiono no está activa"}, {status: 400});
+
+        }
+
         const capacidadOcupada = await prisma.donacion_vianda.count({
             where: {dv_heladera: hela_id_destino}
         });

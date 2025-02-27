@@ -26,6 +26,11 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "No se encontró la heladera seleccionada, vuelva a intentar"}, {status: 404});
 
         }
+        
+        if (heladera?.hela_estado != "activa") {
+            return NextResponse.json({message: "La heladera destiono no está activa"}, {status: 400});
+
+        }
         // si no hay suficiente espacio en la heladera, retornar error
         const capacidadDisponible: number = Number(heladera?.hela_capacidad) - capacidadOcupada
         if(capacidadDisponible < cantidadViandas) {
