@@ -1,7 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function RegistroHeladeras() {
+    const router = useRouter();
     const [userId, setUserId] = useState<number|"">('');
     useEffect(() => {
         setUserId(Number(localStorage.getItem("userId")))
@@ -45,6 +47,7 @@ export default function RegistroHeladeras() {
                 setNombre('');
                 setCapacidad('');
                 setFechaFuncionamiento('');
+                router.push(`/dashboard/${userId}/heladeras`);
             } else {
                 setMensaje(result.mensaje || 'Error al registrar la heladera');
             }

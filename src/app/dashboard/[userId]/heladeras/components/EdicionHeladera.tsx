@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function EdicionHeladera() {
+    const router = useRouter();
     const [userId, setUserId] = useState<number|"">('');
     useEffect(() => {
-        setUserId(Number(localStorage.getItem("userId")))
+        setUserId(Number(localStorage.getItem("userId")));
     },[]);
 
     const [id, setId] = useState<number | string>('');
@@ -139,8 +141,10 @@ export default function EdicionHeladera() {
     }
 
     async function fetchData() {
+        
+        const cola_ID = Number(localStorage.getItem("userId"))
         try {
-            const response = await fetch(`/api/heladera?cola_id=${userId}`, {
+            const response = await fetch(`/api/heladera?cola_id=${cola_ID}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'

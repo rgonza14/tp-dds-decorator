@@ -2,7 +2,7 @@
 import MapaHeladeras from '@/app/dashboard/components/MapaHeladeras';
 import { useState, useEffect } from 'react';
 
-export default function HeladerasSection() {
+export default function HeladerasSection({cola_id}: {cola_id?: number|string}) {
     const [userId, setUserId] = useState<number|"">('');
     const [heladerasDB, setHeladerasDB] = useState([]);
     const [suscripcionesDB, setSuscripcionesDB] = useState([]);
@@ -10,7 +10,11 @@ export default function HeladerasSection() {
 
     async function fetchHeladerasData() {
         try {
-            const response = await fetch("/api/heladera", {
+            var fetchInput = "/api/heladera"
+            if (cola_id) {
+                fetchInput = fetchInput + `?cola_id=${cola_id}`
+            }
+            const response = await fetch(fetchInput, {
                 method: "GET",
                 headers: {"Content-Type": "application/json"}
             });
@@ -36,32 +40,9 @@ export default function HeladerasSection() {
 
     }
 
-    async function fetchSuscripcionesData() {
-        try {
-            const id  = Number(localStorage.getItem("userId"));
-            const response = await fetch(`/api/suscripcion_heladera?cola_id=${id}`, {
-                method: "GET",
-                headers: {"Content-Type": "application/json"}
-            });
-
-            if (response.ok) {
-                const {suscripciones} = await response.json();
-                setSuscripcionesDB(suscripciones);
-            }
-
-        } catch(error) {
-            console.error("Error: ", error);
-        }
-
-    }
-
-
-
-
     useEffect(() => {
         setUserId(Number(localStorage.getItem("userId")));
         fetchHeladerasData();
-        fetchSuscripcionesData();
     }, []);
 
 
@@ -69,7 +50,7 @@ export default function HeladerasSection() {
     return (
         <div>
             <div>Heladeras Disponibles: </div>
-            <MapaHeladeras heladeras={heladerasDB} suscripciones={suscripcionesDB} mapId='heladeras' />
+            <MapaHeladeras heladeras={heladerasDB} mapId='heladeras' />
         </div>
     );
 };

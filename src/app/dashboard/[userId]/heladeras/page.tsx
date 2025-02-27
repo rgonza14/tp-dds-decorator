@@ -22,7 +22,7 @@ export default function Heladeras() {
         <PageContainer>
             <div className='flex flex-col gap-4'>
                 <h1 className='text-2xl font-bold'>Gestión de Heladeras</h1>
-                <HeladerasSection />
+                <HeladerasSection cola_id={Number(localStorage.getItem("userId"))}/>
                 <h1 className='text-2xl font-bold'>Recomendación de puntos para nuevas Heladeras</h1>
                 <RecomendacionesHeladeras />
                 <section>
