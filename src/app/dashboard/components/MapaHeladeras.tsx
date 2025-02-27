@@ -9,9 +9,8 @@ const loadLeaflet = async () => {
 
 const Mapa: React.FC<{
     heladeras: { lat: number; lng: number; nombre: string }[];
-    suscripciones: any[];
     mapId: string;
-}> = ({ heladeras, suscripciones, mapId }) => {
+}> = ({ heladeras,  mapId }) => {
     const mapRef = useRef<L.Map | null>(null);
 
     useEffect(() => {
