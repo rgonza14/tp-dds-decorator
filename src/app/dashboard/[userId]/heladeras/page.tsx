@@ -6,8 +6,6 @@ import EdicionHeladera from './components/EdicionHeladera';
 import { PageContainer } from '../../components/PageContainer';
 import HeladerasSection from './components/HeladerasSection';
 import RecomendacionesHeladeras from '@/app/dashboard/components/RecomendacionesHeladeras';
-import CargaIncidente from './components/CargaIncidente';
-import SuscripcionHeladera from './components/SuscripcionHeladera';
 
 
 
@@ -19,8 +17,6 @@ export default function Heladeras() {
 
     const [abrirRegistro, setAbrirRegistro] = useState<boolean>(false);
     const [abrirEdicion, setAbrirEdicion] = useState<boolean>(false);
-    const [abrirIncidente, setAbrirIncidente] = useState<boolean>(false);
-    const [abrirSuscripcion, setabrirSuscripcion] = useState<boolean>(false);
 
     return (
         <PageContainer>
@@ -39,7 +35,6 @@ export default function Heladeras() {
                             onClick={() => {
                                 setAbrirRegistro(true);
                                 setAbrirEdicion(false);
-                                setAbrirIncidente(false);
                             }}
                             className='bg-blue-600 text-white py-2 px-4 rounded-md shadow-lg transition transform hover:bg-blue-500 hover:scale-105'
                         >
@@ -50,42 +45,16 @@ export default function Heladeras() {
                             onClick={() => {
                                 setAbrirRegistro(false);
                                 setAbrirEdicion(true);
-                                setAbrirIncidente(false);
                             }}
                             className='bg-blue-600 text-white py-2 px-4 rounded-md shadow-lg transition transform hover:bg-blue-500 hover:scale-105'
                         >
                             Edición y baja de Heladeras
                         </button>
 
-                        <button
-                            onClick={() => {
-                                setAbrirRegistro(false);
-                                setAbrirEdicion(false);
-                                setAbrirIncidente(true);
-                            }}
-                            className='bg-red-600 text-white py-2 px-4 rounded-md shadow-lg transition transform hover:bg-red-500 hover:scale-105'
-                        >
-                            Cargar Incidente
-                        </button>
-
-                        <button
-                            onClick={() => {
-                                setAbrirRegistro(false);
-                                setAbrirEdicion(false);
-                                setAbrirIncidente(false);
-                                setabrirSuscripcion(true);
-                            }}
-                            className='bg-green-600 text-white py-2 px-4 rounded-md shadow-lg transition transform hover:bg-red-green hover:scale-105'
-                        >
-                            Suscribirse
-                        </button>
-
                     </div>
                 </section>
                 {abrirRegistro && <RegistroHeladera />}
                 {abrirEdicion && <EdicionHeladera />}
-                {abrirIncidente && <CargaIncidente />}
-                {abrirSuscripcion && <SuscripcionHeladera />}
             </div>
         </PageContainer>
     );
