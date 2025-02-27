@@ -59,7 +59,7 @@ CREATE TABLE smaa.persona_situacion_vulnerable(
     psv_direccion CHAR(50),
     psv_dni_tipo CHAR(3),
     psv_dni_nro CHAR(10),
-    psv_menores_a_cargo INT,
+    psv_menores_a_cargo INT DEFAULT 0,
     psv_baja BOOLEAN DEFAULT false,
     PRIMARY KEY (psv_id),
     FOREIGN KEY (psv_colaborador) REFERENCES smaa.colaborador(cola_id)
