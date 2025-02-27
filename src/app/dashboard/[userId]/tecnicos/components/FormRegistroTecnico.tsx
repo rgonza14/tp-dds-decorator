@@ -1,7 +1,9 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function FormRegistroTecnico({closeModal}: {closeModal: ()=>void}) {
+    const router = useRouter();
 
     const [userId, setUserId] = useState<number|"">("");
     useEffect(() => {
@@ -51,6 +53,7 @@ export default function FormRegistroTecnico({closeModal}: {closeModal: ()=>void}
                 setMensaje(result.mensaje);
                 setError(false);
                 closeModal();
+                location.reload();
 
             } else {
                 setMensaje(result.mensaje || 'Error al registrar al técnico');

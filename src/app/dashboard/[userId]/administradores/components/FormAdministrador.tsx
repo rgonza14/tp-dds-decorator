@@ -64,6 +64,9 @@ export default function RegistroForm({closeModal}: {closeModal: ()=>void}) {
                 })
             })
 
+            
+            location.reload();
+
         } catch (error) {
             console.error('Error al registrar el administrador:', error);
             setMensaje('Error al registrar el administrador');

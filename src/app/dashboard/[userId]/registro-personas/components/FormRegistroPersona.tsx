@@ -72,6 +72,7 @@ export default function FormRegistroPersona({closeModal}: {closeModal: ()=>void}
                 setMensaje(result.mensaje);
                 setError(false);
                 closeModal();
+                location.reload();
 
             } else {
                 setMensaje(result.mensaje || 'Error al registrar la persona');
