@@ -101,6 +101,40 @@ export async function PUT(req: Request) {
 
 }
 
+export async function DELETE(req: Request) {
+    try {
+        const {psv_id} = await req.json();
+        console.log("--> DELETE ID:", psv_id);
+        if(!psv_id) {
+            return NextResponse.json({message: "Se requiere el ID para poder realizar dar de baja una persona"}, {status: 400})
+        }
+
+        const personaEliminada = await prisma.persona_situacion_vulnerable.update({
+            where: {psv_id: Number(psv_id)},
+            data: {
+                psv_baja: true
+            }
+        });
+
+        console.log(personaEliminada);
+
+        if(!personaEliminada) {
+            return NextResponse.json({message: `No se encontró la persona id:${psv_id}`}, {status: 404})
+        }
+
+        return NextResponse.json({
+            message: "persona Eliminada",
+            persona: personaEliminada,
+        }, {status: 200});
+
+
+
+    } catch(error: any) {
+        console.error("Error en el servidor", error);
+        return NextResponse.json({message: "Error en el servidor", error: error.message}, {status: 500})
+    }
+}
+
 
 function esPersonaValida(personaData: any) {
 

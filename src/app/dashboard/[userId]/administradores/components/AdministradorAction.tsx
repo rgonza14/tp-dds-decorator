@@ -47,7 +47,8 @@ export function AdministradorAction({ data }: { data: any }) {
                 console.log(colaborador);
             }
 
-            setIsOpenDelete(false)
+            setIsOpenDelete(false);
+            location.reload();
 
         } catch (error) {
             console.log(error);

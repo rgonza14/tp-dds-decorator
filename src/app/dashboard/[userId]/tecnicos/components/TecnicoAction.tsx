@@ -30,18 +30,32 @@ export function TecnicoAction({ data }: { data: any }) {
     const { idUser } = useParams();
 
     async function onConfirmDelete() {
-        // try {
-        //     setLoading(true);
-        //     await client.delete(
-        //         `/businesses/${idUser}/services/${data.idService}`
-        //     );
-        //     trigger();
-        //     toast.success('Servicio eliminado con éxito');
-        // } catch (error) {
-        //     console.log(error);
-        // } finally {
-        //     setLoading(false);
-        // }
+        try {
+            setLoading(true);
+
+            const response = await fetch("/api/tecnico", {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({tec_id: data.id})
+            });
+
+            
+            const {tecnico} = await response.json();
+
+            if(!response.ok) {
+                alert("Error: no se pudo eliminar el técnico");
+            } else {
+                console.log(tecnico);
+            }
+
+            setIsOpenDelete(false);
+            location.reload();
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
 

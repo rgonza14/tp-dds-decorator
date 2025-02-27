@@ -22,6 +22,7 @@ export type PersonaVulnerable = {
     nombre: string;
     apellido: string;
     cantMenoresACargo: number;
+    baja: boolean;
 };
 
 export const columns: ColumnDef<PersonaVulnerable>[] = [
@@ -36,6 +37,10 @@ export const columns: ColumnDef<PersonaVulnerable>[] = [
     {
         accessorKey: 'apellido',
         header: 'Apellido'
+    },
+    {
+        accessorKey: 'baja',
+        header: 'Estado'
     },
     {
         id: 'actions',
@@ -77,6 +82,7 @@ export function DataTablePersonasVulnerables() {
                     id: persona.psv_id,
                     nombre: persona.psv_nombre,
                     apellido: persona.psv_apellido,
+                    baja: persona.psv_baja?"BAJA":"activo",
                     fechaNacimiento: persona.psv_fecha_nacimiento,
                     fechaRegistro: persona.psv_fecha_registro,
                     direccion: persona.psv_direccion,

@@ -31,18 +31,32 @@ export function PersonaVulnerableAction({ data }: { data: any }) {
     const { idUser } = useParams();
 
     async function onConfirmDelete() {
-        // try {
-        //     setLoading(true);
-        //     await client.delete(
-        //         `/businesses/${idUser}/services/${data.idService}`
-        //     );
-        //     trigger();
-        //     toast.success('Servicio eliminado con éxito');
-        // } catch (error) {
-        //     console.log(error);
-        // } finally {
-        //     setLoading(false);
-        // }
+        try {
+            setLoading(true);
+
+            const response = await fetch("/api/persona_situacion_vulnerable", {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({psv_id: data.id})
+            });
+
+            
+            const {persona} = await response.json();
+
+            if(!response.ok) {
+                alert("Error: no se pudo eliminar la persona");
+            } else {
+                console.log(persona);
+            }
+
+            setIsOpenDelete(false);
+            location.reload();
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
 

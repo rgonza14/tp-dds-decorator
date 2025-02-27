@@ -21,6 +21,7 @@ export type Tecnico = {
     id: string;
     nombre: string;
     apellido: string;
+    baja: boolean;
 };
 
 export const columns: ColumnDef<Tecnico>[] = [
@@ -35,6 +36,10 @@ export const columns: ColumnDef<Tecnico>[] = [
     {
         accessorKey: 'apellido',
         header: 'Apellido'
+    },
+    {
+        accessorKey: 'baja',
+        header: 'Estado'
     },
     {
         id: 'actions',
@@ -70,17 +75,18 @@ export function DataTableTecnicos() {
             }
 
             const {tecnicos} = await response.json();
-            setArrayTecnicos(tecnicos.map((persona: any) => {
+            setArrayTecnicos(tecnicos.map((tecnico: any) => {
                 return {
-                    id: persona.tec_id,
-                    nombre: persona.tec_nombre,
-                    apellido: persona.tec_apellido,
-                    dniTipo: persona.tec_dni_tipo,
-                    dniNro: persona.tec_dni_nro,
-                    cuil: persona.tec_cuil,
-                    email: persona.tec_mail,
-                    telefono: persona.tec_telefono,
-                    areaCobertura: persona.tec_area_cobertura,
+                    id: tecnico.tec_id,
+                    nombre: tecnico.tec_nombre,
+                    apellido: tecnico.tec_apellido,
+                    baja: tecnico.tec_baja?"BAJA":"activo",
+                    dniTipo: tecnico.tec_dni_tipo,
+                    dniNro: tecnico.tec_dni_nro,
+                    cuil: tecnico.tec_cuil,
+                    email: tecnico.tec_mail,
+                    telefono: tecnico.tec_telefono,
+                    areaCobertura: tecnico.tec_area_cobertura,
                 }
             }));
 

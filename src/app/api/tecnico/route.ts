@@ -80,3 +80,37 @@ export async function PUT(req: Request) {
     }
 
 }
+
+export async function DELETE(req: Request) {
+    try {
+        const {tec_id} = await req.json();
+        console.log("--> DELETE ID:", tec_id);
+        if(!tec_id) {
+            return NextResponse.json({message: "Se requiere el ID para poder realizar dar de baja un técnico"}, {status: 400})
+        }
+
+        const tecnicoEliminado = await prisma.tecnico.update({
+            where: {tec_id: Number(tec_id)},
+            data: {
+                tec_baja: true
+            }
+        });
+
+        console.log(tecnicoEliminado);
+
+        if(!tecnicoEliminado) {
+            return NextResponse.json({message: `No se encontró el técnico id:${tec_id}`}, {status: 404})
+        }
+
+        return NextResponse.json({
+            message: "Técnico Eliminado",
+            tecnico: tecnicoEliminado,
+        }, {status: 200});
+
+
+
+    } catch(error: any) {
+        console.error("Error en el servidor", error);
+        return NextResponse.json({message: "Error en el servidor", error: error.message}, {status: 500})
+    }
+}

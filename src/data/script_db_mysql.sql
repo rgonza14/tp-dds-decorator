@@ -60,6 +60,7 @@ CREATE TABLE smaa.persona_situacion_vulnerable(
     psv_dni_tipo CHAR(3),
     psv_dni_nro CHAR(10),
     psv_menores_a_cargo INT,
+    psv_baja BOOLEAN DEFAULT false,
     PRIMARY KEY (psv_id),
     FOREIGN KEY (psv_colaborador) REFERENCES smaa.colaborador(cola_id)
 );
@@ -167,6 +168,7 @@ CREATE TABLE smaa.tecnico(
     tec_mail CHAR(50),
     tec_telefono CHAR(50),
     tec_area_cobertura CHAR(50),
+    tec_baja BOOLEAN DEFAULT false,
     PRIMARY KEY (tec_id)
 );
 
