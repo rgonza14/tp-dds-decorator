@@ -52,10 +52,12 @@ export function DataTablePersonasVulnerables() {
     const [mostrarTodos, setMostrarTodos] = useState<boolean>(false);
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
 
     async function fetchData() {
+        setIsLoading(true);
         try {
             const response = await fetch(`/api/persona_situacion_vulnerable${mostrarTodos?``:`?cola_id=${userId}`}`, {
                 method: "GET",
@@ -91,6 +93,8 @@ export function DataTablePersonasVulnerables() {
             console.error("Error obteniendo los datos:", error);
             setMensaje('Error al obtener personas en situacion vulnerable');
             setError(true);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -143,7 +147,7 @@ export function DataTablePersonasVulnerables() {
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows?.length ? (
+                    {!isLoading ? (
                         table.getRowModel().rows.map(row => (
                             <TableRow
                                 key={row.id}

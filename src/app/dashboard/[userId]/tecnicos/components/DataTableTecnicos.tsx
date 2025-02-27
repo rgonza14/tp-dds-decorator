@@ -50,10 +50,12 @@ export function DataTableTecnicos() {
     const [arrayTecnicos, setArrayTecnicos] = useState<any[]>([]);
     const [mensaje, setMensaje] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
 
     async function fetchData() {
+        setIsLoading(true);
         try {
             const response = await fetch("/api/tecnico", {
                 method: "GET",
@@ -88,6 +90,8 @@ export function DataTableTecnicos() {
             console.error("Error obteniendo los datos:", error);
             setMensaje('Error al obtener personas en situacion vulnerable');
             setError(true);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -125,7 +129,7 @@ export function DataTableTecnicos() {
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows?.length ? (
+                    {!isLoading ? (
                         table.getRowModel().rows.map(row => (
                             <TableRow
                                 key={row.id}
